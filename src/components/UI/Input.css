@@ -1,0 +1,14 @@
+.input-custom {
+
+  padding: 4px;
+  padding-left: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  
+}
+
+.input-custom:focus {
+  border-color: #007bff;
+  outline: none;
+}
