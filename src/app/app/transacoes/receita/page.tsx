@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Input from "@/components/UI/Input"; // Reutilizando o componente de Input
+import Input from "@/app/app/_components/inputVip"; // Reutilizando o componente de Input
 
 export default function CadastroReceitaPage() {
   const [receita, setReceita] = useState({
@@ -99,7 +99,9 @@ export default function CadastroReceitaPage() {
           <input
             type="checkbox"
             checked={receita.transacaoConcluida}
-            onChange={(e) => handleChange("transacaoConcluida", e.target.checked)}
+            onChange={(e) =>
+              handleChange("transacaoConcluida", e.target.checked)
+            }
             className="mr-2"
           />
           <label>Transação Concluída</label>

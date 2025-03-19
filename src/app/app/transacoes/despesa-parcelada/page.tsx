@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Input from "@/components/UI/Input";
+import Input from "@/app/app/_components/inputVip";
 
 export default function CadastroDespesaPage() {
   const [despesa, setDespesa] = useState({

@@ -1,7 +1,8 @@
 "use client";
 
-import Input from "@/components/UI/Input";
+
 import { useState } from "react";
+import InputVip from "../_components/inputVip";
 
 export default function FornecedoresPage() {
   const [fornecedores, setFornecedores] = useState([
@@ -16,7 +17,6 @@ export default function FornecedoresPage() {
   });
 
   const adicionarFornecedor = () => {
-
     if (novoFornecedor.nome && novoFornecedor.documento) {
       setFornecedores((prevFornecedores) => [
         ...prevFornecedores,
@@ -35,14 +35,14 @@ export default function FornecedoresPage() {
       <div className="mb-4 p-4">
         <h2 className="text-xl font-semibold mb-2">Cadastrar Fornecedor</h2>
         <div className="grid grid-cols-3 items-center gap-2">
-          <Input
+          <InputVip
             nome="Nome"
             value={novoFornecedor.nome}
             setValue={(valor) =>
               setNovoFornecedor({ ...novoFornecedor, nome: valor })
             }
           />
-          <Input
+          <InputVip
             nome="Documento"
             value={novoFornecedor.documento}
             setValue={(valor) =>
