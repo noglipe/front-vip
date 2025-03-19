@@ -8,15 +8,15 @@ export default function Layout({
 }>) {
   return (
     <html lang="en">
-      <body>
-      <SidebarProvider>
-      <AppSidebar />
-      <main>
-        <SidebarTrigger />
-        {children}
-      </main>
-    </SidebarProvider>
-        </body>
+      <body className="container">
+        <SidebarProvider>
+          <AppSidebar />
+          <main>
+            <SidebarTrigger className="p-4 cursor-pointer" />
+            <div className="container">{children}</div>
+          </main>
+        </SidebarProvider>
+      </body>
     </html>
   );
 }
