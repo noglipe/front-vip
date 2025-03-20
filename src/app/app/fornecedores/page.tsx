@@ -6,7 +6,6 @@ import FORNECEDORES_QUERY from "@/graphql/fornecedores-query";
 import client from "../../../../apollo-client";
 
 import { ListFilter, PenLine } from "lucide-react";
-import { FornecedorEdicao } from "./_components/fornecedorEdicao";
 import { FornecedorCadastro } from "./_components/fornecedorCadastro";
 
 interface Fornecedor {
@@ -17,113 +16,52 @@ interface Fornecedor {
 
 export default function FornecedoresPage() {
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
-  const [fornecedorEditando, setFornecedorEditando] =
-    useState<Fornecedor | null>(null);
-
-  const { loading, error, data } = useQuery<{ fornecedores: Fornecedor[] }>(
-    FORNECEDORES_QUERY,
-    {
-      client,
-    }
-  );
+  const { loading, error, data } = useQuery<{ fornecedores: Fornecedor[] }>(FORNECEDORES_QUERY, { client });
 
   useEffect(() => {
-    if (data && data.fornecedores) {
+    if (data?.fornecedores) {
       setFornecedores(data.fornecedores);
     }
   }, [data]);
 
-  if (loading) return <p>Carregando...</p>;
-  if (error) return <p>{error.message}</p>;
+  if (loading) return <p className="text-center text-gray-500">Carregando...</p>;
+  if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
-  const handleEditar = (fornecedor: Fornecedor) => {
-    setFornecedorEditando(fornecedor);
-  };
-
-  const handleSalvarEdicao = async (fornecedorAtualizado: Fornecedor) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}seu_app/fornecedores/${fornecedorAtualizado.id}/`, // Substitua 'seu_app'
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(fornecedorAtualizado),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log(result.mensagem);
-
-      client.refetchQueries({ include: [FORNECEDORES_QUERY] });
-      setFornecedorEditando(null);
-    } catch (error) {
-      console.error("Erro ao editar fornecedor:", error);
-    }
-  };
-
-  const handleCancelarEdicao = () => {
-    setFornecedorEditando(null);
-  };
   return (
-    <div className="container p-4">
-      <h1 className="text-4xl font-bold mb-4">Gerenciamento de Fornecedores</h1>
+    <div className="container mx-auto p-6 max-w-3xl">
+      <h1 className="text-3xl font-bold mb-6 text-center">Gerenciamento de Fornecedores</h1>
 
-      <div className="flex flex-col flex-wrap gap-2">
+      <div className="space-y-6">
         <FornecedorCadastro />
-        {fornecedorEditando && (
-          <FornecedorEdicao
-            fornecedor={fornecedorEditando}
-            onSalvar={handleSalvarEdicao}
-            onCancelar={handleCancelarEdicao}
-          />
-        )}
 
-        <div className="bg-muted m-4 rounded-xl shadow-xl w-[700px]">
-          {/* Lista de Fornecedores */}
-          <div className="mb-4 p-4">
-            <h2 className="text-xl font-semibold mb-1">
-              Lista de Fornecedores
-            </h2>
-            <div className="flex flex-col gap-2 mt-2 ">
-              {fornecedores.slice().map((fornecedor) => (
+        <div className="bg-white shadow-lg rounded-xl p-6">
+          <h2 className="text-xl font-semibold mb-4">Lista de Fornecedores</h2>
+          <div className="space-y-4">
+            {fornecedores.length > 0 ? (
+              fornecedores.map((fornecedor) => (
                 <div
                   key={fornecedor.id}
-                  className="mb-2 flex justify-between items-center w-full"
+                  className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm"
                 >
-                  <div className="pr-4">
+                  <div>
                     <p className="text-lg font-medium">{fornecedor.nome}</p>
-                    {fornecedor.documento ? (
-                      <p className="text-gray-600">
-                        Documento: {fornecedor.documento}
-                      </p>
-                    ) : (
-                      ""
+                    {fornecedor.documento && (
+                      <p className="text-gray-600 text-sm">Documento: {fornecedor.documento}</p>
                     )}
                   </div>
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => handleEditar(fornecedor)}
-                      className="flex gap-2 bg-gray-400 hover:bg-gray-600 
-                    hover:cursor-pointer hover:text-white px-2 py-1 rounded-sm "
-                    >
-                      <PenLine /> Editar
+                  <div className="flex gap-2">
+                    <button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm">
+                      <PenLine size={16} /> Editar
                     </button>
-                    <button
-                      className="flex gap-2 bg-gray-400 hover:bg-gray-600 hover:cursor-pointer
-                    hover:text-white  px-2 py-1 rounded-sm"
-                    >
-                      <ListFilter /> Transações
+                    <button className="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm">
+                      <ListFilter size={16} /> Transações
                     </button>
                   </div>
                 </div>
-              ))}
-            </div>{" "}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">Nenhum fornecedor encontrado.</p>
+            )}
           </div>
         </div>
       </div>
