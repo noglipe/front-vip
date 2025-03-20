@@ -14,12 +14,13 @@ import logoImagem from "../../../../public/logos/logo.png";
 import Image from "next/image";
 import { LogOut } from "lucide-react";
 
+import Link from "next/link";
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import Link from "next/link";
+} from "../../../components/UI/collapsible";
 
 const menuLista = [
   {

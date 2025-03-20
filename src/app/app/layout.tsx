@@ -8,10 +8,10 @@ export default function Layout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="container">
+      <body>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full">
+          <main className="container w-full">
             <SidebarTrigger className="p-4 cursor-pointer" />
             <div className="container">{children}</div>
           </main>

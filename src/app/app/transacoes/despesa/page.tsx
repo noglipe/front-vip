@@ -32,16 +32,6 @@ export default function CadastroDespesaPage() {
     }));
   };
 
-  const adicionarArquivo = () => {
-    if (novoArquivo.file && novoArquivo.tipo) {
-      setDespesa((prev) => ({
-        ...prev,
-        arquivos: [...prev.arquivos, novoArquivo],
-      }));
-      setNovoArquivo({ file: null, tipo: "" });
-    }
-  };
-
   const salvarDespesa = () => {
     console.log("Despesa cadastrada:", despesa);
     alert("Despesa cadastrada com sucesso!");
@@ -168,54 +158,6 @@ export default function CadastroDespesaPage() {
           value={despesa.observacao}
           onChange={(e) => handleChange("observacao", e.target.value)}
         />
-      </div>
-
-      {/* Upload de Arquivos */}
-      <div className="mt-4 p-4 border rounded">
-        <h2 className="text-lg font-semibold mb-2">Anexar Arquivos</h2>
-        <input
-          type="file"
-          onChange={(e) =>
-            setNovoArquivo({
-              ...novoArquivo,
-              file: e.target.files?.[0] || null,
-            })
-          }
-          className="border p-2 rounded w-full"
-        />
-        <select
-          className="border p-2 rounded w-full mt-2"
-          value={novoArquivo.tipo}
-          onChange={(e) =>
-            setNovoArquivo({ ...novoArquivo, tipo: e.target.value })
-          }
-        >
-          <option value="">Selecione o Tipo de Arquivo</option>
-          <option value="Nota Fiscal">Nota Fiscal</option>
-          <option value="Comprovante de Pagamento">
-            Comprovante de Pagamento
-          </option>
-        </select>
-        <button
-          onClick={adicionarArquivo}
-          className="bg-blue-500 text-white p-2 rounded mt-2 w-full"
-        >
-          Adicionar Arquivo
-        </button>
-
-        {/* Lista de Arquivos Adicionados */}
-        <ul className="mt-4">
-          {despesa.arquivos.map((arquivo, index) => (
-            <li
-              key={index}
-              className="p-2 border rounded mt-2 flex justify-between"
-            >
-              <span>
-                {arquivo.file?.name} - {arquivo.tipo}
-              </span>
-            </li>
-          ))}
-        </ul>
       </div>
 
       {/* Botão de Salvar */}

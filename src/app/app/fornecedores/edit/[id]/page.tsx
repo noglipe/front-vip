@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import InputVip from "../../../_components/inputVip";
 import { X } from "lucide-react";
 import { useQuery } from "@apollo/client";
@@ -15,16 +15,13 @@ interface Fornecedor {
   documento: string;
 }
 
-export default function EditarFornecedor({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function EditarFornecedor() {
   const [fornecedor, setFornecedor] = useState<Fornecedor | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const router = useRouter();
-  const fornecedorId = parseInt(params.id);
+  const params = useParams();
+  const fornecedorId = parseInt(params.id as string);
 
   const {
     loading: loadingQuery,

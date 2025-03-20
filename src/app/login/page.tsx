@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "../../components/UI/button";
 import {
   Card,
   CardContent,
@@ -8,9 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/UI/card";
+} from "../../components/UI/card";
 
-import { Input } from "@/components/ui/input";
+import { Input } from "../../components/UI/input";
 import { Label } from "@/components/UI/label";
 
 export default function LoginPage() {
