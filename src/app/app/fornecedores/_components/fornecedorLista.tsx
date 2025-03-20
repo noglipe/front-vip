@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import FORNECEDORES_QUERY from "@/graphql/fornecedores-query";
-import client from "../../../../../apollo-client";
+import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
+import client from "../../../../lib/apollo-client";
 
 import { ListFilter, PenLine, Search } from "lucide-react";
 
@@ -24,6 +24,7 @@ export function FornecedorLista({ setView }: PropsList) {
     FORNECEDORES_QUERY,
     { client }
   );
+  const router = useRouter();
 
   useEffect(() => {
     if (data?.fornecedores) {
@@ -41,7 +42,9 @@ export function FornecedorLista({ setView }: PropsList) {
 
   return (
     <div className="flex-2 bg-white shadow-lg rounded-xl p-6">
-      <h2 className="text-xl font-semibold mb-4">Lista de Fornecedores</h2>
+      <h2 className="text-xl font-semibold mb-4 text-center">
+        Lista de Fornecedores
+      </h2>
 
       {/* Campo de Busca */}
       <div className="flex items-center mb-4 border rounded-lg p-2 bg-gray-100">
@@ -71,9 +74,17 @@ export function FornecedorLista({ setView }: PropsList) {
                 )}
               </div>
               <div className="flex gap-2">
-                <button className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm">
+                {/* Botão de edição redireciona para a página de edição */}
+                <button
+                  className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm"
+                  onClick={() =>
+                    router.push(`/app/fornecedores/edit/${fornecedor.id}`)
+                  }
+                >
                   <PenLine size={16} /> Editar
                 </button>
+
+                {/* Botão de transações */}
                 <button
                   onClick={() => setView(fornecedor.id)}
                   className="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm"

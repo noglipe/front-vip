@@ -2,7 +2,7 @@
 
 import { gql } from "@apollo/client";
 
-const FORNECEDORES_QUERY = gql`
+export const FORNECEDORES_QUERY = gql`
   query Fornecedores {
     fornecedores {
       id
@@ -12,4 +12,12 @@ const FORNECEDORES_QUERY = gql`
   }
 `;
 
-export default FORNECEDORES_QUERY;
+export const FORNECEDOR_QUERY = gql`
+  query Fornecedor($id: Int!) {
+    fornecedor(id: $id) {
+      id
+      nome
+      documento
+    }
+  }
+`;
