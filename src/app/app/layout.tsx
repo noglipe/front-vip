@@ -11,7 +11,7 @@ export default function Layout({
       <body className="container">
         <SidebarProvider>
           <AppSidebar />
-          <main>
+          <main className="w-full">
             <SidebarTrigger className="p-4 cursor-pointer" />
             <div className="container">{children}</div>
           </main>
