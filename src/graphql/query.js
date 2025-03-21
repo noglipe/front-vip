@@ -19,3 +19,12 @@ export const CATEGORIAS_FORM_QUERY = gql`
     }
   }
 `;
+
+export const MEIO_TRANSACAO_FORM_QUERY = gql`
+  query meiosDeTransacao {
+    meiosDeTransacao {
+      id
+      nome
+    }
+  }
+`;

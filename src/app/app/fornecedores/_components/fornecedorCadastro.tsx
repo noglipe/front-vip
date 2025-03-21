@@ -4,7 +4,6 @@ import client from "../../../../lib/apollo-client";
 import InputVip from "../../_components/inputVip";
 import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
 
-import { encryptData } from "../../../../lib/crip";
 
 export function FornecedorCadastro() {
   const [novoFornecedor, setNovoFornecedor] = useState({

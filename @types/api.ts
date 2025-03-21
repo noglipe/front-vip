@@ -1,9 +1,4 @@
-interface Caixa {
-  id: number;
-  nome: string;
-}
-
-interface Categoria {
-  id: number;
+interface SelectApi {
+  id: string;
   nome: string;
 }
