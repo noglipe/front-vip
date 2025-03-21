@@ -7,7 +7,7 @@ interface ReceitaInput {
   data: string | null;
   valor: number | null;
   categoria: string | null;
-  meioTransacao: string | null;
+  meio_de_transacao: string | null;
   instituicaoFinanceira: string | null;
   transacaoConcluida: boolean;
   descricao: string;

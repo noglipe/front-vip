@@ -1,5 +1,8 @@
 import { Loader2 } from "lucide-react";
-import { Logo64, LogoMedida } from "../logo";
+import { Logo64 } from "../logo";
+
+import miniLogoImg from "../../../public/logos/logo_64.png";
+import Image from "next/image";
 
 export function Loading() {
   return (
@@ -15,9 +18,18 @@ export function Loading() {
 
 export function MiniLoading() {
   return (
-    <div className="flex flex-row gap-1">
-      <LogoMedida tamanho={25} />
-      <Loader2 size={25} className="text-white animate-spin" />
+    <div className="relative w-8 h-8 flex items-center justify-center">
+      {/* Imagem de fundo */}
+      <Image
+        src={miniLogoImg}
+        alt="Mini Logo De Carregamento"
+        width={32}
+        height={32}
+        className="absolute top-0 left-0 z-0 animate-bounce"
+        quality={50}
+      />
+
+      {/* Ícone de loading girando sobre a imagem */}
     </div>
   );
 }
