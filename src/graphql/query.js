@@ -28,3 +28,12 @@ export const MEIO_TRANSACAO_FORM_QUERY = gql`
     }
   }
 `;
+
+export const INSTITUICAO_FINANCEIRA_FORM_QUERY = gql`
+  query instituicoesFinanceiras {
+    instituicoesFinanceiras {
+      id
+      nome
+    }
+  }
+`;

@@ -2,12 +2,23 @@ import { useQuery } from "@apollo/client";
 
 import client from "@/lib/apollo-client";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../UI/select";
+import Carregando from "../carregando";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
   query: any;
   minutos?: number;
   dataKey: string;
+  titulo?: string;
+  className?: string;
 }
 
 export function SelectBase<T extends SelectApi>({
@@ -15,6 +26,8 @@ export function SelectBase<T extends SelectApi>({
   query,
   minutos,
   dataKey,
+  titulo,
+  className,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const { loading, error, data, refetch } = useQuery<{
@@ -40,22 +53,23 @@ export function SelectBase<T extends SelectApi>({
     return () => clearInterval(intervalId);
   }, [refetch]);
 
-  if (loading)
-    return <p className="text-center text-gray-500">Carregando...</p>;
+  if (loading) return <Carregando />;
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div>
-      <select
-        onChange={(e) => setFunc(e.target.value)}
-        className="h-full w-full px-2 border-1 border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      >
-        {objetos.map((value) => (
-          <option key={value.id} value={value.id.toString()}>
-            {value.nome}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select onValueChange={(e) => setFunc(e)}>
+      <SelectTrigger className={className}>
+        <SelectValue placeholder={titulo ? titulo : `${dataKey}`} />
+      </SelectTrigger>
+      <SelectContent className={className}>
+        <SelectGroup className={className}>
+          {objetos.map((value) => (
+            <SelectItem className={className} key={value.id} value={value.id.toString()}>
+              {value.nome}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
 }

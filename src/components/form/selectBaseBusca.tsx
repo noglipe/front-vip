@@ -18,12 +18,16 @@ import {
   CommandItem,
   CommandList,
 } from "../UI/command";
+import Carregando from "../carregando";
+import CError from "../cError";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
   query: any;
   minutos?: number;
   dataKey: string;
+  titulo?: string;
+  className?: string;
 }
 
 export function SelectBaseBusca<T extends SelectApi>({
@@ -31,6 +35,8 @@ export function SelectBaseBusca<T extends SelectApi>({
   query,
   minutos,
   dataKey,
+  titulo,
+  className,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const [open, setOpen] = React.useState(false);
@@ -58,10 +64,8 @@ export function SelectBaseBusca<T extends SelectApi>({
     return () => clearInterval(intervalId);
   }, [refetch]);
 
-
-  if (loading)
-    return <p className="text-center text-gray-500">Carregando...</p>;
-  if (error) return <p className="text-center text-red-500">{error.message}</p>;
+  if (loading) return <Carregando />;
+  if (error) return <CError msg={error.message} />;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -70,11 +74,11 @@ export function SelectBaseBusca<T extends SelectApi>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="flex justify-between overflow-hidden h-full w-full px-2 border-1 border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={"flex justify-between overflow-hidden " + className}
         >
           {value
             ? objetos.find((obj) => obj.nome === value)?.nome
-            : `${dataKey}`}
+            : `${titulo}`}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -82,7 +86,7 @@ export function SelectBaseBusca<T extends SelectApi>({
         <Command>
           <CommandInput placeholder={`Buscar por ${dataKey}`} className="h-9" />
           <CommandList>
-            <CommandEmpty>No found.</CommandEmpty>
+            <CommandEmpty>Não Encontrado</CommandEmpty>
             <CommandGroup>
               {objetos.map((obj) => (
                 <CommandItem
@@ -90,7 +94,7 @@ export function SelectBaseBusca<T extends SelectApi>({
                   value={obj.nome}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
-                    setFunc(obj.id)
+                    setFunc(obj.id);
                     setOpen(false);
                   }}
                 >
