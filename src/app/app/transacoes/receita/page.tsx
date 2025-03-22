@@ -18,6 +18,7 @@ import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
+import ReceitaLista from "./_components/receitaList";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState("");
@@ -92,7 +93,7 @@ export default function CadastroReceitaPage() {
       alert("Receita cadastrada");
       setLoading(false);
       router.push("/app/transacoes/receita/");
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
       setLoading(false);
       if (error instanceof z.ZodError) {
@@ -112,109 +113,118 @@ export default function CadastroReceitaPage() {
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
         Cadastro de Receita
       </h1>
-      <div>
-        {errors.data && <p className="text-red-500">{errors.data}</p>}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 ">
+        <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
+          <div>
+            {errors.data && <p className="text-red-500">{errors.data}</p>}
 
-        {errors.valor && <p className="text-red-500">{errors.valor}</p>}
-        {errors.categoria && <p className="text-red-500">{errors.categoria}</p>}
-        {errors.meio_de_transacao && (
-          <p className="text-red-500">{errors.meio_de_transacao}</p>
-        )}
-        {errors.instituicao_financeira && (
-          <p className="text-red-500">{errors.instituicao_financeira}</p>
-        )}
-        {errors.transacaoConcluida && (
-          <p className="text-red-500">{errors.transacaoConcluida}</p>
-        )}
-        {errors.descricao && <p className="text-red-500">{errors.descricao}</p>}
-        {errors.observacao && (
-          <p className="text-red-500">{errors.observacao}</p>
-        )}
-        {errors.fornecedor && (
-          <p className="text-red-500">{errors.fornecedor}</p>
-        )}
-        {errors.receita && <p className="text-red-500">{errors.receita}</p>}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <DatePickerForm setFunc={setDate} className="w-full" />
+            {errors.valor && <p className="text-red-500">{errors.valor}</p>}
+            {errors.categoria && (
+              <p className="text-red-500">{errors.categoria}</p>
+            )}
+            {errors.meio_de_transacao && (
+              <p className="text-red-500">{errors.meio_de_transacao}</p>
+            )}
+            {errors.instituicao_financeira && (
+              <p className="text-red-500">{errors.instituicao_financeira}</p>
+            )}
+            {errors.transacaoConcluida && (
+              <p className="text-red-500">{errors.transacaoConcluida}</p>
+            )}
+            {errors.descricao && (
+              <p className="text-red-500">{errors.descricao}</p>
+            )}
+            {errors.observacao && (
+              <p className="text-red-500">{errors.observacao}</p>
+            )}
+            {errors.fornecedor && (
+              <p className="text-red-500">{errors.fornecedor}</p>
+            )}
+            {errors.receita && <p className="text-red-500">{errors.receita}</p>}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <DatePickerForm setFunc={setDate} className="w-full" />
 
-        <div className="flex items-center gap-2">
-          <Label 
-          htmlFor="valor"
-          >R$</Label>
-          <Input
-            id="valor"
-            type="number"
-            placeholder="Valor"
-            className="w-full"
-            onChange={(e) => setValor(parseFloat(e.target.value))}
-          />
+            <div className="flex items-center gap-2">
+              <Label htmlFor="valor">R$</Label>
+              <Input
+                id="valor"
+                type="number"
+                placeholder="Valor"
+                className="w-full"
+                onChange={(e) => setValor(parseFloat(e.target.value))}
+              />
+            </div>
+            <SelectBase
+              setFunc={setMeioTransacao}
+              query={MEIO_TRANSACAO_FORM_QUERY}
+              dataKey="meiosDeTransacao"
+              minutos={60}
+              titulo="Meios de Transações"
+              className="w-full"
+            />
+            <SelectBase
+              setFunc={setinstituicaoFinanceira}
+              query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+              dataKey="instituicoesFinanceiras"
+              minutos={60}
+              titulo="Instituições Financeiras"
+              className="w-full"
+            />
+            <SelectBaseBusca
+              setFunc={setCategoria}
+              query={CATEGORIAS_FORM_QUERY}
+              dataKey="categorias"
+              minutos={1}
+              titulo="Categorias"
+              className="w-full"
+            />
+            <SelectBaseBusca
+              setFunc={setFornecedores}
+              query={FORNECEDORES_QUERY}
+              dataKey="fornecedores"
+              minutos={1}
+              titulo="Fornecedores"
+              className="w-full"
+            />
+            <div className="flex items-center gap-2 h-full">
+              <Checkbox
+                className="h-full sm:h-10 w-10"
+                id="terms"
+                checked={concluida}
+                onCheckedChange={() => setConcluida(!concluida)}
+              />
+              <Label htmlFor="terms">Transação Concluída</Label>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 mt-4">
+            <Input
+              type="text"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descrição"
+              className="w-full"
+            />
+
+            <Textarea
+              value={observacao}
+              onChange={(e) => setObservacao(e.target.value)}
+              placeholder="Observação"
+              className="w-full"
+            />
+          </div>
+          <div className="flex justify-center gap-4 mt-12">
+            <Button
+              className="cursor-pointer flex justify-center items-center"
+              onClick={() => cadastrarReceita()}
+            >
+              {loading ? <MiniLoading /> : ""} Cadastrar
+            </Button>
+          </div>
         </div>
-        <SelectBase
-          setFunc={setMeioTransacao}
-          query={MEIO_TRANSACAO_FORM_QUERY}
-          dataKey="meiosDeTransacao"
-          minutos={60}
-          titulo="Meios de Transações"
-          className="w-full"
-        />
-        <SelectBase
-          setFunc={setinstituicaoFinanceira}
-          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-          dataKey="instituicoesFinanceiras"
-          minutos={60}
-          titulo="Instituições Financeiras"
-          className="w-full"
-        />
-        <SelectBaseBusca
-          setFunc={setCategoria}
-          query={CATEGORIAS_FORM_QUERY}
-          dataKey="categorias"
-          minutos={1}
-          titulo="Categorias"
-          className="w-full"
-        />
-        <SelectBaseBusca
-          setFunc={setFornecedores}
-          query={FORNECEDORES_QUERY}
-          dataKey="fornecedores"
-          minutos={1}
-          titulo="Fornecedores"
-          className="w-full"
-        />
-        <div className="flex items-center gap-2 h-full">
-          <Checkbox
-            className="h-full sm:h-10 w-10"
-            id="terms"
-            checked={concluida}
-            onCheckedChange={() => setConcluida(!concluida)}
-          />
-          <Label htmlFor="terms">Transação Concluída</Label>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 mt-4">
-        <Input
-          type="text"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          placeholder="Descrição"
-          className="w-full"
-        />
 
-        <Textarea
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          placeholder="Observação"
-          className="w-full"
-        />
-      </div>
-      <div className="flex justify-center gap-4 mt-12">
-        <Button
-          className="cursor-pointer flex justify-center items-center"
-          onClick={() => cadastrarReceita()}
-        >
-          {loading ? <MiniLoading /> : ""} Cadastrar
-        </Button>
+        <ReceitaLista />
       </div>
     </div>
   );

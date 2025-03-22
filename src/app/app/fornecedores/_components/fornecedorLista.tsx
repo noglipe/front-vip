@@ -6,6 +6,7 @@ import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
 import client from "../../../../lib/apollo-client";
 
 import { ListFilter, PenLine, Search } from "lucide-react";
+import { Carregando } from "@/components/loading";
 
 interface Fornecedor {
   id: number;
@@ -37,7 +38,7 @@ export function FornecedorLista({ setView }: PropsList) {
   );
 
   if (loading)
-    return <p className="text-center text-gray-500">Carregando...</p>;
+    return <Carregando />
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (

@@ -37,3 +37,19 @@ export const INSTITUICAO_FINANCEIRA_FORM_QUERY = gql`
     }
   }
 `;
+
+export const RECEITA_LIST_QUERY = gql`
+  query receitalista {
+    receitas {
+      data
+      descricao
+      valor
+      fornecedor {
+        nome
+      }
+      categoria {
+        nome
+      }
+    }
+  }
+`;

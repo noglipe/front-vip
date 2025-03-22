@@ -16,6 +16,14 @@ export function Loading() {
   );
 }
 
+export function Carregando() {
+  return (
+    <>
+      <p className="text-center text-gray-500">Carregando...</p>;
+    </>
+  );
+}
+
 export function MiniLoading() {
   return (
     <div className="relative w-8 h-8 flex items-center justify-center">

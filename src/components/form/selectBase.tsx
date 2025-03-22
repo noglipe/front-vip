@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../UI/select";
-import Carregando from "../carregando";
+import { Carregando } from "../loading";
+
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;

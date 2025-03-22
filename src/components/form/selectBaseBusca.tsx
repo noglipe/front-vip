@@ -19,8 +19,9 @@ import {
   CommandList,
 } from "../UI/command";
 
-import Carregando from "../carregando";
+
 import CError from "../cError";
+import { Carregando } from "../loading";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
