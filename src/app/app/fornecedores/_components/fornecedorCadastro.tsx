@@ -3,17 +3,20 @@ import client from "../../../../lib/apollo-client";
 
 import InputVip from "../../_components/inputVip";
 import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
-
+import { MiniLoading } from "@/components/loading";
 
 export function FornecedorCadastro() {
+  const [loading, setLoading] = useState(false);
   const [novoFornecedor, setNovoFornecedor] = useState({
     nome: "",
     documento: "",
   });
 
   const adicionarFornecedor = async () => {
+    setLoading(true);
     if (!novoFornecedor.nome) {
       alert("Dados Não Informados");
+      setLoading(false);
       return;
     }
 
@@ -27,15 +30,19 @@ export function FornecedorCadastro() {
         }
       );
 
-      if (!response.ok)
+      if (!response.ok) {
+        setLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const result = await response.json();
       alert(result.mensagem);
 
       client.refetchQueries({ include: [FORNECEDORES_QUERY] });
       setNovoFornecedor({ nome: "", documento: "" });
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error("Erro ao cadastrar fornecedor:", error);
     }
   };
@@ -59,10 +66,10 @@ export function FornecedorCadastro() {
           }
         />
         <button
-          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition"
+          className="flex gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition"
           onClick={adicionarFornecedor}
         >
-          Cadastrar
+          {loading ? <MiniLoading /> : ""} Cadastrar
         </button>
       </div>
     </div>

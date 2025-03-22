@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DatePickerForm } from "../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
@@ -15,17 +16,14 @@ import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
 import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
-
 import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
 
 export default function CadastroReceitaPage() {
-  const [instituicaoFinanceira, setinstituicaoFinanceira] = useState<
-    string | null
-  >(null);
-  const [categoria, setCategoria] = useState<string | null>(null);
-  const [meio_de_transacao, setMeioTransacao] = useState<string | null>(null);
-  const [date, setDate] = useState<Date | null>(null);
+  const [instituicao_financeira, setinstituicaoFinanceira] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [meio_de_transacao, setMeioTransacao] = useState("");
+  const [date, setDate] = useState("");
   const [concluida, setConcluida] = useState(true);
   const [fornecedores, setFornecedores] = useState("");
   const [descricao, setDescricao] = useState("");
@@ -33,19 +31,16 @@ export default function CadastroReceitaPage() {
   const [valor, setValor] = useState(0);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const receitaSchema = z.object({
-    date: z.date().nullable(),
-    valor: z.number().nullable(),
-    categoria: z.string().min(1, "A categoria é obrigatória.").nullable(),
-    meio_de_transacao: z
+    date: z.string().min(1, "A data é obrigatória."),
+    valor: z.number(),
+    categoria: z.string().min(1, "A categoria é obrigatória."),
+    meio_de_transacao: z.string().min(1, "O meio de transação é obrigatório."),
+    instituicao_financeira: z
       .string()
-      .min(1, "O meio de transação é obrigatório.")
-      .nullable(),
-    instituicaoFinanceira: z
-      .string()
-      .min(1, "A instituição financeira é obrigatória.")
-      .nullable(),
+      .min(1, "A instituição financeira é obrigatória."),
     descricao: z.string().min(1, "A descrição é obrigatória."),
     fornecedores: z.string().nullable(),
     observacao: z.string().nullable(),
@@ -53,14 +48,14 @@ export default function CadastroReceitaPage() {
   });
 
   const cadastrarReceita = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       receitaSchema.parse({
         date,
         valor,
         categoria,
         meio_de_transacao,
-        instituicaoFinanceira,
+        instituicao_financeira,
         descricao,
         fornecedores,
         observacao,
@@ -68,14 +63,14 @@ export default function CadastroReceitaPage() {
       });
 
       const receitaInput: ReceitaInput = {
-        data: date ? date.toISOString().split("T")[0] : null,
-        valor: valor,
-        categoria: categoria,
-        meio_de_transacao: meio_de_transacao,
-        instituicaoFinanceira: instituicaoFinanceira,
+        data: date ? date : "null",
+        valor,
+        categoria,
+        meio_de_transacao,
+        instituicao_financeira,
         transacaoConcluida: concluida,
-        descricao: descricao,
-        observacao: observacao,
+        descricao,
+        observacao,
         fornecedor: fornecedores,
         receita: true,
       };
@@ -91,12 +86,13 @@ export default function CadastroReceitaPage() {
 
       if (!response.ok) {
         setLoading(false);
-        throw new Error("HTTP error! status: ${response.status}");
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
       alert("Receita cadastrada");
       setLoading(false);
+      router.push("/app/transacoes/receita/");
+      window.location.reload()
     } catch (error) {
       setLoading(false);
       if (error instanceof z.ZodError) {
@@ -111,16 +107,41 @@ export default function CadastroReceitaPage() {
       }
     }
   };
-
   return (
     <div className="container mx-auto p-8 bg-white shadow-lg rounded-lg">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
         Cadastro de Receita
       </h1>
+      <div>
+        {errors.data && <p className="text-red-500">{errors.data}</p>}
+
+        {errors.valor && <p className="text-red-500">{errors.valor}</p>}
+        {errors.categoria && <p className="text-red-500">{errors.categoria}</p>}
+        {errors.meio_de_transacao && (
+          <p className="text-red-500">{errors.meio_de_transacao}</p>
+        )}
+        {errors.instituicao_financeira && (
+          <p className="text-red-500">{errors.instituicao_financeira}</p>
+        )}
+        {errors.transacaoConcluida && (
+          <p className="text-red-500">{errors.transacaoConcluida}</p>
+        )}
+        {errors.descricao && <p className="text-red-500">{errors.descricao}</p>}
+        {errors.observacao && (
+          <p className="text-red-500">{errors.observacao}</p>
+        )}
+        {errors.fornecedor && (
+          <p className="text-red-500">{errors.fornecedor}</p>
+        )}
+        {errors.receita && <p className="text-red-500">{errors.receita}</p>}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DatePickerForm setFunc={setDate} className="w-full" />
+
         <div className="flex items-center gap-2">
-          <Label htmlFor="valor">R$</Label>
+          <Label 
+          htmlFor="valor"
+          >R$</Label>
           <Input
             id="valor"
             type="number"
@@ -179,6 +200,7 @@ export default function CadastroReceitaPage() {
           placeholder="Descrição"
           className="w-full"
         />
+
         <Textarea
           value={observacao}
           onChange={(e) => setObservacao(e.target.value)}
@@ -192,9 +214,6 @@ export default function CadastroReceitaPage() {
           onClick={() => cadastrarReceita()}
         >
           {loading ? <MiniLoading /> : ""} Cadastrar
-        </Button>
-        <Button className="cursor-pointer" variant="outline">
-          Cadastrar e Novo Cadastro
         </Button>
       </div>
     </div>

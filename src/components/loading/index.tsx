@@ -27,6 +27,7 @@ export function MiniLoading() {
         height={32}
         className="absolute top-0 left-0 z-0 animate-bounce"
         quality={50}
+        priority
       />
 
       {/* Ícone de loading girando sobre a imagem */}
