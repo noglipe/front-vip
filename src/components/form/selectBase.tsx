@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../UI/select";
-import { Carregando } from "../loading";
+import { Carregando, MiniLoading } from "../loading";
 
 
 interface Props<T extends SelectApi> {
@@ -54,7 +54,7 @@ export function SelectBase<T extends SelectApi>({
     return () => clearInterval(intervalId);
   }, [refetch]);
 
-  if (loading) return <Carregando />;
+  if (loading) return <MiniLoading />;
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (

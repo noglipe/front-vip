@@ -1,16 +1,25 @@
 import { Loader2 } from "lucide-react";
-import { Logo64 } from "../logo";
 
+import Logo64 from "../../../public/logos/logo.png";
 import miniLogoImg from "../../../public/logos/logo_64.png";
 import Image from "next/image";
 
 export function Loading() {
   return (
     <div className="fixed inset-0 w-full h-full flex justify-center items-center bg-black z-50">
-      <div className="flex items-center space-x-2">
-        <Logo64 />
-        <Loader2 size={25} className="text-white animate-spin" />
-        <span className="text-white">Carregando...</span>
+      <div className="flex flex-col items-center ">
+        <Image
+          src={Logo64}
+          alt="Logo"
+          priority
+          width={200}
+                height={200}
+          className="z-50 mb-10 "
+        />
+        <div className="flex flex-row gap-4">
+          <Loader2 size={25} className="text-white animate-spin" />
+          <span className="text-white">Carregando...</span>
+        </div>
       </div>
     </div>
   );

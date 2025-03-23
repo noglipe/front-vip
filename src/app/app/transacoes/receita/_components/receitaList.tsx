@@ -4,8 +4,19 @@ import { RECEITA_LIST_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
 import client from "../../../../../lib/apollo-client";
 import { useEffect, useState } from "react";
-import { Carregando } from "@/components/loading";
+import { Carregando, Loading, MiniLoading } from "@/components/loading";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/UI/table";
+
+import {formatReal} from "../../../../../lib/utils"
 
 interface Receitas {
   data: string;
@@ -32,36 +43,34 @@ export default function ReceitaLista() {
     }
   }, [data]);
 
-  if (loading) return <Carregando />;
+  if (loading) return <MiniLoading />;
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
     <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">Receitas Recentes</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+        Receitas Recentes
+      </h2>
       <div className="grid grid-cols-1 gap-2">
-        {receitas.map((receita, index) => (
-          <Card key={index} className="bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold text-gray-700">
-                {receita.descricao}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 grid grid-cols-2">
-              <p className="text-sm text-gray-600">
-                <strong>Data:</strong> {new Date(receita.data).toLocaleDateString()}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Valor:</strong> <span className="text-green-600 font-semibold">R$ {parseFloat(receita.valor).toFixed(2)}</span>
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Categoria:</strong> {receita.categoria.nome}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Fornecedor:</strong> {receita.fornecedor.nome}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+        <Table>
+          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableHeader>
+            <TableHead className="w-[100px]">Data</TableHead>
+            <TableHead>descricao</TableHead>
+            <TableHead className="w-[100px]">Valor</TableHead>
+            <TableHead className="">Categoria</TableHead>
+          </TableHeader>
+          <TableBody>
+            {receitas.map((receita, index) => (
+              <TableRow key={index}>
+                <TableCell>{receita.data}</TableCell>
+                <TableCell>{receita.descricao}</TableCell>
+                <TableCell>{formatReal(receita.valor)}</TableCell>
+                <TableCell>{receita.categoria.nome}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

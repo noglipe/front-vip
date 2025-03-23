@@ -21,7 +21,7 @@ import {
 
 
 import CError from "../cError";
-import { Carregando } from "../loading";
+import { Carregando, MiniLoading } from "../loading";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
@@ -66,7 +66,7 @@ export function SelectBaseBusca<T extends SelectApi>({
     return () => clearInterval(intervalId);
   }, [refetch]);
 
-  if (loading) return <Carregando />;
+  if (loading) return <MiniLoading />;
   if (error) return <CError msg={error.message} />;
 
   return (

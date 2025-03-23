@@ -113,7 +113,7 @@ export default function CadastroReceitaPage() {
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
         Cadastro de Receita
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 ">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 ">
         <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
           <div>
@@ -188,15 +188,6 @@ export default function CadastroReceitaPage() {
               titulo="Fornecedores"
               className="w-full"
             />
-            <div className="flex items-center gap-2 h-full">
-              <Checkbox
-                className="h-full sm:h-10 w-10"
-                id="terms"
-                checked={concluida}
-                onCheckedChange={() => setConcluida(!concluida)}
-              />
-              <Label htmlFor="terms">Transação Concluída</Label>
-            </div>
           </div>
           <div className="flex flex-col gap-2 mt-4">
             <Input
@@ -215,6 +206,15 @@ export default function CadastroReceitaPage() {
             />
           </div>
           <div className="flex justify-center gap-4 mt-12">
+            <div className="flex items-center gap-2 h-full">
+              <Checkbox
+                className="h-full sm:h-10 w-10"
+                id="terms"
+                checked={concluida}
+                onCheckedChange={() => setConcluida(!concluida)}
+              />
+              <Label htmlFor="terms">Transação Concluída</Label>
+            </div>
             <Button
               className="cursor-pointer flex justify-center items-center"
               onClick={() => cadastrarReceita()}
