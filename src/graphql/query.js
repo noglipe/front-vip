@@ -53,3 +53,18 @@ export const RECEITA_LIST_QUERY = gql`
     }
   }
 `;
+
+export const APP_QUERY = gql`
+  query app {
+    caixas {
+      nome
+      id
+      saldo
+    }
+    instituicoesFinanceiras {
+      id
+      nome
+      saldo
+    }
+  }
+`;

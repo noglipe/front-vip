@@ -4,8 +4,8 @@ import { RECEITA_LIST_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
 import client from "../../../../../lib/apollo-client";
 import { useEffect, useState } from "react";
-import { Carregando, Loading, MiniLoading } from "@/components/loading";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import { MiniLoading } from "@/components/loading";
+
 import {
   Table,
   TableBody,
