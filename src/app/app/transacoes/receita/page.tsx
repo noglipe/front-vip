@@ -18,9 +18,9 @@ import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
-import { Loading, MiniLoading } from "@/components/loading";
-import ReceitaLista from "../_components/transacoesRecentes";
+import {  MiniLoading } from "@/components/loading";
 import TransacoesRecentes from "../_components/transacoesRecentes";
+import { CALSS_INPUTS } from "@/lib/constantes";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<
@@ -113,40 +113,20 @@ export default function CadastroReceitaPage() {
     }
   };
   return (
-    <div className="container mx-auto p-8 bg-white shadow-lg rounded-lg">
+    <div className="container mx-auto p-8 bg-white ">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
         Cadastro de Receita
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 ">
-        <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
           <div>
-            {errors.data && <p className="text-red-500">{errors.data}</p>}
-
-            {errors.valor && <p className="text-red-500">{errors.valor}</p>}
-            {errors.categoria && (
-              <p className="text-red-500">{errors.categoria}</p>
-            )}
-            {errors.meio_de_transacao && (
-              <p className="text-red-500">{errors.meio_de_transacao}</p>
-            )}
-            {errors.instituicao_financeira && (
-              <p className="text-red-500">{errors.instituicao_financeira}</p>
-            )}
-            {errors.transacaoConcluida && (
-              <p className="text-red-500">{errors.transacaoConcluida}</p>
-            )}
-            {errors.descricao && (
-              <p className="text-red-500">{errors.descricao}</p>
-            )}
-            {errors.observacao && (
-              <p className="text-red-500">{errors.observacao}</p>
-            )}
-            {errors.fornecedor && (
-              <p className="text-red-500">{errors.fornecedor}</p>
-            )}
-            {errors.receita && <p className="text-red-500">{errors.receita}</p>}
-          </div>
+        {Object.entries(errors).map(([key, message]) => (
+          <p key={key} className="text-red-500">
+            {message}
+          </p>
+        ))}
+      </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <DatePickerForm setFunc={setDate} className="w-full" />
 
@@ -156,7 +136,7 @@ export default function CadastroReceitaPage() {
                 id="valor"
                 type="number"
                 placeholder="Valor"
-                className="w-full"
+                className={CALSS_INPUTS}
                 onChange={(e) => setValor(parseFloat(e.target.value))}
               />
             </div>
@@ -166,7 +146,7 @@ export default function CadastroReceitaPage() {
               dataKey="meiosDeTransacao"
               minutos={60}
               titulo="Meios de Transações"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
             <SelectBase
               setFunc={setinstituicaoFinanceira}
@@ -174,7 +154,7 @@ export default function CadastroReceitaPage() {
               dataKey="instituicoesFinanceiras"
               minutos={60}
               titulo="Instituições Financeiras"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
             <SelectBaseBusca
               setFunc={setCategoria}
@@ -182,7 +162,7 @@ export default function CadastroReceitaPage() {
               dataKey="categorias"
               minutos={1}
               titulo="Categorias"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
             <SelectBaseBusca
               setFunc={setFornecedores}
@@ -190,7 +170,7 @@ export default function CadastroReceitaPage() {
               dataKey="fornecedores"
               minutos={1}
               titulo="Fornecedores"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
           </div>
           <div className="flex flex-col gap-2 mt-4">
@@ -199,20 +179,20 @@ export default function CadastroReceitaPage() {
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descrição"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
 
             <Textarea
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
               placeholder="Observação"
-              className="w-full"
+              className={CALSS_INPUTS}
             />
           </div>
           <div className="flex justify-center gap-4 mt-12">
             <div className="flex items-center gap-2 h-full">
               <Checkbox
-                className="h-full sm:h-10 w-10"
+                className={`${CALSS_INPUTS} sm:h-10 w-10`}
                 id="terms"
                 checked={concluida}
                 onCheckedChange={() => setConcluida(!concluida)}

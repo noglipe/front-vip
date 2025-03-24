@@ -1,18 +1,5 @@
 "use client";
 
-interface App {
-  caixas: {
-    nome: string;
-    id: string;
-    saldo: number;
-  }[];
-  instituicoesFinanceiras: {
-    id: string;
-    nome: string;
-    saldo: number;
-  }[];
-}
-
 import { Card, CardContent } from "@/components/UI/card";
 import {
   Table,
@@ -26,18 +13,43 @@ import { APP_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import client from "../../lib/apollo-client";
-import { Loading, MiniLoading } from "@/components/loading";
+import { Loading } from "@/components/loading";
 import { formatReal } from "@/lib/utils";
 
+interface App {
+  caixas: {
+    nome: string;
+    id: string;
+    saldo: number;
+  }[];
+  instituicoesFinanceiras: {
+    id: string;
+    nome: string;
+    saldo: number;
+  }[];
+}
+
+interface Cx {
+    nome: string;
+    id: string;
+    saldo: number;
+}
+
+interface iF {
+  id: string;
+  nome: string;
+  saldo: number;
+}
+
 export default function DashboardFinanceiro() {
-  const [dados, setDados] = useState<App | null>(null);
+  const [dados, setDados] = useState<App[] | any >(null);
   const { loading, error, data } = useQuery<{ app: App[] }>(APP_QUERY, {
     client,
   });
 
   useEffect(() => {
     console.log(data);
-    if (data) {
+    if (data !== undefined) {
       setDados(data);
     }
   }, [data]);
@@ -55,29 +67,33 @@ export default function DashboardFinanceiro() {
   return (
     <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {/* Total em cada caixa */}
-      {dados?.caixas.map((caixa, index) => (
-        <Card key={index} className="p-4">
-          <CardContent>
-            <h2 className="text-lg font-bold">{caixa.nome}</h2>
-            <p className="text-2xl font-semibold">{formatReal(caixa.saldo)}</p>
-          </CardContent>
-        </Card>
-      ))}
+      {dados &&
+        dados?.caixas.map((caixa : Cx) => (
+          <Card key={caixa.id} className="p-4">
+            <CardContent>
+              <h2 className="text-lg font-bold">{caixa.nome}</h2>
+              <p className="text-2xl font-semibold">
+                {formatReal(caixa.saldo)}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
 
       {/* Total em cada instituição financeira */}
-      {dados?.instituicoesFinanceiras.map((inst, index) => (
-        <Card key={index} className="p-4">
-          <CardContent>
-            <h2 className="text-lg font-bold">{inst.nome}</h2>
-            <p className="text-2xl font-semibold">{formatReal(inst.saldo)}</p>
-          </CardContent>
-        </Card>
-      ))}
+      {dados &&
+        dados?.instituicoesFinanceiras.map((inst: iF) => (
+          <Card key={inst.id} className="p-4">
+            <CardContent>
+              <h2 className="text-lg font-bold">{inst.nome}</h2>
+              <p className="text-2xl font-semibold">{formatReal(inst.saldo)}</p>
+            </CardContent>
+          </Card>
+        ))}
 
       {/* Total de compras do cartão */}
       <Card className="p-4 col-span-1 md:col-span-2">
         <CardContent>
-          <h2 className="text-lg font-bold">Compras no Cartão - Inplementar</h2>
+          <h2 className="text-lg font-bold">Compras no Cartão - Implementar</h2>
           <p className="text-2xl font-semibold text-red-600">
             R$ {comprasCartao.toFixed(2)}
           </p>
@@ -87,7 +103,9 @@ export default function DashboardFinanceiro() {
       {/* Lista de transações não concluídas */}
       <Card className="p-4 col-span-full">
         <CardContent>
-          <h2 className="text-lg font-bold mb-4">Transações Não Concluídas - Inplementar</h2>
+          <h2 className="text-lg font-bold mb-4">
+            Transações Não Concluídas - Implementar
+          </h2>
           <Table>
             <TableHeader>
               <TableRow>

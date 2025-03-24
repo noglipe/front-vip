@@ -56,28 +56,30 @@ export default function TransacoesRecentes({
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
+    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         {receita ? " Receitas Recentes" : " Despesas Recentes"}
       </h2>
-      <div className="grid grid-cols-1 gap-2">
+      <div className="grid grid-cols-1 gap-2 flex-1">
         <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableCaption>Uma lista das transações mais recentes.</TableCaption>
           <TableHeader>
             <tr>
-              <TableHead className="w-[100px]">Data</TableHead>
-              <TableHead>descricao</TableHead>
-              <TableHead className="w-[100px]">Valor</TableHead>
-              <TableHead className="w-[100px]">Categoria</TableHead>
+              <TableHead className="w-[50px]">Data</TableHead>
+              <TableHead className="w-[50px]">descricao</TableHead>
+              <TableHead className="w-[50px]">Valor</TableHead>
+              <TableHead className="w-[50px]">Categoria</TableHead>
             </tr>
           </TableHeader>
           <TableBody>
             {dados.map((dado, index) => (
-              <TableRow key={index} className="overflow-hidden">
+              <TableRow key={index} className="overflow-clip">
                 <TableCell>{dado.data}</TableCell>
-                <TableCell>{dado.descricao}</TableCell>
+                <TableCell className="w-[50px] overflow-hidden">
+                  {dado.descricao}
+                </TableCell>
                 <TableCell>{formatReal(dado.valor)}</TableCell>
-                <TableCell className="w-[100px] overflow-hidden">
+                <TableCell className="w-[50px] overflow-hidden">
                   {dado.categoria.nome}
                 </TableCell>
               </TableRow>
