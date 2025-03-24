@@ -53,6 +53,7 @@ export const RECEITA_LIST_QUERY = gql`
       data
       descricao
       valor
+      transacaoConcluido
       fornecedor {
         nome
       }
@@ -69,6 +70,7 @@ export const DESPESA_LIST_QUERY = gql`
       data
       descricao
       valor
+      transacaoConcluido
       fornecedor {
         nome
       }
@@ -90,6 +92,39 @@ export const APP_QUERY = gql`
       id
       nome
       saldo
+    }
+  }
+`;
+
+export const N_CONCLIDAS_QUERY = gql`
+  query nConcluidas {
+    nConcluidas {
+      id
+      data
+      descricao
+      valor
+      categoria {
+        nome
+      }
+    }
+  }
+`;
+
+export const CARTAO_MES_QUERY = gql`
+  query comprasCartaoMes {
+    comprasCartaoMes {
+      id
+      descricao
+      data
+      valor
+      cartaoUtilizado {
+        nome
+        id
+      }
+      categoria {
+        nome
+        id
+      }
     }
   }
 `;

@@ -16,11 +16,13 @@ import {
 } from "@/components/UI/table";
 
 import { formatReal } from "../../../../lib/utils";
+import { CircleCheckBig, CircleEllipsis } from "lucide-react";
 
 interface DadosType {
   data: string;
   descricao: string;
   valor: string;
+  transacaoConcluido: boolean;
   fornecedor: {
     nome: string;
   };
@@ -65,6 +67,7 @@ export default function TransacoesRecentes({
           <TableCaption>Uma lista das transações mais recentes.</TableCaption>
           <TableHeader>
             <tr>
+              <TableHead className="w-[50px]"> </TableHead>
               <TableHead className="w-[50px]">Data</TableHead>
               <TableHead className="w-[50px]">descricao</TableHead>
               <TableHead className="w-[50px]">Valor</TableHead>
@@ -74,6 +77,13 @@ export default function TransacoesRecentes({
           <TableBody>
             {dados.map((dado, index) => (
               <TableRow key={index} className="overflow-clip">
+                <TableCell>
+                  {dado.transacaoConcluido ? (
+                    <CircleCheckBig className="text-green-600 "/>
+                  ) : (
+                    <CircleEllipsis className="text-gray-500 " />
+                  )}
+                </TableCell>
                 <TableCell>{dado.data}</TableCell>
                 <TableCell className="w-[50px] overflow-hidden">
                   {dado.descricao}
