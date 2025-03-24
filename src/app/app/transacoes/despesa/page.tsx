@@ -1,172 +1,293 @@
 "use client";
 
 import { useState } from "react";
-import Input from "@/app/app/_components/inputVip";
+import { useRouter } from "next/navigation";
+import { DatePickerForm } from "../../../../components/form/datePickerForm";
+import { Input } from "@/components/UI/input";
+import { SelectBase } from "@/components/form/selectBase";
+import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
+import {
+  CARTOES_FORM_QUERY,
+  CATEGORIAS_FORM_QUERY,
+  INSTITUICAO_FINANCEIRA_FORM_QUERY,
+  MEIO_TRANSACAO_FORM_QUERY,
+} from "@/graphql/query";
+import { Checkbox } from "@/components/UI/checkbox";
+import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
+import { Label } from "@/components/UI/label";
+import { Button } from "@/components/UI/button";
+import { Textarea } from "@/components/UI/textarea";
+import { z } from "zod";
+import { Loading, MiniLoading } from "@/components/loading";
+import { Switch } from "@/components/UI/switch";
 
 export default function CadastroDespesaPage() {
-  const [despesa, setDespesa] = useState({
-    dataPagamento: "",
-    dataCompra: "",
-    transacaoConcluida: false,
-    valor: "",
-    meioTransacao: "",
-    instituicaoFinanceira: "",
-    categoria: "",
-    cartaoUtilizado: "",
-    situacaoFiscal: "",
-    descricao: "",
-    fornecedor: "",
-    observacao: "",
-    arquivos: [],
+  const [compra_parcelada, setTipoDespesa] = useState(false);
+  const [instituicao_financeira, setInstituicaoFinanceira] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [cartao_utilizado, setCartao] = useState("");
+  const [meio_de_transacao, setMeioTransacao] = useState("");
+  const [data, setDate] = useState("");
+  const [data_compra, setDateCompra] = useState("");
+  const [transacao_concluido, setConcluida] = useState(true);
+  const [fornecedor, setFornecedores] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [observacao, setObservacao] = useState("");
+  const [valor, setValor] = useState(0);
+  const [parcela_atual, setParcelas] = useState(1);
+  const [numero_de_parcelas, setNumParcelas] = useState(1);
+  const [errors, setErrors] = useState({});
+  const [situacao_fiscal, setSituacao_fiscal] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const despesaSchema = z.object({
+    date: z.string().min(1, "A data é obrigatória."),
+    data_compra: z.string(),
+    valor: z.number(),
+    categoria: z.string().min(1, "A categoria é obrigatória."),
+    numero_de_parcelas: z.number().nullable(),
+    parcela_atual: z.number().nullable(),
+    meio_de_transacao: z.string().min(1, "O meio de transação é obrigatório."),
+    cartao_utilizado: z.string().nullable(),
+    instituicao_financeira: z
+      .string()
+      .min(1, "A instituição financeira é obrigatória."),
+    descricao: z.string().min(1, "A descrição é obrigatória."),
+    fornecedor: z.string().nullable(),
+    observacao: z.string().nullable(),
+    situacao_fiscal: z.boolean(),
+    compra_parcelada: z.boolean(),
+    transacao_concluido: z.boolean(),
   });
 
-  const [novoArquivo, setNovoArquivo] = useState({
-    file: null,
-    tipo: "",
-  });
+  const cadastrarDespesa = async () => {
+    setLoading(true);
 
-  const handleChange = (campo: string, valor: any) => {
-    setDespesa((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
-  };
-
-  const salvarDespesa = () => {
-    console.log("Despesa cadastrada:", despesa);
-    alert("Despesa cadastrada com sucesso!");
-    setDespesa({
-      dataPagamento: "",
-      dataCompra: "",
-      transacaoConcluida: false,
-      valor: "",
-      meioTransacao: "",
-      instituicaoFinanceira: "",
-      categoria: "",
-      cartaoUtilizado: "",
-      situacaoFiscal: "",
-      descricao: "",
-      fornecedor: "",
-      observacao: "",
-      arquivos: [],
+    console.log({
+      data,
+      data_compra: data_compra ? data_compra : null,
+      valor,
+      categoria,
+      numero_de_parcelas: numero_de_parcelas,
+      parcela_atual: parcela_atual,
+      meio_de_transacao,
+      cartao_utilizado,
+      instituicao_financeira,
+      descricao,
+      fornecedor,
+      observacao : observacao ? observacao : null,
+      situacao_fiscal,
+      compra_parcelada,
+      transacao_concluido,
     });
+    try {
+      despesaSchema.parse({
+        data,
+        data_compra,
+        valor,
+        categoria,
+        numero_de_parcelas: numero_de_parcelas.toString(),
+        parcela_atual: parcela_atual.toString(),
+        meio_de_transacao,
+        cartao_utilizado,
+        instituicao_financeira,
+        descricao,
+        fornecedor,
+        observacao,
+        situacao_fiscal,
+        compra_parcelada,
+        transacao_concluido,
+      });
+
+      const despesaInput: DespesaInput = {
+        data,
+        data_compra: data_compra ? data_compra : "",
+        valor,
+        categoria,
+        numero_de_parcelas,
+        parcela_atual,
+        meio_de_transacao,
+        cartao_utilizado,
+        instituicao_financeira,
+        descricao,
+        fornecedor,
+        observacao,
+        situacao_fiscal,
+        compra_parcelada,
+        transacao_concluido,
+        receita: false,
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(despesaInput),
+        }
+      );
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      alert("Despesa cadastrada");
+      setLoading(false);
+      router.push("/app/transacoes/despesa/");
+      window.location.reload();
+    } catch (error) {
+      setLoading(false);
+      if (error instanceof z.ZodError) {
+        setErrors(
+          error.issues.reduce(
+            (acc, issue) => ({ ...acc, [issue.path[0]]: issue.message }),
+            {}
+          )
+        );
+      } else {
+        alert("Erro ao cadastrar despesa");
+      }
+    }
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-bold mb-4">Cadastro de Despesa</h1>
-
-      {/* Formulário */}
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          nome="Data de Pagamento"
-          value={despesa.dataPagamento}
-          setValue={(valor) => handleChange("dataPagamento", valor)}
+    <div className="container mx-auto p-8 bg-white shadow-lg rounded-lg">
+      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
+        Cadastro de Despesa
+      </h1>
+      <div className="flex gap-4 mb-4">
+        <Label>Despesa Simples</Label>
+        <Switch
+          className=""
+          checked={compra_parcelada}
+          onCheckedChange={setTipoDespesa}
         />
-        <Input
-          nome="Data de Compra"
-          value={despesa.dataCompra}
-          setValue={(valor) => handleChange("dataCompra", valor)}
+        <Label>Despesa Parcelada</Label>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <DatePickerForm
+          descricao={compra_parcelada ? "Data de pagamento" : null}
+          setFunc={setDate}
+          className="w-full"
         />
-        <Input
-          nome="Valor"
-          value={despesa.valor}
-          setValue={(valor) => handleChange("valor", valor)}
-        />
-
-        {/* Meio de Transação */}
-        <select
-          className="border p-2 rounded"
-          value={despesa.meioTransacao}
-          onChange={(e) => handleChange("meioTransacao", e.target.value)}
-        >
-          <option value="">Selecione o Meio de Transação</option>
-          <option value="Dinheiro">Dinheiro</option>
-          <option value="Cartão de Crédito">Cartão de Crédito</option>
-          <option value="Transferência">Transferência</option>
-        </select>
-
-        {/* Instituição Financeira */}
-        <Input
-          nome="Instituição Financeira"
-          value={despesa.instituicaoFinanceira}
-          setValue={(valor) => handleChange("instituicaoFinanceira", valor)}
-        />
-
-        {/* Categoria */}
-        <select
-          className="border p-2 rounded"
-          value={despesa.categoria}
-          onChange={(e) => handleChange("categoria", e.target.value)}
-        >
-          <option value="">Selecione a Categoria</option>
-          <option value="Alimentação">Alimentação</option>
-          <option value="Transporte">Transporte</option>
-          <option value="Saúde">Saúde</option>
-        </select>
-
-        {/* Cartão Utilizado */}
-        <Input
-          nome="Cartão Utilizado"
-          value={despesa.cartaoUtilizado}
-          setValue={(valor) => handleChange("cartaoUtilizado", valor)}
-        />
-
-        {/* Situação Fiscal */}
-        <select
-          className="border p-2 rounded"
-          value={despesa.situacaoFiscal}
-          onChange={(e) => handleChange("situacaoFiscal", e.target.value)}
-        >
-          <option value="">Selecione a Situação Fiscal</option>
-          <option value="Dedutível">Dedutível</option>
-          <option value="Não Dedutível">Não Dedutível</option>
-        </select>
-
-        {/* Fornecedor */}
-        <Input
-          nome="Fornecedor"
-          value={despesa.fornecedor}
-          setValue={(valor) => handleChange("fornecedor", valor)}
-        />
-
-        {/* Transação Concluída (Checkbox) */}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            checked={despesa.transacaoConcluida}
-            onChange={(e) =>
-              handleChange("transacaoConcluida", e.target.checked)
-            }
-            className="mr-2"
+        {compra_parcelada ? (
+          <DatePickerForm
+            setFunc={setDateCompra}
+            className="w-full"
+            descricao="Data da Compra"
           />
-          <label>Transação Concluída</label>
-        </div>
+        ) : (
+          ""
+        )}
 
-        {/* Descrição */}
-        <textarea
+        <div className="flex items-center gap-2">
+          <Label htmlFor="valor">R$</Label>
+          <Input
+            id="valor"
+            type="number"
+            placeholder="Valor"
+            className="w-full"
+            onChange={(e) => setValor(parseFloat(e.target.value))}
+          />
+        </div>
+        <SelectBase
+          setFunc={setMeioTransacao}
+          query={MEIO_TRANSACAO_FORM_QUERY}
+          dataKey="meiosDeTransacao"
+          minutos={60}
+          titulo="Meios de Transações"
+          className="w-full"
+        />
+        <SelectBase
+          setFunc={setInstituicaoFinanceira}
+          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+          dataKey="instituicoesFinanceiras"
+          minutos={60}
+          titulo="Instituições Financeiras"
+          className="w-full"
+        />
+        <SelectBaseBusca
+          setFunc={setCategoria}
+          query={CATEGORIAS_FORM_QUERY}
+          dataKey="categorias"
+          minutos={60}
+          titulo="Categorias"
+          className="w-full"
+        />
+        <SelectBaseBusca
+          setFunc={setFornecedores}
+          query={FORNECEDORES_QUERY}
+          dataKey="fornecedores"
+          minutos={1}
+          titulo="Fornecedores"
+          className="w-full"
+        />
+        <SelectBase
+          setFunc={setCartao}
+          query={CARTOES_FORM_QUERY}
+          dataKey="cartoesDeCredito"
+          minutos={60}
+          titulo="Cartão Utilizado"
+          className="w-full"
+        />
+        {compra_parcelada ? (
+          <>
+            <Input
+              type="number"
+              placeholder="Parcela Atual"
+              onChange={(e) => setParcelas(parseInt(e.target.value))}
+            />
+            <Input
+              type="number"
+              placeholder="Número de Parcelas"
+              onChange={(e) => setNumParcelas(parseInt(e.target.value))}
+            />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
+      <div className="flex flex-col items-center gap-2 mt-6">
+        <Input
+          type="text"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
           placeholder="Descrição"
-          className="border p-2 rounded w-full"
-          value={despesa.descricao}
-          onChange={(e) => handleChange("descricao", e.target.value)}
+          className="w-full"
         />
 
-        {/* Observação */}
-        <textarea
+        <Textarea
+          value={observacao}
+          onChange={(e) => setObservacao(e.target.value)}
           placeholder="Observação"
-          className="border p-2 rounded w-full"
-          value={despesa.observacao}
-          onChange={(e) => handleChange("observacao", e.target.value)}
+          className="w-full"
         />
       </div>
-
-      {/* Botão de Salvar */}
-      <button
-        className="bg-green-600 hover:bg-green-700 text-white p-2 rounded mt-4 w-full"
-        onClick={salvarDespesa}
-      >
-        Salvar Despesa
-      </button>
+      <div className="flex flex-row gap-4 justify-center items-center mt-6">
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className="h-full sm:h-10 w-10"
+            id="terms"
+            checked={transacao_concluido}
+            onCheckedChange={() => setConcluida(!transacao_concluido)}
+          />
+          <Label htmlFor="terms">Transação Concluída</Label>
+        </div>
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className="h-full sm:h-10 w-10"
+            id="terms"
+            checked={situacao_fiscal}
+            onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}
+          />
+          <Label htmlFor="terms">Nota Fiscal</Label>
+        </div>
+        <Button className="" onClick={cadastrarDespesa}>
+          {loading ? <MiniLoading /> : "Cadastrar"}
+        </Button>
+      </div>
     </div>
   );
 }

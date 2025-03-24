@@ -13,9 +13,10 @@ import { ptBR } from "date-fns/locale";
 interface Props {
   setFunc: (date: string) => void;
   className: string;
+  descricao?: string | null 
 }
 
-export function DatePickerForm({ setFunc, className }: Props) {
+export function DatePickerForm({ setFunc, className, descricao }: Props) {
   const [date, setDate] = React.useState<any>();
 
   function handleData(e: Date) {
@@ -35,7 +36,7 @@ export function DatePickerForm({ setFunc, className }: Props) {
           )}
         >
           <CalendarIcon />
-          {date ? format(date, "dd/MM/yyyy") : <span>Seleciona a Data</span>}
+          {date ? format(date, "dd/MM/yyyy") : descricao ? descricao : <span>Seleciona a Data</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">

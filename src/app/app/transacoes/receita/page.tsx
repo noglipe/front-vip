@@ -21,15 +21,15 @@ import { Loading, MiniLoading } from "@/components/loading";
 import ReceitaLista from "./_components/receitaList";
 
 export default function CadastroReceitaPage() {
-  const [instituicao_financeira, setinstituicaoFinanceira] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [meio_de_transacao, setMeioTransacao] = useState("");
+  const [instituicao_financeira, setinstituicaoFinanceira] = useState<number| any>();
+  const [categoria, setCategoria] = useState<number| any>();
+  const [meio_de_transacao, setMeioTransacao] = useState<number| any>();
   const [date, setDate] = useState("");
   const [concluida, setConcluida] = useState(true);
-  const [fornecedores, setFornecedores] = useState("");
+  const [fornecedores, setFornecedores] = useState<number| any>();
   const [descricao, setDescricao] = useState("");
   const [observacao, setObservacao] = useState("");
-  const [valor, setValor] = useState(0);
+  const [valor, setValor] = useState<number| any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -37,13 +37,13 @@ export default function CadastroReceitaPage() {
   const receitaSchema = z.object({
     date: z.string().min(1, "A data é obrigatória."),
     valor: z.number(),
-    categoria: z.string().min(1, "A categoria é obrigatória."),
-    meio_de_transacao: z.string().min(1, "O meio de transação é obrigatório."),
+    categoria: z.number().min(1, "A categoria é obrigatória."),
+    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
     instituicao_financeira: z
-      .string()
+      .number()
       .min(1, "A instituição financeira é obrigatória."),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedores: z.string().nullable(),
+    fornecedores: z.number().nullable(),
     observacao: z.string().nullable(),
     concluida: z.boolean(),
   });
@@ -54,11 +54,11 @@ export default function CadastroReceitaPage() {
       receitaSchema.parse({
         date,
         valor,
-        categoria,
-        meio_de_transacao,
-        instituicao_financeira,
+        categoria: parseInt(categoria),
+        meio_de_transacao: parseInt(meio_de_transacao),
+        instituicao_financeira: parseInt(instituicao_financeira),
         descricao,
-        fornecedores,
+        fornecedores: parseInt(fornecedores),
         observacao,
         concluida,
       });

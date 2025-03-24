@@ -11,6 +11,15 @@ export const CAIXAS_FORM_QUERY = gql`
   }
 `;
 
+export const CARTOES_FORM_QUERY = gql`
+  query cartoesDeCredito {
+    cartoesDeCredito {
+      id
+      nome
+    }
+  }
+`;
+
 export const CATEGORIAS_FORM_QUERY = gql`
   query Categorias {
     categorias {

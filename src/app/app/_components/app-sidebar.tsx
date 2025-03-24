@@ -29,7 +29,7 @@ const menuLista = [
   },
   {
     nome: "Despesa",
-    link: "/",
+    link: "/app/transacoes/despesa",
   },
   {
     nome: "Transações",
