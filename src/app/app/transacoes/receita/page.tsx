@@ -10,6 +10,7 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
+  RECEITA_LIST_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
 import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
@@ -18,18 +19,21 @@ import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
-import ReceitaLista from "./_components/receitaList";
+import ReceitaLista from "../_components/transacoesRecentes";
+import TransacoesRecentes from "../_components/transacoesRecentes";
 
 export default function CadastroReceitaPage() {
-  const [instituicao_financeira, setinstituicaoFinanceira] = useState<number| any>();
-  const [categoria, setCategoria] = useState<number| any>();
-  const [meio_de_transacao, setMeioTransacao] = useState<number| any>();
+  const [instituicao_financeira, setinstituicaoFinanceira] = useState<
+    number | any
+  >();
+  const [categoria, setCategoria] = useState<number | any>();
+  const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
   const [date, setDate] = useState("");
   const [concluida, setConcluida] = useState(true);
-  const [fornecedores, setFornecedores] = useState<number| any>();
+  const [fornecedores, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
   const [observacao, setObservacao] = useState("");
-  const [valor, setValor] = useState<number| any>();
+  const [valor, setValor] = useState<number | any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -224,7 +228,7 @@ export default function CadastroReceitaPage() {
           </div>
         </div>
 
-        <ReceitaLista />
+        <TransacoesRecentes receita={true} query={RECEITA_LIST_QUERY} />
       </div>
     </div>
   );

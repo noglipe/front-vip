@@ -9,6 +9,7 @@ import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {
   CARTOES_FORM_QUERY,
   CATEGORIAS_FORM_QUERY,
+  DESPESA_LIST_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
 } from "@/graphql/query";
@@ -20,6 +21,7 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
+import TransacoesRecentes from "../_components/transacoesRecentes";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
@@ -45,16 +47,16 @@ export default function CadastroDespesaPage() {
     date: z.string().min(1, "A data é obrigatória."),
     data_compra: z.string(),
     valor: z.number(),
-    categoria: z.string().min(1, "A categoria é obrigatória."),
+    categoria: z.number().min(1, "A categoria é obrigatória."),
     numero_de_parcelas: z.number().nullable(),
     parcela_atual: z.number().nullable(),
-    meio_de_transacao: z.string().min(1, "O meio de transação é obrigatório."),
-    cartao_utilizado: z.string().nullable(),
+    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
+    cartao_utilizado: z.number().nullable(),
     instituicao_financeira: z
-      .string()
+      .number()
       .min(1, "A instituição financeira é obrigatória."),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedor: z.string().nullable(),
+    fornecedor: z.number().nullable(),
     observacao: z.string().nullable(),
     situacao_fiscal: z.boolean(),
     compra_parcelada: z.boolean(),
@@ -87,8 +89,8 @@ export default function CadastroDespesaPage() {
         data_compra,
         valor,
         categoria,
-        numero_de_parcelas: numero_de_parcelas.toString(),
-        parcela_atual: parcela_atual.toString(),
+        numero_de_parcelas,
+        parcela_atual,
         meio_de_transacao,
         cartao_utilizado,
         instituicao_financeira,
@@ -288,6 +290,8 @@ export default function CadastroDespesaPage() {
           {loading ? <MiniLoading /> : "Cadastrar"}
         </Button>
       </div>
+
+       <TransacoesRecentes receita={false} query={DESPESA_LIST_QUERY} />
     </div>
   );
 }

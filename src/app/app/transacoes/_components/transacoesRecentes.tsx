@@ -1,8 +1,7 @@
 "use client";
 
-import { RECEITA_LIST_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
-import client from "../../../../../lib/apollo-client";
+import client from "../../../../lib/apollo-client";
 import { useEffect, useState } from "react";
 import { MiniLoading } from "@/components/loading";
 
@@ -16,9 +15,9 @@ import {
   TableRow,
 } from "@/components/UI/table";
 
-import {formatReal} from "../../../../../lib/utils"
+import { formatReal } from "../../../../lib/utils";
 
-interface Receitas {
+interface DadosType {
   data: string;
   descricao: string;
   valor: string;
@@ -30,10 +29,15 @@ interface Receitas {
   };
 }
 
-export default function ReceitaLista() {
-  const [receitas, setReceitas] = useState<Receitas[]>([]);
-  const { loading, error, data } = useQuery<{ receitas: Receitas[] }>(
-    RECEITA_LIST_QUERY,
+interface TRProps {
+  receita: boolean;
+  query: any;
+}
+
+export default function TransacoesRecentes({ receita, query }: TRProps) {
+  const [receitas, setReceitas] = useState<DadosType[]>([]);
+  const { loading, error, data } = useQuery<{ [key: string]: DadosType[] }>(
+    query,
     { client }
   );
 
@@ -49,7 +53,7 @@ export default function ReceitaLista() {
   return (
     <div className="container mx-auto p-6 bg-gray-50 rounded-lg shadow-md">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        Receitas Recentes
+        {receita ? " Receitas Recentes" : " Despesas Recentes"}
       </h2>
       <div className="grid grid-cols-1 gap-2">
         <Table>
@@ -58,15 +62,15 @@ export default function ReceitaLista() {
             <TableHead className="w-[100px]">Data</TableHead>
             <TableHead>descricao</TableHead>
             <TableHead className="w-[100px]">Valor</TableHead>
-            <TableHead className="">Categoria</TableHead>
+            <TableHead className="w-[100px]">Categoria</TableHead>
           </TableHeader>
           <TableBody>
             {receitas.map((receita, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} className="w-[400px] overflow-hidden">
                 <TableCell>{receita.data}</TableCell>
                 <TableCell>{receita.descricao}</TableCell>
                 <TableCell>{formatReal(receita.valor)}</TableCell>
-                <TableCell>{receita.categoria.nome}</TableCell>
+                <TableCell className="w-[100px] overflow-hidden">{receita.categoria.nome}</TableCell>
               </TableRow>
             ))}
           </TableBody>

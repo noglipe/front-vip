@@ -63,6 +63,22 @@ export const RECEITA_LIST_QUERY = gql`
   }
 `;
 
+export const DESPESA_LIST_QUERY = gql`
+  query receitalista {
+    despesas {
+      data
+      descricao
+      valor
+      fornecedor {
+        nome
+      }
+      categoria {
+        nome
+      }
+    }
+  }
+`;
+
 export const APP_QUERY = gql`
   query app {
     caixas {
