@@ -8,7 +8,7 @@ import {
   SidebarMenu,
 } from "@/components/UI/sidebar";
 
-import { Banknote } from "lucide-react";
+import { Banknote, HomeIcon } from "lucide-react";
 
 import logoImagem from "../../../../public/logos/logo.png";
 import Image from "next/image";
@@ -60,9 +60,18 @@ export function AppSidebar() {
       </div>
       <SidebarHeader />
       <SidebarContent>
-        <Collapsible className="p-4 w-full ">
+        <Collapsible className="p-2 w-full ">
+          <CollapsibleTrigger className="w-full cursor-pointer text-left ">
+            <Link href={"/app/"} className="flex flex-row gap-2">
+              <HomeIcon /> Home
+            </Link>
+          </CollapsibleTrigger>
+        </Collapsible>
+        <Collapsible className="p-2 w-full ">
           <CollapsibleTrigger className="w-full cursor-pointer text-left flex gap-2">
-            <Banknote /> Financeiro
+            <Link href={"/app/"} className="flex flex-row gap-2">
+              <Banknote /> Financeiro
+            </Link>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-2 ml-5 ">
             <div className="flex flex-col w-full ">
