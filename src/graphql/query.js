@@ -64,7 +64,7 @@ export const RECEITA_LIST_QUERY = gql`
 `;
 
 export const DESPESA_LIST_QUERY = gql`
-  query receitalista {
+  query despesalista {
     despesas {
       data
       descricao

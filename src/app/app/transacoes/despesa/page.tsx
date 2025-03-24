@@ -19,42 +19,42 @@ import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
-import { Loading, MiniLoading } from "@/components/loading";
+import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
 import TransacoesRecentes from "../_components/transacoesRecentes";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
-  const [instituicao_financeira, setInstituicaoFinanceira] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [cartao_utilizado, setCartao] = useState("");
-  const [meio_de_transacao, setMeioTransacao] = useState("");
+  const [instituicao_financeira, setInstituicaoFinanceira] = useState<
+    number | any
+  >();
+  const [categoria, setCategoria] = useState<number | any>();
+  const [cartao_utilizado, setCartao] = useState<number | any>();
+  const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
   const [data, setDate] = useState("");
   const [data_compra, setDateCompra] = useState("");
   const [transacao_concluido, setConcluida] = useState(true);
-  const [fornecedor, setFornecedores] = useState("");
+  const [fornecedor, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
   const [observacao, setObservacao] = useState("");
-  const [valor, setValor] = useState(0);
-  const [parcela_atual, setParcelas] = useState(1);
-  const [numero_de_parcelas, setNumParcelas] = useState(1);
-  const [errors, setErrors] = useState({});
+  const [valor, setValor] = useState<number | any>();
+  const [parcela_atual, setParcelas] = useState<number | any>(1);
+  const [numero_de_parcelas, setNumParcelas] = useState<number | any>(1);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const despesaSchema = z.object({
-    date: z.string().min(1, "A data é obrigatória."),
+    data: z.string().min(1, "A data é obrigatória."),
     data_compra: z.string(),
     valor: z.number(),
-    categoria: z.number().min(1, "A categoria é obrigatória."),
-    numero_de_parcelas: z.number().nullable(),
-    parcela_atual: z.number().nullable(),
-    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
+    categoria: z.number(),
+    numero_de_parcelas: z.number(),
+    parcela_atual: z.number(),
+    meio_de_transacao: z.number(),
     cartao_utilizado: z.number().nullable(),
-    instituicao_financeira: z
-      .number()
-      .min(1, "A instituição financeira é obrigatória."),
+    instituicao_financeira: z.number(),
     descricao: z.string().min(1, "A descrição é obrigatória."),
     fornecedor: z.number().nullable(),
     observacao: z.string().nullable(),
@@ -66,41 +66,28 @@ export default function CadastroDespesaPage() {
   const cadastrarDespesa = async () => {
     setLoading(true);
 
-    console.log({
-      data,
-      data_compra: data_compra ? data_compra : null,
-      valor,
-      categoria,
-      numero_de_parcelas: numero_de_parcelas,
-      parcela_atual: parcela_atual,
-      meio_de_transacao,
-      cartao_utilizado,
-      instituicao_financeira,
-      descricao,
-      fornecedor,
-      observacao : observacao ? observacao : null,
-      situacao_fiscal,
-      compra_parcelada,
-      transacao_concluido,
-    });
+    console.log("n1");
+
     try {
       despesaSchema.parse({
         data,
-        data_compra,
+        data_compra: data_compra ? data_compra : data,
         valor,
-        categoria,
-        numero_de_parcelas,
-        parcela_atual,
-        meio_de_transacao,
-        cartao_utilizado,
-        instituicao_financeira,
+        categoria: parseInt(categoria),
+        numero_de_parcelas: numero_de_parcelas ? numero_de_parcelas : 1,
+        parcela_atual: parcela_atual ? parcela_atual : 1,
+        meio_de_transacao: parseInt(meio_de_transacao),
+        cartao_utilizado: cartao_utilizado ? parseInt(cartao_utilizado) : null,
+        instituicao_financeira: parseInt(instituicao_financeira),
         descricao,
-        fornecedor,
-        observacao,
+        fornecedor: fornecedor ? parseInt(fornecedor) : null,
+        observacao: observacao ? observacao : null,
         situacao_fiscal,
         compra_parcelada,
         transacao_concluido,
       });
+
+      console.log("n2");
 
       const despesaInput: DespesaInput = {
         data,
@@ -141,6 +128,7 @@ export default function CadastroDespesaPage() {
       window.location.reload();
     } catch (error) {
       setLoading(false);
+      console.error("Erro na validação ou requisição:", error);
       if (error instanceof z.ZodError) {
         setErrors(
           error.issues.reduce(
@@ -159,6 +147,13 @@ export default function CadastroDespesaPage() {
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
         Cadastro de Despesa
       </h1>
+      <div>
+        {Object.entries(errors).map(([key, message]) => (
+          <p key={key} className="text-red-500">
+            {message}
+          </p>
+        ))}
+      </div>
       <div className="flex gap-4 mb-4">
         <Label>Despesa Simples</Label>
         <Switch
@@ -291,7 +286,11 @@ export default function CadastroDespesaPage() {
         </Button>
       </div>
 
-       <TransacoesRecentes receita={false} query={DESPESA_LIST_QUERY} />
+      <TransacoesRecentes
+        receita={false}
+        query={DESPESA_LIST_QUERY}
+        dataKey="despesas"
+      />
     </div>
   );
 }

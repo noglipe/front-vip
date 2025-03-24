@@ -228,7 +228,7 @@ export default function CadastroReceitaPage() {
           </div>
         </div>
 
-        <TransacoesRecentes receita={true} query={RECEITA_LIST_QUERY} />
+        <TransacoesRecentes dataKey={"receitas"} receita={true} query={RECEITA_LIST_QUERY} />
       </div>
     </div>
   );

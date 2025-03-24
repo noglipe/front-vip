@@ -32,18 +32,23 @@ interface DadosType {
 interface TRProps {
   receita: boolean;
   query: any;
+  dataKey: string;
 }
 
-export default function TransacoesRecentes({ receita, query }: TRProps) {
-  const [receitas, setReceitas] = useState<DadosType[]>([]);
+export default function TransacoesRecentes({
+  receita,
+  query,
+  dataKey,
+}: TRProps) {
+  const [dados, setDados] = useState<DadosType[]>([]);
   const { loading, error, data } = useQuery<{ [key: string]: DadosType[] }>(
     query,
     { client }
   );
 
   useEffect(() => {
-    if (data?.receitas) {
-      setReceitas(data.receitas);
+    if (data && data[dataKey]) {
+      setDados(data[dataKey]);
     }
   }, [data]);
 
@@ -59,18 +64,22 @@ export default function TransacoesRecentes({ receita, query }: TRProps) {
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
-            <TableHead className="w-[100px]">Data</TableHead>
-            <TableHead>descricao</TableHead>
-            <TableHead className="w-[100px]">Valor</TableHead>
-            <TableHead className="w-[100px]">Categoria</TableHead>
+            <tr>
+              <TableHead className="w-[100px]">Data</TableHead>
+              <TableHead>descricao</TableHead>
+              <TableHead className="w-[100px]">Valor</TableHead>
+              <TableHead className="w-[100px]">Categoria</TableHead>
+            </tr>
           </TableHeader>
           <TableBody>
-            {receitas.map((receita, index) => (
-              <TableRow key={index} className="w-[400px] overflow-hidden">
-                <TableCell>{receita.data}</TableCell>
-                <TableCell>{receita.descricao}</TableCell>
-                <TableCell>{formatReal(receita.valor)}</TableCell>
-                <TableCell className="w-[100px] overflow-hidden">{receita.categoria.nome}</TableCell>
+            {dados.map((dado, index) => (
+              <TableRow key={index} className="overflow-hidden">
+                <TableCell>{dado.data}</TableCell>
+                <TableCell>{dado.descricao}</TableCell>
+                <TableCell>{formatReal(dado.valor)}</TableCell>
+                <TableCell className="w-[100px] overflow-hidden">
+                  {dado.categoria.nome}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
