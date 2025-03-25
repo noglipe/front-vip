@@ -84,7 +84,7 @@ export default function TransacoesRecentes({
                     <CircleEllipsis className="text-gray-500 " />
                   )}
                 </TableCell>
-                <TableCell>{dado.data}</TableCell>
+                <TableCell>{new Date(dado.data).toLocaleDateString("pt-BR")}</TableCell>
                 <TableCell className="w-[50px] overflow-hidden">
                   {dado.descricao}
                 </TableCell>

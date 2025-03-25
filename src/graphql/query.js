@@ -156,3 +156,56 @@ export const TRANSACOES_MES_QUERY = gql`
     }
   }
 `;
+
+export const DETALHES_TRANSACAO_QUERY = gql`
+  query DetalhesTransacao($id: Int!) {
+    transacao(id: $id) {
+      id
+      data
+      dataCompra
+      categoria {
+        id
+        nome
+      }
+      descricao
+      fornecedor {
+        id
+        nome
+      }
+      instituicaoFinanceira {
+        id
+        nome
+      }
+      meioDeTransacao {
+        id
+        nome
+      }
+      numeroDeParcelas
+      observacao
+      parcelaAtual
+      rastreioParcelas {
+        id
+        valorTotal
+      }
+      receita
+      situacaoFiscal
+      transacaoConcluido
+      valor
+    }
+  }
+`;
+
+export const TRANSACAO_RELACIONADA_QUERY = gql`
+  query DetalhesTransacao($id: Int!) {
+    transacoesParceladas(id: $id) {
+      id
+      data
+      valor
+      parcelaAtual
+      transacaoConcluido
+      rastreioParcelas {
+        valorTotal
+      }
+    }
+  }
+`;

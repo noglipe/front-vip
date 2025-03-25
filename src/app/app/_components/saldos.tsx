@@ -40,7 +40,6 @@ export default function Saldos() {
   });
 
   useEffect(() => {
-
     if (data !== undefined) {
       setDados(data);
     }
@@ -51,7 +50,7 @@ export default function Saldos() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-2xl">Caixas</h2>
+      <h2 className="text-2xl uppercase font-extrabold">Caixas</h2>
       <div className="flex flex-row gap-3 flex-wrap">
         {dados &&
           dados?.caixas.map((caixa: Cx) => (
@@ -72,7 +71,7 @@ export default function Saldos() {
           ))}
       </div>
 
-      <h2 className="text-2xl">Bancos</h2>
+      <h2 className="text-2xl uppercase font-extrabold">Bancos</h2>
       <div className="flex flex-row gap-3 flex-wrap">
         {dados &&
           dados?.instituicoesFinanceiras.map((inst: iF) => (
