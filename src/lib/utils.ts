@@ -17,6 +17,11 @@ export function formatReal(value: any) {
   return formatter.format(value);
 }
 
+export function numeroExtenso(value: number) {
+  var numero = require('numero-por-extenso');
+  return numero.porExtenso(value, numero.estilo.monetario)
+}
+
 export function formatData(value: any, extenso: boolean = false) {
   if (value) {
     const [ano, mes, dia] = value

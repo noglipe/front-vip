@@ -16,6 +16,7 @@ import {
   CircleChevronRight,
   CircleEllipsis,
   EllipsisVerticalIcon,
+  Handshake,
   HomeIcon,
 } from "lucide-react";
 
@@ -83,7 +84,7 @@ export function AppSidebar() {
           </CollapsibleTrigger>
           <CollapsibleTrigger className={CLASS_SIDEBAR}>
             <Link href={"/app/termo-doacao"} className="flex flex-row gap-2">
-              <HomeIcon /> Termo de Doação
+              <Handshake /> Termo de Doação
             </Link>
           </CollapsibleTrigger>
           <CollapsibleTrigger
