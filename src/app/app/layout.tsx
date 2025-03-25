@@ -12,7 +12,7 @@ export default function Layout({
         <SidebarProvider>
           <AppSidebar />
           <main className="container w-full">
-            <SidebarTrigger className="p-4 cursor-pointer" />
+            <SidebarTrigger className="p-4 cursor-pointer print:hidden" />
             <div className="container">{children}</div>
           </main>
         </SidebarProvider>

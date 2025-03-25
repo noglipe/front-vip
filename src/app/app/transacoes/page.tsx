@@ -15,7 +15,10 @@ import { Loading } from "@/components/loading";
 import { formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
-import { CircleCheckBig, CircleEllipsis, Printer } from "lucide-react";
+import { CircleCheckBig, CircleEllipsis,  Printer } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 interface TransacoesMes {
   totalDespesas: number;
@@ -43,6 +46,7 @@ interface TransacoesMes {
 }
 
 export default function Page() {
+  const router = useRouter();
   const [dados, setDados] = useState<TransacoesMes | null>(null);
   const { loading, error, data } = useQuery<{ transacoesMes: TransacoesMes }>(
     TRANSACOES_MES_QUERY,
@@ -62,8 +66,8 @@ export default function Page() {
 
   const diferenca = (dados?.totalReceitas || 0) - (dados?.totalDespesas || 0);
 
-  const CLASS_RECEITA = "text-green-900";
-  const CLASS_DESPESA = "text-red-900";
+  const CLASS_RECEITA = "text-green-900 cursor-pointer";
+  const CLASS_DESPESA = "text-red-900 cursor-pointer";
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -71,21 +75,35 @@ export default function Page() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-4 bg-green-100">
           <CardContent>
-            <h2 className="text-lg font-bold text-green-800">Total de Receitas</h2>
-            <p className="text-3xl font-semibold">{formatReal(dados?.totalReceitas || 0)}</p>
+            <h2 className="text-lg font-bold text-green-800">
+              Total de Receitas
+            </h2>
+            <p className="text-3xl font-semibold">
+              {formatReal(dados?.totalReceitas || 0)}
+            </p>
           </CardContent>
         </Card>
 
         <Card className="p-4 bg-red-100">
           <CardContent>
-            <h2 className="text-lg font-bold text-red-800">Total de Despesas</h2>
-            <p className="text-3xl font-semibold">{formatReal(dados?.totalDespesas || 0)}</p>
+            <h2 className="text-lg font-bold text-red-800">
+              Total de Despesas
+            </h2>
+            <p className="text-3xl font-semibold">
+              {formatReal(dados?.totalDespesas || 0)}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className={`p-4 ${diferenca >= 0 ? "bg-green-200" : "bg-red-200"}`}>
+        <Card
+          className={`p-4 ${diferenca >= 0 ? "bg-green-200" : "bg-red-200"}`}
+        >
           <CardContent>
-            <h2 className={`text-lg font-bold ${diferenca >= 0 ? "text-green-800" : "text-red-800"}`}>
+            <h2
+              className={`text-lg font-bold ${
+                diferenca >= 0 ? "text-green-800" : "text-red-800"
+              }`}
+            >
               Diferença (Lucro / Prejuízo)
             </h2>
             <p className="text-3xl font-semibold">{formatReal(diferenca)}</p>
@@ -113,6 +131,7 @@ export default function Page() {
                 <TableRow
                   key={index}
                   className={transacao.receita ? CLASS_RECEITA : CLASS_DESPESA}
+                  onClick={() => router.push(`/app/transacoes/${transacao.id}`)}
                 >
                   <TableCell className="flex flex-col justify-center items-center gap-1">
                     {transacao.transacaoConcluido ? (
@@ -125,7 +144,16 @@ export default function Page() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {new Date(transacao.data).toLocaleDateString("pt-BR")}
+                    {(() => {
+                      if (transacao.data) {
+                        const [ano, mes, dia] = transacao.data
+                          .split("-")
+                          .map(Number);
+                        const dataObj = new Date(ano, mes - 1, dia);
+                        return dataObj.toLocaleDateString("pt-BR");
+                      }
+                      return "";
+                    })()}
                   </TableCell>
                   <TableCell>
                     {transacao.descricao} / {transacao.categoria.nome}

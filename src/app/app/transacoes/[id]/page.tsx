@@ -5,7 +5,7 @@ import { DETALHES_TRANSACAO_QUERY } from "@/graphql/query";
 import { Card, CardContent } from "@/components/UI/card";
 import { Loading } from "@/components/loading";
 import { formatReal } from "@/lib/utils";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import client from "../../../../lib/apollo-client";
 import {
   CircleCheckBig,
@@ -13,11 +13,9 @@ import {
   FileText,
   Edit,
   Trash2,
-  Link,
-  TextQuote,
+
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import TransacoesRecentes from "../_components/transacoesRecentes";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
 
 interface Transacao {
@@ -56,6 +54,7 @@ interface Transacao {
 
 export default function DetalhesTransacao() {
   const params = useParams();
+  const router = useRouter();
   const id = parseInt(params.id as string);
   const [dados, setDados] = useState<Transacao>();
   const { loading, error, data } = useQuery<{ transacao: Transacao }>(
@@ -90,13 +89,15 @@ export default function DetalhesTransacao() {
 
           {/* Botões de ação */}
           <div className="flex justify-end gap-4 mb-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg">
+            <button 
+            onClick={()=>{router.push(`/app/transacoes/recibo/${transacao.id}`)}}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-400">
               <FileText size={18} /> Recibo
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg">
+            <button className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg cursor-pointer hover:bg-yellow-500">
               <Edit size={18} /> Editar
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg">
+            <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-400">
               <Trash2 size={18} /> Deletar
             </button>
             {transacao.rastreioParcelas ? (

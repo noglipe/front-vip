@@ -140,6 +140,7 @@ export const TRANSACOES_MES_QUERY = gql`
         data
         descricao
         valor
+        id
         categoria {
           id
           nome
@@ -205,6 +206,28 @@ export const TRANSACAO_RELACIONADA_QUERY = gql`
       transacaoConcluido
       rastreioParcelas {
         valorTotal
+      }
+    }
+  }
+`;
+
+export const RECIBO_QUERY = gql`
+  query transacao($id: Int!) {
+    transacao(id: $id) {
+      id
+      valor
+      descricao
+      data
+      fornecedor {
+        id
+        nome
+      }
+      compraParcelada
+      numeroDeParcelas
+      parcelaAtual
+      observacao
+      rastreioParcelas {
+        id
       }
     }
   }

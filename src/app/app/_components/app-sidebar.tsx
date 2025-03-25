@@ -33,7 +33,7 @@ const menuLista = [
   },
   {
     nome: "Transações",
-    link: "/app/transacoes/",
+    link: "/app/transacoes",
   },
   {
     nome: "Fornecedor",
@@ -43,7 +43,7 @@ const menuLista = [
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="print:hidden">
       <div className="flex flex-row gap-2 p-4 items-center border-b-2">
         <Image
           src={logoImagem}
