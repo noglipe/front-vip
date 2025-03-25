@@ -9,10 +9,10 @@ export default function DashboardFinanceiro() {
 
   return (
     <div>
-      <div className="container mx-auto p-6  flex flex-col gap-6">
+      <div className="container mx-auto p-6 flex flex-col gap-2">
         <Saldos />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-2 rounded-xl">
           <ComprasCartaoMes />
 
           <NConclidas />
