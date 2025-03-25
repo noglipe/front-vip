@@ -4,7 +4,7 @@ import { useQuery } from "@apollo/client";
 import { DETALHES_TRANSACAO_QUERY } from "@/graphql/query";
 import { Card, CardContent } from "@/components/UI/card";
 import { Loading } from "@/components/loading";
-import { formatReal } from "@/lib/utils";
+import { formatData, formatReal } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
 import client from "../../../../lib/apollo-client";
 import {
@@ -130,13 +130,13 @@ export default function DetalhesTransacao() {
                 <div>
                   <p className="text-gray-600">Data da Transação</p>
                   <p className="text-lg font-semibold">
-                    {new Date(transacao.data).toLocaleDateString("pt-BR")}
+                  {formatData(transacao.data)}
                   </p>
                 </div>
                 <div>
                   <p className="text-gray-600">Data da Compra</p>
                   <p className="text-lg font-semibold">
-                    {new Date(transacao.dataCompra).toLocaleDateString("pt-BR")}
+                    {formatData(transacao.data)}
                   </p>
                 </div>
                 <div>

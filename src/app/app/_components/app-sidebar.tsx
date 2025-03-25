@@ -8,7 +8,16 @@ import {
   SidebarMenu,
 } from "@/components/UI/sidebar";
 
-import { Banknote, HomeIcon } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Banknote,
+  CircleChevronDown,
+  CircleChevronRight,
+  CircleEllipsis,
+  EllipsisVerticalIcon,
+  HomeIcon,
+} from "lucide-react";
 
 import logoImagem from "../../../../public/logos/logo.png";
 import Image from "next/image";
@@ -21,6 +30,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../../../components/UI/collapsible";
+import { useState } from "react";
+import { CLASS_SIDEBAR, CLASS_SIDEBAR_HOVER } from "@/lib/constantes";
 
 const menuLista = [
   {
@@ -42,6 +53,10 @@ const menuLista = [
 ];
 
 export function AppSidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => setIsOpen(!isOpen);
+
   return (
     <Sidebar className="print:hidden">
       <div className="flex flex-row gap-2 p-4 items-center border-b-2">
@@ -61,23 +76,35 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <Collapsible className="p-2 w-full ">
-          <CollapsibleTrigger className="w-full cursor-pointer text-left ">
+          <CollapsibleTrigger className={CLASS_SIDEBAR + " "}>
             <Link href={"/app/"} className="flex flex-row gap-2">
               <HomeIcon /> Home
             </Link>
           </CollapsibleTrigger>
-        </Collapsible>
-        <Collapsible className="p-2 w-full ">
-          <CollapsibleTrigger className="w-full cursor-pointer text-left flex gap-2">
-            <Link href={"/app/"} className="flex flex-row gap-2">
-              <Banknote /> Financeiro
+          <CollapsibleTrigger className={CLASS_SIDEBAR}>
+            <Link href={"/app/termo-doacao"} className="flex flex-row gap-2">
+              <HomeIcon /> Termo de Doação
             </Link>
           </CollapsibleTrigger>
+          <CollapsibleTrigger
+            className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+            onClick={handleToggle}
+          >
+            <Link href={"/app/"} className="flex flex-row gap-2 ">
+              <Banknote /> Financeiro
+            </Link>
+            {isOpen ? (
+              <CircleChevronDown size={20} className={"mr-2"} />
+            ) : (
+              <CircleChevronRight className={" mr-2"} size={20} />
+            )}
+          </CollapsibleTrigger>
+
           <CollapsibleContent className="mt-2 ml-5 ">
             <div className="flex flex-col w-full ">
               {menuLista.map((item, index) => (
                 <Link
-                  className="w-full hover:bg-accent hover:shadow p-4"
+                  className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
                   key={index}
                   href={item.link}
                 >

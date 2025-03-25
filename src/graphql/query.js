@@ -216,8 +216,10 @@ export const RECIBO_QUERY = gql`
     transacao(id: $id) {
       id
       valor
+      valorPorExtenso
       descricao
       data
+      receita
       fornecedor {
         id
         nome

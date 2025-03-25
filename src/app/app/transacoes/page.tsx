@@ -12,7 +12,7 @@ import {
 } from "@/components/UI/table";
 import { Card, CardContent } from "@/components/UI/card";
 import { Loading } from "@/components/loading";
-import { formatReal } from "@/lib/utils";
+import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
 import { CircleCheckBig, CircleEllipsis,  Printer } from "lucide-react";
@@ -144,16 +144,7 @@ export default function Page() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    {(() => {
-                      if (transacao.data) {
-                        const [ano, mes, dia] = transacao.data
-                          .split("-")
-                          .map(Number);
-                        const dataObj = new Date(ano, mes - 1, dia);
-                        return dataObj.toLocaleDateString("pt-BR");
-                      }
-                      return "";
-                    })()}
+                    {formatData(transacao.data)}
                   </TableCell>
                   <TableCell>
                     {transacao.descricao} / {transacao.categoria.nome}

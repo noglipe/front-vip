@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/UI/table";
 
-import { formatReal } from "../../../../lib/utils";
+import { formatData, formatReal } from "../../../../lib/utils";
 import { CircleCheckBig, CircleEllipsis } from "lucide-react";
 
 interface DadosType {
@@ -84,7 +84,7 @@ export default function TransacoesRecentes({
                     <CircleEllipsis className="text-gray-500 " />
                   )}
                 </TableCell>
-                <TableCell>{new Date(dado.data).toLocaleDateString("pt-BR")}</TableCell>
+                <TableCell>{formatData(dado.data)}</TableCell>
                 <TableCell className="w-[50px] overflow-hidden">
                   {dado.descricao}
                 </TableCell>
