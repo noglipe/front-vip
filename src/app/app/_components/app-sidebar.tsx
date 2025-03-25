@@ -33,7 +33,7 @@ const menuLista = [
   },
   {
     nome: "Transações",
-    link: "/",
+    link: "/app/transacoes/",
   },
   {
     nome: "Fornecedor",

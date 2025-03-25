@@ -128,3 +128,31 @@ export const CARTAO_MES_QUERY = gql`
     }
   }
 `;
+
+export const TRANSACOES_MES_QUERY = gql`
+  query transacoesMes {
+    transacoesMes {
+      totalDespesas
+      totalReceitas
+      transacoes {
+        receita
+        transacaoConcluido
+        data
+        descricao
+        valor
+        categoria {
+          id
+          nome
+        }
+        meioDeTransacao {
+          id
+          nome
+        }
+        instituicaoFinanceira {
+          id
+          nome
+        }
+      }
+    }
+  }
+`;

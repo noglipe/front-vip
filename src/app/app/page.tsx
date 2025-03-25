@@ -1,7 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/UI/card";
-
 import Saldos from "./_components/saldos";
 import NConclidas from "./_components/nConcluidas";
 import ComprasCartaoMes from "./_components/comprasCartaoMes";
