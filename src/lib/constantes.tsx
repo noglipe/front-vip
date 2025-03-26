@@ -20,3 +20,5 @@ export const ENDERECO_IGREJA = () => {
     </>
   );
 };
+
+export const PAGINACAO_APP = 10

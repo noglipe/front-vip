@@ -17,8 +17,10 @@ import {
 
 import { formatData, formatReal } from "../../../../lib/utils";
 import { CircleCheckBig, CircleEllipsis } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface DadosType {
+  id: string;
   data: string;
   descricao: string;
   valor: string;
@@ -43,6 +45,7 @@ export default function TransacoesRecentes({
   dataKey,
 }: TRProps) {
   const [dados, setDados] = useState<DadosType[]>([]);
+  const router = useRouter();
   const { loading, error, data } = useQuery<{ [key: string]: DadosType[] }>(
     query,
     { client }
@@ -76,10 +79,16 @@ export default function TransacoesRecentes({
           </TableHeader>
           <TableBody>
             {dados.map((dado, index) => (
-              <TableRow key={index} className="overflow-clip">
+              <TableRow
+                onClick={() => {
+                  router.push(`/app/transacoes/${dado.id}/`);
+                }}
+                key={index}
+                className="overflow-clip cursor-pointer"
+              >
                 <TableCell>
                   {dado.transacaoConcluido ? (
-                    <CircleCheckBig className="text-green-600 "/>
+                    <CircleCheckBig className="text-green-600 " />
                   ) : (
                     <CircleEllipsis className="text-gray-500 " />
                   )}

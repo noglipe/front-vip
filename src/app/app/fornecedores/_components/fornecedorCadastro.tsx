@@ -2,7 +2,7 @@ import { useState } from "react";
 import client from "../../../../lib/apollo-client";
 
 import InputVip from "../../_components/inputVip";
-import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
+import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { MiniLoading } from "@/components/loading";
 
 export function FornecedorCadastro() {

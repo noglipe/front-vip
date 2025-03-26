@@ -13,7 +13,7 @@ export function Loading() {
           alt="Logo"
           priority
           width={200}
-                height={200}
+          height={200}
           className="z-50 mb-10 "
         />
         <div className="flex flex-row gap-4">
@@ -35,19 +35,21 @@ export function Carregando() {
 
 export function MiniLoading() {
   return (
-    <div className="relative w-8 h-8 flex items-center justify-center">
-      {/* Imagem de fundo */}
-      <Image
-        src={miniLogoImg}
-        alt="Mini Logo De Carregamento"
-        width={32}
-        height={32}
-        className="absolute top-0 left-0 z-0 animate-bounce"
-        quality={50}
-        priority
-      />
+    <div className="flex justify-center items-center">
+      <div className="relative w-8 h-8 flex items-center justify-center">
+        {/* Imagem de fundo */}
+        <Image
+          src={miniLogoImg}
+          alt="Mini Logo De Carregamento"
+          width={32}
+          height={32}
+          className="absolute top-0 left-0 z-0 animate-bounce"
+          quality={50}
+          priority
+        />
 
-      {/* Ícone de loading girando sobre a imagem */}
+        {/* Ícone de loading girando sobre a imagem */}
+      </div>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
+import { FORNECEDORES_QUERY } from "@/graphql/query";
 import client from "../../../../lib/apollo-client";
 
 import { ListFilter, PenLine, Search } from "lucide-react";

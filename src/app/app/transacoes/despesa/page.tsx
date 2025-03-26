@@ -14,7 +14,7 @@ import {
   MEIO_TRANSACAO_FORM_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
-import { FORNECEDORES_QUERY } from "@/graphql/fornecedores-query";
+import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";

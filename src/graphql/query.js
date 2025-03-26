@@ -2,6 +2,26 @@
 
 import { gql } from "@apollo/client";
 
+export const FORNECEDORES_QUERY = gql`
+  query Fornecedores {
+    fornecedores {
+      id
+      nome
+      documento
+    }
+  }
+`;
+
+export const FORNECEDOR_QUERY = gql`
+  query Fornecedor($id: Int!) {
+    fornecedor(id: $id) {
+      id
+      nome
+      documento
+    }
+  }
+`;
+
 export const CAIXAS_FORM_QUERY = gql`
   query Caixas {
     caixas {
@@ -50,6 +70,7 @@ export const INSTITUICAO_FINANCEIRA_FORM_QUERY = gql`
 export const RECEITA_LIST_QUERY = gql`
   query receitalista {
     receitas {
+      id
       data
       descricao
       valor
@@ -67,6 +88,7 @@ export const RECEITA_LIST_QUERY = gql`
 export const DESPESA_LIST_QUERY = gql`
   query despesalista {
     despesas {
+      id
       data
       descricao
       valor
@@ -97,33 +119,45 @@ export const APP_QUERY = gql`
 `;
 
 export const N_CONCLIDAS_QUERY = gql`
-  query nConcluidas {
-    nConcluidas {
-      id
-      data
-      descricao
-      valor
-      categoria {
-        nome
+  query nConcluidas($limite: Int!, $page: Int) {
+    nConcluidas(limite: $limite, page: $page) {
+      hasNextPage
+      hasPreviousPage
+      totalPaginas
+      paginaAtual
+      transacoes {
+        id
+        data
+        descricao
+        valor
+        categoria {
+          nome
+        }
       }
     }
   }
 `;
 
 export const CARTAO_MES_QUERY = gql`
-  query comprasCartaoMes {
-    comprasCartaoMes {
-      id
-      descricao
-      data
-      valor
-      cartaoUtilizado {
-        nome
+  query comprasCartaoMes($limite: Int!, $page: Int) {
+    comprasCartaoMes(limite: $limite, page: $page) {
+      hasNextPage
+      hasPreviousPage
+      totalPaginas
+      paginaAtual
+      transacoes {
         id
-      }
-      categoria {
-        nome
-        id
+        descricao
+        data
+        valor
+        cartaoUtilizado {
+          nome
+          id
+        }
+        categoria {
+          nome
+          id
+        }
       }
     }
   }

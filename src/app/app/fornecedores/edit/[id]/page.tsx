@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 import { useQuery } from "@apollo/client";
 
 import client from "../../../../../lib/apollo-client";
-import { FORNECEDOR_QUERY } from "@/graphql/fornecedores-query";
+import { FORNECEDOR_QUERY } from "@/graphql/query";
 
 interface Fornecedor {
   id: number;
