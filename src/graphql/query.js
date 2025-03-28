@@ -22,6 +22,18 @@ export const FORNECEDOR_QUERY = gql`
   }
 `;
 
+export const FORNECEDOR_TRANSACOES_QUERY = gql`
+  query fornecedorTransacoes($id: Int!) {
+    fornecedorTransacoes(id: $id) {
+      data
+      descricao
+      valor
+      receita
+      situacaoFiscal
+    }
+  }
+`;
+
 export const CAIXAS_FORM_QUERY = gql`
   query Caixas {
     caixas {

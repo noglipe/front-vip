@@ -1,13 +1,55 @@
+"use client";
+
+import { FORNECEDOR_TRANSACOES_QUERY } from "@/graphql/query";
+import { useQuery } from "@apollo/client";
 import { X } from "lucide-react";
+import client from "../../../../lib/apollo-client";
+import { useRouter } from "next/navigation";
+import { MiniLoading } from "@/components/loading";
+import { useEffect, useState } from "react";
 
 interface Transacao {
   view: boolean;
-  id?: number | null;
+  id: number | null;
   setView: (value: boolean) => void;
+}
+
+interface FornecedorTransacoes {
+  data: string;
+  descricao: string;
+  valor: number;
+  receita: string;
+  situacaoFiscal: string;
 }
 
 export default function FornecedorTransacoes({ view, id, setView }: Transacao) {
   if (!view) return null;
+
+  const router = useRouter();
+  const [dados, setDados] = useState<FornecedorTransacoes[]>([]);
+
+  const { loading, error, data } = useQuery<{
+    fornecedorTransacoes: FornecedorTransacoes[];
+  }>(FORNECEDOR_TRANSACOES_QUERY, {
+    variables: { id: id ?? 0 },
+    client,
+    skip: !id,
+  });
+
+  console.log(error?.message);
+
+  useEffect(() => {
+    console.log(loading);
+    if (data?.fornecedorTransacoes) {
+      setDados(data.fornecedorTransacoes);
+    }
+    console.log(dados);
+  }, [data]);
+
+  if (loading) return <MiniLoading />;
+  if (error) return <p className="text-center text-red-500">{error.message}</p>;
+  if (!data || data.fornecedorTransacoes.length === 0)
+    return <p>Nenhuma transação encontrada.</p>;
 
   return (
     <div className="flex bg-opacity-50 z-50">
