@@ -13,10 +13,10 @@ import {
   FileText,
   Edit,
   Trash2,
-
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
+import { Button } from "@/components/UI/button";
 
 interface Transacao {
   id: string;
@@ -84,22 +84,24 @@ export default function DetalhesTransacao() {
   return (
     <div className="container mx-auto p-6">
       <Card className="p-6">
-        <CardContent>
-          <h2 className="text-2xl font-bold mb-4">Detalhes da Transação</h2>
-
+        <h2 className="text-2xl font-bold mb-4">Detalhes da Transação</h2>
+        <CardContent className="flex flex-row flex-wrap-reverse sm:flex-col">
           {/* Botões de ação */}
-          <div className="flex justify-end gap-4 mb-4">
-            <button 
-            onClick={()=>{router.push(`/app/transacoes/recibo/${transacao.id}`)}}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-400">
+          <div className="flex justify-end gap-4 mb-4 sm:flex-row flex-col">
+            <Button
+              onClick={() => {
+                router.push(`/app/transacoes/recibo/${transacao.id}`);
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer hover:bg-blue-400"
+            >
               <FileText size={18} /> Recibo
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg cursor-pointer hover:bg-yellow-500">
+            </Button>
+            <Button className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg cursor-pointer hover:bg-yellow-500">
               <Edit size={18} /> Editar
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-400">
+            </Button>
+            <Button className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-400">
               <Trash2 size={18} /> Deletar
-            </button>
+            </Button>
             {transacao.rastreioParcelas ? (
               <TransacaoRelacionadas id={transacao?.rastreioParcelas.id} />
             ) : (
@@ -107,20 +109,21 @@ export default function DetalhesTransacao() {
             )}
           </div>
 
-          {/* Status */}
-          <div className="flex items-center gap-3 mb-6">
-            {transacao.transacaoConcluido ? (
-              <CircleCheckBig className="text-green-600" size={32} />
-            ) : (
-              <CircleEllipsis className="text-gray-500" size={32} />
-            )}
-            <span className="text-lg font-semibold">
-              {transacao.transacaoConcluido ? "Concluída" : "Pendente"}
-            </span>
-          </div>
-
           {/* Seções de Dados */}
           <div className="space-y-8">
+            {/* Status */}
+            <div className="flex items-center gap-3 mb-6">
+              {transacao.transacaoConcluido ? (
+                <CircleCheckBig className="text-green-600" size={32} />
+              ) : (
+                <CircleEllipsis className="text-gray-500" size={32} />
+              )}
+              <span className="text-lg font-semibold">
+                Transação{" "}
+                {transacao.transacaoConcluido ? "Concluída" : "Pendente"}
+              </span>
+            </div>
+
             {/* Dados da Compra */}
             <div>
               <h3 className="text-xl font-bold mb-3 border-b pb-2">
@@ -130,7 +133,7 @@ export default function DetalhesTransacao() {
                 <div>
                   <p className="text-gray-600">Data da Transação</p>
                   <p className="text-lg font-semibold">
-                  {formatData(transacao.data)}
+                    {formatData(transacao.data)}
                   </p>
                 </div>
                 <div>

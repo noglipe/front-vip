@@ -15,6 +15,7 @@ import { useQuery } from "@apollo/client";
 import client from "../../../../lib/apollo-client";
 import { MiniLoading } from "@/components/loading";
 import Link from "next/link";
+import { Button } from "@/components/UI/button";
 
 interface Parcelas {
   id: string;
@@ -58,12 +59,12 @@ export default function TransacaoRelacionadas({
   return (
     <>
       {/* Botão para abrir o modal */}
-      <button
+      <Button
         onClick={() => setOpen(true)}
         className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg"
       >
-        <TextQuote size={18} /> Ver Transações Relacionadas
-      </button>
+        <TextQuote size={18} /> Transações Relacionadas
+      </Button>
 
       {/* Modal */}
       <Dialog open={open} onOpenChange={setOpen}>
