@@ -15,10 +15,17 @@ import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
-import { CircleCheckBig, CircleEllipsis,  Printer } from "lucide-react";
+import {
+  CircleCheckBig,
+  CircleEllipsis,
+  EyeIcon,
+  Pencil,
+  Printer,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import Recibo from "./recibo/[id]/page";
+import { Button } from "@/components/UI/button";
 
 interface TransacoesMes {
   totalDespesas: number;
@@ -131,7 +138,6 @@ export default function Page() {
                 <TableRow
                   key={index}
                   className={transacao.receita ? CLASS_RECEITA : CLASS_DESPESA}
-                  onClick={() => router.push(`/app/transacoes/${transacao.id}`)}
                 >
                   <TableCell className="flex flex-col justify-center items-center gap-1">
                     {transacao.transacaoConcluido ? (
@@ -143,9 +149,7 @@ export default function Page() {
                       {transacao.receita ? "Receita" : "Despesa"}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    {formatData(transacao.data)}
-                  </TableCell>
+                  <TableCell>{formatData(transacao.data)}</TableCell>
                   <TableCell>
                     {transacao.descricao} / {transacao.categoria.nome}
                   </TableCell>
@@ -154,8 +158,21 @@ export default function Page() {
                     {transacao.instituicaoFinanceira?.nome || "N/A"}
                   </TableCell>
                   <TableCell>{formatReal(transacao.valor)}</TableCell>
-                  <TableCell>
-                    <Printer />
+                  <TableCell className="flex flex-row gap-2 items-center justify-center">
+                    <Button
+                      onClick={() =>
+                        router.push(`/app/transacoes/${transacao.id}`)
+                      }
+                    >
+                      <EyeIcon className="mr-2" size={16} /> Visualizar
+                    </Button>
+                    <Button
+                      onClick={() =>
+                        router.push(`/app/transacoes/recibo/${transacao.id}`)
+                      }
+                    >
+                      <Printer className="mr-2" size={16} /> Recibo
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
