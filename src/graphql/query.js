@@ -238,6 +238,7 @@ export const DETALHES_TRANSACAO_QUERY = gql`
       situacaoFiscal
       transacaoConcluido
       valor
+      excluida
     }
   }
 `;
