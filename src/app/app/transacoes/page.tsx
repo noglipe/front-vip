@@ -22,9 +22,7 @@ import {
   Pencil,
   Printer,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Recibo from "./recibo/[id]/page";
 import { Button } from "@/components/UI/button";
 
 interface TransacoesMes {
