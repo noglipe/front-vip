@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
 import { Button } from "@/components/UI/button";
 import { boolean } from "zod";
+import { IfConcluidoCircle, IfConcluidoText } from "../_components/ifConcluido";
 
 interface Transacao {
   id: string;
@@ -171,15 +172,8 @@ export default function DetalhesTransacao() {
 
             {/* Status */}
             <div className="flex items-center gap-3 mb-6">
-              {transacao.transacaoConcluido ? (
-                <CircleCheckBig className="text-green-600" size={32} />
-              ) : (
-                <CircleEllipsis className="text-gray-500" size={32} />
-              )}
-              <span className="text-lg font-semibold">
-                Transação{" "}
-                {transacao.transacaoConcluido ? "Concluída" : "Pendente"}
-              </span>
+              <IfConcluidoCircle concluido={transacao.transacaoConcluido} />
+              <IfConcluidoText concluido={transacao.transacaoConcluido} />
             </div>
 
             {/* Dados da Compra */}
@@ -241,13 +235,13 @@ export default function DetalhesTransacao() {
                 </div>
                 <div>
                   <p className="text-gray-600">Valor</p>
-                  <p
+                  <div
                     className={`text-lg font-semibold ${
                       transacao.receita ? "text-green-600" : "text-red-600"
                     }`}
                   >
                     {formatReal(transacao.valor)}
-                  </p>
+                  </div>
                 </div>
                 <div>
                   <p className="text-gray-600">Situação Fiscal</p>

@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { FornecedorCadastro } from "./_components/fornecedorCadastro";
 import { FornecedorLista } from "./_components/fornecedorLista";
-import FornecedorTransacoes from "./_components/fornecedorTransacoes";
+import TransacoesFornecedor from "./_components/fornecedorTransacoes";
 
 export default function FornecedoresPage() {
-  const [idTransacao, setIdTransacao] = useState<number| null>(null);
+  const [idTransacao, setIdTransacao] = useState<number | null>(null);
   const [viewTransacoes, setViewTransacoes] = useState(false);
 
   function handelView(id: number) {
-    setIdTransacao(id); 
+    setIdTransacao(id);
     setViewTransacoes(true);
   }
 
@@ -23,7 +23,11 @@ export default function FornecedoresPage() {
         <FornecedorCadastro />
         <div className="flex flex-1 w-full gap-4">
           <FornecedorLista setView={handelView} />
-          <FornecedorTransacoes view={viewTransacoes} id={idTransacao ? idTransacao: null} setView={setViewTransacoes} />
+          <TransacoesFornecedor
+            view={viewTransacoes}
+            id={idTransacao}
+            setView={setViewTransacoes}
+          />
         </div>
       </div>
     </div>

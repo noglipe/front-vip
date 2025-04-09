@@ -7,10 +7,14 @@ import client from "../../../../lib/apollo-client";
 import { useRouter } from "next/navigation";
 import { MiniLoading } from "@/components/loading";
 import { useEffect, useState } from "react";
+import { formatData, formatReal } from "@/lib/utils";
+import { IfConcluidoCircle } from "../../transacoes/_components/ifConcluido";
+import { IfReceitaValor } from "../../transacoes/_components/ifReceita";
+import Link from "next/link";
 
 interface Transacao {
   view: boolean;
-  id: number | null;
+  id: any;
   setView: (value: boolean) => void;
 }
 
@@ -18,37 +22,38 @@ interface FornecedorTransacoes {
   data: string;
   descricao: string;
   valor: number;
-  receita: string;
-  situacaoFiscal: string;
+  receita: boolean;
+  id: number;
+  transacaoConcluido: boolean;
 }
 
-export default function FornecedorTransacoes({ view, id, setView }: Transacao) {
+export default function TransacoesFornecedor({ view, id, setView }: Transacao) {
   if (!view) return null;
 
   const router = useRouter();
   const [dados, setDados] = useState<FornecedorTransacoes[]>([]);
 
   const { loading, error, data } = useQuery<{
-    fornecedorTransacoes: FornecedorTransacoes[];
+    transacoesFornecedores: FornecedorTransacoes[];
   }>(FORNECEDOR_TRANSACOES_QUERY, {
-    variables: { id: id ?? 0 },
+    variables: { id: parseInt(id) },
     client,
-    skip: !id,
   });
 
-  console.log(error?.message);
-
   useEffect(() => {
-    console.log(loading);
-    if (data?.fornecedorTransacoes) {
-      setDados(data.fornecedorTransacoes);
+    if (data?.transacoesFornecedores) {
+      setDados(data.transacoesFornecedores);
     }
-    console.log(dados);
   }, [data]);
 
   if (loading) return <MiniLoading />;
-  if (error) return <p className="text-center text-red-500">{error.message}</p>;
-  if (!data || data.fornecedorTransacoes.length === 0)
+  if (error)
+    return (
+      <p className="text-center text-red-500">
+        {error.name} - {error.message}{" "}
+      </p>
+    );
+  if (!data || data.transacoesFornecedores.length === 0)
     return <p>Nenhuma transação encontrada.</p>;
 
   return (
@@ -66,7 +71,25 @@ export default function FornecedorTransacoes({ view, id, setView }: Transacao) {
         <h2 className="text-xl font-semibold mb-4 text-center">
           Transações do Fornecedor
         </h2>
-        <div className="text-center text-4xl font-bold text-gray-700">{id}</div>
+
+        {dados &&
+          dados.map((obj) => (
+            <Link href={`/app/transacoes/${obj.id}/`}>
+              <div
+                key={obj.id}
+                className="grid grid-cols-3 items-center gap-3 p-2 border-b border-gray-200"
+              >
+                <div className="text-sm text-gray-700 flex gap-1 justify-center items-center">
+                  <IfConcluidoCircle concluido={obj.transacaoConcluido} />
+                  {formatData(obj.data)}
+                </div>
+                <div className="text-sm text-gray-800">{obj.descricao}</div>
+                <div className="text-sm font-medium">
+                  <IfReceitaValor valor={obj.valor} receita={obj.receita} />
+                </div>
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   );

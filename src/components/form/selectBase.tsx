@@ -10,8 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../UI/select";
-import { Carregando, MiniLoading } from "../loading";
-
+import { MiniLoading } from "../loading";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
@@ -65,7 +64,11 @@ export function SelectBase<T extends SelectApi>({
       <SelectContent className={className}>
         <SelectGroup className={className}>
           {objetos.map((value) => (
-            <SelectItem className={className} key={value.id} value={value.id.toString()}>
+            <SelectItem
+              className={className}
+              key={value.id}
+              value={value.id.toString()}
+            >
               {value.nome}
             </SelectItem>
           ))}
