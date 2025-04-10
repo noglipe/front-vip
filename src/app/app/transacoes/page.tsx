@@ -10,7 +10,12 @@ import {
   TableBody,
   TableCell,
 } from "@/components/UI/table";
-import { Card, CardContent } from "@/components/UI/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/UI/card";
 import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
@@ -113,14 +118,25 @@ export default function Page() {
     <>
       <div className="container mx-auto p-6 space-y-6">
         {/* Totais Financeiros */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <PainelValor valor={dados?.totalReceitas} title="Total de Receitas" />
-          <PainelValor valor={dados?.totalDespesas} title="Total de Despesas" />
-          <PainelValor
-            valor={diferenca}
-            title=" Diferença (Lucro / Prejuízo)"
-          />
-        </div>
+        <Card className="container p-4 bg-gray-100 rounded-xl">
+          <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
+            <PainelValor
+              valor={dados?.totalReceitas}
+              title="Total de Receitas"
+            />
+            <PainelValor
+              valor={dados?.totalDespesas}
+              title="Total de Despesas"
+            />
+            <PainelValor
+              valor={diferenca}
+              title=" Diferença (Lucro / Prejuízo)"
+            />
+          </div>
+          <CardDescription className="text-end font-bold">
+            *Dados referente ao mês vigente
+          </CardDescription>
+        </Card>
 
         {/* Tabela de Transações */}
         <Card className="p-4">
