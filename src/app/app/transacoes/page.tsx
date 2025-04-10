@@ -30,6 +30,7 @@ import { IfConcluidoCircle } from "./_components/ifConcluido";
 import BtnEditar from "./_components/tbnEditar";
 import BtnRecibo from "./_components/tbnRecibo";
 import BtnVisualizar from "./_components/btnVisualizar";
+import PainelValor from "./_components/painelValor";
 
 interface TransacoesMes {
   totalDespesas: number;
@@ -103,50 +104,22 @@ export default function Page() {
     return matchBusca && matchCategoria && matchesType;
   });
 
-  const CLASS_RECEITA = "text-green-900 cursor-pointer";
-  const CLASS_DESPESA = "text-red-900 cursor-pointer";
+  const CLASS_RECEITA =
+    "text-green-900 cursor-pointer hover:font-bold hover:bg-green-50";
+  const CLASS_DESPESA =
+    "text-red-900 cursor-pointer hover:font-bold hover:bg-red-50";
 
   return (
     <>
       <div className="container mx-auto p-6 space-y-6">
         {/* Totais Financeiros */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="p-4 bg-green-100">
-            <CardContent>
-              <h2 className="text-lg font-bold text-green-800">
-                Total de Receitas
-              </h2>
-              <p className="text-3xl font-semibold">
-                {formatReal(dados?.totalReceitas || 0)}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="p-4 bg-red-100">
-            <CardContent>
-              <h2 className="text-lg font-bold text-red-800">
-                Total de Despesas
-              </h2>
-              <p className="text-3xl font-semibold">
-                {formatReal(dados?.totalDespesas || 0)}
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card
-            className={`p-4 ${diferenca >= 0 ? "bg-green-200" : "bg-red-200"}`}
-          >
-            <CardContent>
-              <h2
-                className={`text-lg font-bold ${
-                  diferenca >= 0 ? "text-green-800" : "text-red-800"
-                }`}
-              >
-                Diferença (Lucro / Prejuízo)
-              </h2>
-              <p className="text-3xl font-semibold">{formatReal(diferenca)}</p>
-            </CardContent>
-          </Card>
+          <PainelValor valor={dados?.totalReceitas} title="Total de Receitas" />
+          <PainelValor valor={dados?.totalDespesas} title="Total de Despesas" />
+          <PainelValor
+            valor={diferenca}
+            title=" Diferença (Lucro / Prejuízo)"
+          />
         </div>
 
         {/* Tabela de Transações */}
