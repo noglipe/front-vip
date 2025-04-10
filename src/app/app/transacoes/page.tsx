@@ -109,10 +109,8 @@ export default function Page() {
     return matchBusca && matchCategoria && matchesType;
   });
 
-  const CLASS_RECEITA =
-    "text-green-900 cursor-pointer hover:font-bold hover:bg-green-50";
-  const CLASS_DESPESA =
-    "text-red-900 cursor-pointer hover:font-bold hover:bg-red-50";
+  const CLASS_RECEITA = "text-green-900 cursor-pointer hover:bg-green-100";
+  const CLASS_DESPESA = "text-red-900 cursor-pointer hover:bg-red-100";
 
   return (
     <>
