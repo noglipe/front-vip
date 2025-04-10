@@ -201,6 +201,7 @@ export default function CadastroDespesaPage() {
               minutos={60}
               titulo="Meios de Transações"
               className={CALSS_INPUTS}
+              value={meio_de_transacao}
             />
             <SelectBase
               setFunc={setInstituicaoFinanceira}
@@ -209,6 +210,7 @@ export default function CadastroDespesaPage() {
               minutos={60}
               titulo="Instituições Financeiras"
               className={CALSS_INPUTS}
+              value={instituicao_financeira}
             />
             <SelectBaseBusca
               setFunc={setCategoria}
@@ -217,6 +219,7 @@ export default function CadastroDespesaPage() {
               minutos={60}
               titulo="Categorias"
               className={CALSS_INPUTS}
+              value={categoria}
             />
             <SelectBaseBusca
               setFunc={setFornecedores}
@@ -225,6 +228,7 @@ export default function CadastroDespesaPage() {
               minutos={1}
               titulo="Fornecedores"
               className={CALSS_INPUTS}
+              value={fornecedor}
             />
             <SelectBase
               setFunc={setCartao}
@@ -233,6 +237,7 @@ export default function CadastroDespesaPage() {
               minutos={60}
               titulo="Cartão Utilizado"
               className={CALSS_INPUTS}
+              value={cartao_utilizado}
             />
             {compra_parcelada ? (
               <>
