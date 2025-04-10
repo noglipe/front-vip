@@ -9,7 +9,7 @@ interface ReceitaInput {
   categoria: string;
   meio_de_transacao: string;
   instituicao_financeira: string;
-  transacaoConcluida: boolean;
+  transacao_concluido: boolean;
   descricao: string;
   observacao: string | null;
   fornecedor: string | null;

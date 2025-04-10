@@ -67,7 +67,7 @@ export default function CadastroDespesaPage() {
   const cadastrarDespesa = async () => {
     setLoading(true);
 
-    console.log("n1");
+ 
 
     try {
       despesaSchema.parse({
@@ -88,7 +88,7 @@ export default function CadastroDespesaPage() {
         transacao_concluido,
       });
 
-      console.log("n2");
+  
 
       const despesaInput: DespesaInput = {
         data,

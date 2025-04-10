@@ -244,6 +244,37 @@ export const DETALHES_TRANSACAO_QUERY = gql`
   }
 `;
 
+export const TRANSACAO_RECEITA_QUERY = gql`
+  query Transacao($id: Int!) {
+    transacao(id: $id) {
+      id
+      data
+      categoria {
+        id
+        nome
+      }
+      descricao
+      fornecedor {
+        id
+        nome
+      }
+      instituicaoFinanceira {
+        id
+        nome
+      }
+      meioDeTransacao {
+        id
+        nome
+      }
+      observacao
+      situacaoFiscal
+      transacaoConcluido
+      valor
+      excluida
+    }
+  }
+`;
+
 export const TRANSACAO_RELACIONADA_QUERY = gql`
   query DetalhesTransacao($id: Int!) {
     transacoesParceladas(id: $id) {

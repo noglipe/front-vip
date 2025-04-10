@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { DatePickerForm } from "../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
 import { SelectBase } from "@/components/form/selectBase";
@@ -18,7 +18,7 @@ import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
-import {  MiniLoading } from "@/components/loading";
+import { MiniLoading } from "@/components/loading";
 import TransacoesRecentes from "../_components/transacoesRecentes";
 import { CALSS_INPUTS } from "@/lib/constantes";
 
@@ -28,8 +28,8 @@ export default function CadastroReceitaPage() {
   >();
   const [categoria, setCategoria] = useState<number | any>();
   const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
-  const [date, setDate] = useState("");
-  const [concluida, setConcluida] = useState(true);
+  const [date, setDate] = React.useState<any>();
+  const [transacao_concluido, setConcluida] = useState(true);
   const [fornecedores, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
   const [observacao, setObservacao] = useState("");
@@ -49,14 +49,16 @@ export default function CadastroReceitaPage() {
     descricao: z.string().min(1, "A descrição é obrigatória."),
     fornecedores: z.number().nullable(),
     observacao: z.string().nullable(),
-    concluida: z.boolean(),
+    transacao_concluido: z.boolean(),
   });
 
   const cadastrarReceita = async () => {
     setLoading(true);
+
+
     try {
       receitaSchema.parse({
-        date,
+        date: date.toISOString().split("T")[0],
         valor,
         categoria: parseInt(categoria),
         meio_de_transacao: parseInt(meio_de_transacao),
@@ -64,16 +66,16 @@ export default function CadastroReceitaPage() {
         descricao,
         fornecedores: parseInt(fornecedores),
         observacao,
-        concluida,
+        transacao_concluido,
       });
 
       const receitaInput: ReceitaInput = {
-        data: date ? date : "null",
+        data: date ? date.toISOString().split("T")[0] : "null",
         valor,
         categoria,
         meio_de_transacao,
         instituicao_financeira,
-        transacaoConcluida: concluida,
+        transacao_concluido,
         descricao,
         observacao,
         fornecedor: fornecedores,
@@ -109,6 +111,7 @@ export default function CadastroReceitaPage() {
         );
       } else {
         alert("Erro ao cadastrar receita");
+
       }
     }
   };
@@ -121,14 +124,14 @@ export default function CadastroReceitaPage() {
         <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
           <div>
-        {Object.entries(errors).map(([key, message]) => (
-          <p key={key} className="text-red-500">
-            {message}
-          </p>
-        ))}
-      </div>
+            {Object.entries(errors).map(([key, message]) => (
+              <p key={key} className="text-red-500">
+                {message}
+              </p>
+            ))}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <DatePickerForm setFunc={setDate} className="w-full" />
+            <DatePickerForm setFunc={setDate} date={date} className="w-full" />
 
             <div className="flex items-center gap-2">
               <Label htmlFor="valor">R$</Label>
@@ -142,6 +145,7 @@ export default function CadastroReceitaPage() {
             </div>
             <SelectBase
               setFunc={setMeioTransacao}
+              value={categoria?.toString()}
               query={MEIO_TRANSACAO_FORM_QUERY}
               dataKey="meiosDeTransacao"
               minutos={60}
@@ -155,6 +159,7 @@ export default function CadastroReceitaPage() {
               minutos={60}
               titulo="Instituições Financeiras"
               className={CALSS_INPUTS}
+              value={instituicao_financeira}
             />
             <SelectBaseBusca
               setFunc={setCategoria}
@@ -163,6 +168,7 @@ export default function CadastroReceitaPage() {
               minutos={1}
               titulo="Categorias"
               className={CALSS_INPUTS}
+              value={categoria}
             />
             <SelectBaseBusca
               setFunc={setFornecedores}
@@ -171,6 +177,7 @@ export default function CadastroReceitaPage() {
               minutos={1}
               titulo="Fornecedores"
               className={CALSS_INPUTS}
+              value={fornecedores}
             />
           </div>
           <div className="flex flex-col gap-2 mt-4">
@@ -194,8 +201,8 @@ export default function CadastroReceitaPage() {
               <Checkbox
                 className={`${CALSS_INPUTS} sm:h-10 w-10`}
                 id="terms"
-                checked={concluida}
-                onCheckedChange={() => setConcluida(!concluida)}
+                checked={transacao_concluido}
+                onCheckedChange={() => setConcluida(!transacao_concluido)}
               />
               <Label htmlFor="terms">Transação Concluída</Label>
             </div>
@@ -208,7 +215,11 @@ export default function CadastroReceitaPage() {
           </div>
         </div>
 
-        <TransacoesRecentes dataKey={"receitas"} receita={true} query={RECEITA_LIST_QUERY} />
+        <TransacoesRecentes
+          dataKey={"receitas"}
+          receita={true}
+          query={RECEITA_LIST_QUERY}
+        />
       </div>
     </div>
   );

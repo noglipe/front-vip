@@ -19,9 +19,8 @@ import {
   CommandList,
 } from "../UI/command";
 
-
 import CError from "../cError";
-import { Carregando, MiniLoading } from "../loading";
+import { MiniLoading } from "../loading";
 
 interface Props<T extends SelectApi> {
   setFunc: (id: string) => void;
@@ -30,6 +29,10 @@ interface Props<T extends SelectApi> {
   dataKey: string;
   titulo?: string;
   className?: string;
+  value: {
+    id: number,
+    nome: string,
+  } | any;
 }
 
 export function SelectBaseBusca<T extends SelectApi>({
@@ -39,6 +42,7 @@ export function SelectBaseBusca<T extends SelectApi>({
   dataKey,
   titulo,
   className,
+  value: initialValue,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const [open, setOpen] = React.useState(false);
@@ -52,8 +56,18 @@ export function SelectBaseBusca<T extends SelectApi>({
   useEffect(() => {
     if (data && data[dataKey]) {
       setObjetos(data[dataKey]);
+
+      // Se temos valor inicial e o nome correspondente, setar
+      if (initialValue && !value) {
+        const selected = data[dataKey].find(
+          (obj) => obj.id.toString() === initialValue.id.toString()
+        );
+        if (selected) {
+          setValue(selected.nome);
+        }
+      }
     }
-  }, [data, dataKey]);
+  }, [data, dataKey, initialValue, value]);
 
   useEffect(() => {
     const intervalId = setInterval(

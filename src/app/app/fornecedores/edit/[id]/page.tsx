@@ -58,7 +58,7 @@ export default function EditarFornecedor() {
       if (!response.ok) throw new Error("Erro ao salvar fornecedor.");
 
       alert("Fornecedor atualizado com sucesso!");
-      router.push("/app/fornecedores"); // Redireciona para a lista de fornecedores
+      router.push("/app/fornecedores/"); // Redireciona para a lista de fornecedores
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar fornecedor.");

@@ -19,6 +19,10 @@ interface Props<T extends SelectApi> {
   dataKey: string;
   titulo?: string;
   className?: string;
+  value: {
+    id: string;
+    nome: string;
+  } | any;
 }
 
 export function SelectBase<T extends SelectApi>({
@@ -28,6 +32,7 @@ export function SelectBase<T extends SelectApi>({
   dataKey,
   titulo,
   className,
+  value,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const { loading, error, data, refetch } = useQuery<{
@@ -57,9 +62,11 @@ export function SelectBase<T extends SelectApi>({
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <Select onValueChange={(e) => setFunc(e)}>
+    <Select onValueChange={(e) => setFunc(e)} value={value}>
       <SelectTrigger className={className}>
-        <SelectValue placeholder={titulo ? titulo : `${dataKey}`} />
+        <SelectValue placeholder={titulo ? titulo : `${dataKey}`}>
+          {objetos.find((obj) => obj.id === value?.id)?.nome}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent className={className}>
         <SelectGroup className={className}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import { CATEGORIAS_FORM_QUERY, TRANSACOES_MES_QUERY } from "@/graphql/query";
+import { TRANSACOES_MES_QUERY } from "@/graphql/query";
 import {
   Table,
   TableHeader,
@@ -16,12 +16,8 @@ import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
 import {
-  ChevronDownIcon,
-  CircleCheckBig,
-  CircleEllipsis,
   EyeIcon,
   FilterIcon,
-  Pencil,
   Printer,
   SearchIcon,
 } from "lucide-react";
@@ -35,8 +31,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/UI/select";
-import { Label } from "@/components/UI/label";
-import { useCategorias } from "@/lib/consultas";
 import { IfConcluidoCircle } from "./_components/ifConcluido";
 
 interface TransacoesMes {
@@ -68,18 +62,11 @@ export default function Page() {
   const router = useRouter();
 
   const [selectedCategory, setSelectedCategory] = useState("");
-  const { categorias } = useCategorias();
-
-  const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
-  const [date, setDate] = useState("");
-  const [concluida, setConcluida] = useState(true);
-  const [fornecedores, setFornecedores] = useState<number | any>();
 
   const [dados, setDados] = useState<TransacoesMes | null>(null);
 
   const [termoDeBusca, setTermoDeBusca] = useState("");
   const [filterType, setFilterType] = useState<string>("todos");
-  const [showFilters, setShowFilters] = useState(false);
 
   const { loading, error, data } = useQuery<{ transacoesMes: TransacoesMes }>(
     TRANSACOES_MES_QUERY,
@@ -115,8 +102,6 @@ export default function Page() {
       ? transacao.categoria.id.includes(selectedCategory)
       : true;
 
-    console.log(matchCategoria);
-
     return matchBusca && matchCategoria && matchesType;
   });
 
@@ -125,83 +110,6 @@ export default function Page() {
 
   return (
     <>
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Buscar transações..."
-                className="pl-10"
-                value={termoDeBusca}
-                onChange={(e) => setTermoDeBusca(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <FilterIcon className="h-4 w-4 text-muted-foreground" />
-            <Select value={filterType} onValueChange={setFilterType}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filtrar por" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todos">TODAS</SelectItem>
-                <SelectItem value="receitas">Receitas</SelectItem>
-                <SelectItem value="despesas">Despesas</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-1"
-            >
-              {showFilters ? "Ocultar filtros" : "Filtros avançados"}
-              <ChevronDownIcon
-                className={`h-4 w-4 transition-transform ${
-                  showFilters ? "rotate-180" : ""
-                }`}
-              />
-            </Button>
-          </div>
-
-          {showFilters && (
-            <div className="mb-6 p-4 border rounded-md bg-muted/30">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                {/* Filtro por categoria */}
-                <div className="space-y-2">
-                  <Label>Categoria</Label>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value={null}>TODAS</SelectItem>
-                      {categorias?.map((category, index) => (
-                        <SelectItem key={index} value={category.id}>
-                          {category.nome}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="mt-4 flex justify-end">
-                <Button variant="outline" onClick={() => {}} className="mr-2">
-                  Limpar filtros
-                </Button>
-                <Button onClick={() => setShowFilters(false)}>
-                  Aplicar filtros
-                </Button>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
       <div className="container mx-auto p-6 space-y-6">
         {/* Totais Financeiros */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -249,6 +157,32 @@ export default function Page() {
             <h2 className="text-lg font-bold mb-4">
               Transações do Mês Vigente
             </h2>
+
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="relative flex-1">
+                <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Buscar transações..."
+                  className="pl-10"
+                  value={termoDeBusca}
+                  onChange={(e) => setTermoDeBusca(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <FilterIcon className="h-4 w-4 text-muted-foreground" />
+                <Select value={filterType} onValueChange={setFilterType}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filtrar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todos">TODAS</SelectItem>
+                    <SelectItem value="receitas">Receitas</SelectItem>
+                    <SelectItem value="despesas">Despesas</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
             <Table>
               <TableHeader>
                 <TableRow>

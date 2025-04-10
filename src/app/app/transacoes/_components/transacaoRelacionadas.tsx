@@ -46,7 +46,6 @@ export default function TransacaoRelacionadas({
   });
 
   useEffect(() => {
-    console.log(data);
     if (data?.transacoesParceladas) {
       setDados(data.transacoesParceladas);
     }

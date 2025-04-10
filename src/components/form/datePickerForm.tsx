@@ -11,18 +11,17 @@ import { Calendar } from "../UI/calendar";
 import { ptBR } from "date-fns/locale";
 
 interface Props {
-  setFunc: (date: string) => void;
+  setFunc: (date: any) => void;
   className: string;
-  descricao?: string | null 
+  descricao?: string | null ;
+  date?: any
 }
 
-export function DatePickerForm({ setFunc, className, descricao }: Props) {
-  const [date, setDate] = React.useState<any>();
+export function DatePickerForm({ setFunc, className, descricao, date }: Props) {
 
   function handleData(e: Date) {
     if (e) {
-      setFunc(e.toISOString().split("T")[0]);
-      setDate(e);
+      setFunc(e);
     }
   }
   return (
