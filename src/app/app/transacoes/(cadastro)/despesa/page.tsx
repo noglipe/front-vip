@@ -1,16 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { DatePickerForm } from "../../../../components/form/datePickerForm";
+import { DatePickerForm } from "../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {
+  CARTOES_FORM_QUERY,
   CATEGORIAS_FORM_QUERY,
+  DESPESA_LIST_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
-  RECEITA_LIST_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
@@ -19,67 +20,89 @@ import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
-import TransacoesRecentes from "../_components/transacoesRecentes";
+import { Switch } from "@/components/UI/switch";
+import TransacoesRecentes from "../../_components/transacoesRecentes";
 import { CALSS_INPUTS } from "@/lib/constantes";
 
-export default function CadastroReceitaPage() {
-  const [instituicao_financeira, setinstituicaoFinanceira] = useState<
+export default function CadastroDespesaPage() {
+  const [compra_parcelada, setTipoDespesa] = useState(false);
+  const [instituicao_financeira, setInstituicaoFinanceira] = useState<
     number | any
   >();
   const [categoria, setCategoria] = useState<number | any>();
+  const [cartao_utilizado, setCartao] = useState<number | any>();
   const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
-  const [date, setDate] = React.useState<any>();
+  const [data, setDate] = useState("");
+  const [data_compra, setDateCompra] = useState("");
   const [transacao_concluido, setConcluida] = useState(true);
-  const [fornecedores, setFornecedores] = useState<number | any>();
+  const [fornecedor, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
   const [observacao, setObservacao] = useState("");
   const [valor, setValor] = useState<number | any>();
+  const [parcela_atual, setParcelas] = useState<number | any>(1);
+  const [numero_de_parcelas, setNumParcelas] = useState<number | any>(1);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const receitaSchema = z.object({
-    date: z.string().min(1, "A data é obrigatória."),
+  const despesaSchema = z.object({
+    data: z.string().min(1, "A data é obrigatória."),
+    data_compra: z.string(),
     valor: z.number(),
-    categoria: z.number().min(1, "A categoria é obrigatória."),
-    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
-    instituicao_financeira: z
-      .number()
-      .min(1, "A instituição financeira é obrigatória."),
+    categoria: z.number(),
+    numero_de_parcelas: z.number(),
+    parcela_atual: z.number(),
+    meio_de_transacao: z.number(),
+    cartao_utilizado: z.number().nullable(),
+    instituicao_financeira: z.number(),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedores: z.number().nullable(),
+    fornecedor: z.number().nullable(),
     observacao: z.string().nullable(),
+    situacao_fiscal: z.boolean(),
+    compra_parcelada: z.boolean(),
     transacao_concluido: z.boolean(),
   });
 
-  const cadastrarReceita = async () => {
+  const cadastrarDespesa = async () => {
     setLoading(true);
 
-
     try {
-      receitaSchema.parse({
-        date: date.toISOString().split("T")[0],
+      despesaSchema.parse({
+        data,
+        data_compra: data_compra ? data_compra : data,
         valor,
         categoria: parseInt(categoria),
+        numero_de_parcelas: numero_de_parcelas ? numero_de_parcelas : 1,
+        parcela_atual: parcela_atual ? parcela_atual : 1,
         meio_de_transacao: parseInt(meio_de_transacao),
+        cartao_utilizado: cartao_utilizado ? parseInt(cartao_utilizado) : null,
         instituicao_financeira: parseInt(instituicao_financeira),
         descricao,
-        fornecedores: parseInt(fornecedores),
-        observacao,
+        fornecedor: fornecedor ? parseInt(fornecedor) : null,
+        observacao: observacao ? observacao : null,
+        situacao_fiscal,
+        compra_parcelada,
         transacao_concluido,
       });
 
-      const receitaInput: ReceitaInput = {
-        data: date ? date.toISOString().split("T")[0] : "null",
+      const despesaInput: DespesaInput = {
+        data,
+        data_compra: data_compra ? data_compra : "",
         valor,
         categoria,
+        numero_de_parcelas,
+        parcela_atual,
         meio_de_transacao,
+        cartao_utilizado,
         instituicao_financeira,
-        transacao_concluido,
         descricao,
+        fornecedor,
         observacao,
-        fornecedor: fornecedores,
-        receita: true,
+        situacao_fiscal,
+        compra_parcelada,
+        transacao_concluido,
+        receita: false,
       };
 
       const response = await fetch(
@@ -87,7 +110,7 @@ export default function CadastroReceitaPage() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(receitaInput),
+          body: JSON.stringify(despesaInput),
         }
       );
 
@@ -96,12 +119,13 @@ export default function CadastroReceitaPage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      alert("Receita cadastrada");
+      alert("Despesa cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/receita/");
+      router.push("/app/transacoes/despesa/");
       window.location.reload();
     } catch (error) {
       setLoading(false);
+      console.error("Erro na validação ou requisição:", error);
       if (error instanceof z.ZodError) {
         setErrors(
           error.issues.reduce(
@@ -110,18 +134,18 @@ export default function CadastroReceitaPage() {
           )
         );
       } else {
-        alert("Erro ao cadastrar receita");
-
+        alert("Erro ao cadastrar despesa");
       }
     }
   };
+
   return (
-    <div className="container mx-auto p-8 bg-white ">
+    <div className="container mx-auto p-8 bg-white">
       <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
-        Cadastro de Receita
+        Cadastro de Despesa
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 ">
-        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 justify-center">
+        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
           <div>
             {Object.entries(errors).map(([key, message]) => (
@@ -130,8 +154,31 @@ export default function CadastroReceitaPage() {
               </p>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <DatePickerForm setFunc={setDate} date={date} className="w-full" />
+
+          <div className="flex gap-4 mb-4">
+            <Label>Despesa Simples</Label>
+            <Switch
+              className=""
+              checked={compra_parcelada}
+              onCheckedChange={setTipoDespesa}
+            />
+            <Label>Despesa Parcelada</Label>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <DatePickerForm
+              descricao={compra_parcelada ? "Data de pagamento" : null}
+              setFunc={setDate}
+              className={CALSS_INPUTS}
+            />
+            {compra_parcelada ? (
+              <DatePickerForm
+                setFunc={setDateCompra}
+                className={CALSS_INPUTS}
+                descricao="Data da Compra"
+              />
+            ) : (
+              ""
+            )}
 
             <div className="flex items-center gap-2">
               <Label htmlFor="valor">R$</Label>
@@ -145,15 +192,15 @@ export default function CadastroReceitaPage() {
             </div>
             <SelectBase
               setFunc={setMeioTransacao}
-              value={categoria?.toString()}
               query={MEIO_TRANSACAO_FORM_QUERY}
               dataKey="meiosDeTransacao"
               minutos={60}
               titulo="Meios de Transações"
               className={CALSS_INPUTS}
+              value={meio_de_transacao}
             />
             <SelectBase
-              setFunc={setinstituicaoFinanceira}
+              setFunc={setInstituicaoFinanceira}
               query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
               dataKey="instituicoesFinanceiras"
               minutos={60}
@@ -165,7 +212,7 @@ export default function CadastroReceitaPage() {
               setFunc={setCategoria}
               query={CATEGORIAS_FORM_QUERY}
               dataKey="categorias"
-              minutos={1}
+              minutos={60}
               titulo="Categorias"
               className={CALSS_INPUTS}
               value={categoria}
@@ -177,10 +224,37 @@ export default function CadastroReceitaPage() {
               minutos={1}
               titulo="Fornecedores"
               className={CALSS_INPUTS}
-              value={fornecedores}
+              value={fornecedor}
             />
+            <SelectBase
+              setFunc={setCartao}
+              query={CARTOES_FORM_QUERY}
+              dataKey="cartoesDeCredito"
+              minutos={60}
+              titulo="Cartão Utilizado"
+              className={CALSS_INPUTS}
+              value={cartao_utilizado}
+            />
+            {compra_parcelada ? (
+              <>
+                <Input
+                  type="number"
+                  placeholder="Parcela Atual"
+                  onChange={(e) => setParcelas(parseInt(e.target.value))}
+                  className={CALSS_INPUTS}
+                />
+                <Input
+                  type="number"
+                  placeholder="Número de Parcelas"
+                  onChange={(e) => setNumParcelas(parseInt(e.target.value))}
+                  className={CALSS_INPUTS}
+                />
+              </>
+            ) : (
+              ""
+            )}
           </div>
-          <div className="flex flex-col gap-2 mt-4">
+          <div className="flex flex-col items-center gap-2 mt-6">
             <Input
               type="text"
               value={descricao}
@@ -196,7 +270,7 @@ export default function CadastroReceitaPage() {
               className={CALSS_INPUTS}
             />
           </div>
-          <div className="flex justify-center gap-4 mt-12">
+          <div className="flex flex-row gap-4 justify-center items-center mt-6">
             <div className="flex items-center gap-2 h-full">
               <Checkbox
                 className={`${CALSS_INPUTS} sm:h-10 w-10`}
@@ -206,19 +280,25 @@ export default function CadastroReceitaPage() {
               />
               <Label htmlFor="terms">Transação Concluída</Label>
             </div>
-            <Button
-              className="cursor-pointer flex justify-center items-center"
-              onClick={() => cadastrarReceita()}
-            >
-              {loading ? <MiniLoading /> : ""} Cadastrar
+            <div className="flex items-center gap-2 h-full">
+              <Checkbox
+                className={`${CALSS_INPUTS} sm:h-10 w-10`}
+                id="terms"
+                checked={situacao_fiscal}
+                onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}
+              />
+              <Label htmlFor="terms">Nota Fiscal</Label>
+            </div>
+            <Button className="" onClick={cadastrarDespesa}>
+              {loading ? <MiniLoading /> : "Cadastrar"}
             </Button>
           </div>
         </div>
 
         <TransacoesRecentes
-          dataKey={"receitas"}
-          receita={true}
-          query={RECEITA_LIST_QUERY}
+          receita={false}
+          query={DESPESA_LIST_QUERY}
+          dataKey="despesas"
         />
       </div>
     </div>
