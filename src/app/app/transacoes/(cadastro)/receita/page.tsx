@@ -115,8 +115,6 @@ export default function CadastroReceitaPage() {
     }
   };
   return (
-    <div className="container mx-auto p-0 bg-white ">
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 ">
         <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
           <h2 className="text-xl font-bold text-gray-800 mb-2">Receita</h2>
           <div>
@@ -210,13 +208,5 @@ export default function CadastroReceitaPage() {
             </Button>
           </div>
         </div>
-
-        <TransacoesRecentes
-          dataKey={"receitas"}
-          receita={true}
-          query={RECEITA_LIST_QUERY}
-        />
-      </div>
-    </div>
   );
 }

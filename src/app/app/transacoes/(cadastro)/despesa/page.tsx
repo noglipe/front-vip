@@ -9,7 +9,6 @@ import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {
   CARTOES_FORM_QUERY,
   CATEGORIAS_FORM_QUERY,
-  DESPESA_LIST_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
 } from "@/graphql/query";
@@ -21,7 +20,6 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
-import TransacoesRecentes from "../../_components/transacoesRecentes";
 import { CALSS_INPUTS } from "@/lib/constantes";
 
 export default function CadastroDespesaPage() {
@@ -140,13 +138,8 @@ export default function CadastroDespesaPage() {
   };
 
   return (
-    <div className="container mx-auto p-8 bg-white">
-      <h1 className="text-4xl font-bold mb-6 text-center text-gray-800">
-        Cadastro de Despesa
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-2 justify-center">
         <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Cadastro</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-2">Despesa</h2>
           <div>
             {Object.entries(errors).map(([key, message]) => (
               <p key={key} className="text-red-500">
@@ -294,13 +287,5 @@ export default function CadastroDespesaPage() {
             </Button>
           </div>
         </div>
-
-        <TransacoesRecentes
-          receita={false}
-          query={DESPESA_LIST_QUERY}
-          dataKey="despesas"
-        />
-      </div>
-    </div>
   );
 }

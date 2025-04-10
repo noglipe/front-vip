@@ -15,12 +15,7 @@ import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
-import {
-  EyeIcon,
-  FilterIcon,
-  Printer,
-  SearchIcon,
-} from "lucide-react";
+import { EyeIcon, FilterIcon, Printer, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/UI/button";
 import { Input } from "@/components/UI/input";
@@ -32,6 +27,9 @@ import {
   SelectValue,
 } from "@/components/UI/select";
 import { IfConcluidoCircle } from "./_components/ifConcluido";
+import BtnEditar from "./_components/tbnEditar";
+import BtnRecibo from "./_components/tbnRecibo";
+import BtnVisualizar from "./_components/btnVisualizar";
 
 interface TransacoesMes {
   totalDespesas: number;
@@ -203,12 +201,14 @@ export default function Page() {
                         transacao.receita ? CLASS_RECEITA : CLASS_DESPESA
                       }
                     >
-                      <TableCell className="flex flex-col justify-center items-center gap-1">
-                        <IfConcluidoCircle
-                          concluido={transacao.transacaoConcluido}
-                        />
-                        <div className="font-bold uppercase">
-                          {transacao.receita ? "Receita" : "Despesa"}
+                      <TableCell className="justify-center items-center gap-1">
+                        <div className="flex justify-center items-center text-center gap-1">
+                          <IfConcluidoCircle
+                            concluido={transacao.transacaoConcluido}
+                          />
+                          <div className="font-bold uppercase">
+                            {transacao.receita ? "Receita" : "Despesa"}
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell>{formatData(transacao.data)}</TableCell>
@@ -220,23 +220,13 @@ export default function Page() {
                         {transacao.instituicaoFinanceira?.nome || "N/A"}
                       </TableCell>
                       <TableCell>{formatReal(transacao.valor)}</TableCell>
-                      <TableCell className="flex flex-row gap-2 items-center justify-center">
-                        <Button
-                          onClick={() =>
-                            router.push(`/app/transacoes/${transacao.id}`)
-                          }
-                        >
-                          <EyeIcon className="mr-2" size={16} /> Visualizar
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            router.push(
-                              `/app/transacoes/recibo/${transacao.id}`
-                            )
-                          }
-                        >
-                          <Printer className="mr-2" size={16} /> Recibo
-                        </Button>
+                      <TableCell className="grid grid-cols-3 gap-1 items-center justify-center">
+                        <BtnVisualizar id={transacao.id} />
+                        <BtnEditar
+                          receita={transacao.receita}
+                          id={transacao.id}
+                        />
+                        <BtnRecibo id={transacao.id} />
                       </TableCell>
                     </TableRow>
                   ))}
