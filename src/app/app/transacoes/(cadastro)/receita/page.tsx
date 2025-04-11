@@ -10,7 +10,6 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
-  RECEITA_LIST_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
@@ -19,7 +18,6 @@ import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
-import TransacoesRecentes from "../../_components/transacoesRecentes";
 import { CALSS_INPUTS } from "@/lib/constantes";
 import { DatePickerForm } from "@/components/form/datePickerForm";
 

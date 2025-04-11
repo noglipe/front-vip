@@ -20,9 +20,8 @@ import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
-import { EyeIcon, FilterIcon, Printer, SearchIcon } from "lucide-react";
+import { FilterIcon, SearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/UI/button";
 import { Input } from "@/components/UI/input";
 import {
   Select,
@@ -32,10 +31,11 @@ import {
   SelectValue,
 } from "@/components/UI/select";
 import { IfConcluidoCircle } from "./_components/ifConcluido";
-import BtnEditar from "./_components/tbnEditar";
+
 import BtnRecibo from "./_components/tbnRecibo";
 import BtnVisualizar from "./_components/btnVisualizar";
 import PainelValor from "./_components/painelValor";
+import { BtnEditar } from "./_components/tbnEditar";
 
 interface TransacoesMes {
   totalDespesas: number;

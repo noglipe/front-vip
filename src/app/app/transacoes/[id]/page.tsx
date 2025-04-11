@@ -18,10 +18,9 @@ import {
 import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
 import { Button } from "@/components/UI/button";
-import { boolean } from "zod";
 import { IfConcluidoCircle, IfConcluidoText } from "../_components/ifConcluido";
-import BtnEditar from "../_components/tbnEditar";
 import BtnRecibo from "../_components/tbnRecibo";
+import { BtnEditar } from "../_components/tbnEditar";
 
 interface Transacao {
   id: string;

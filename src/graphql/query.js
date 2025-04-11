@@ -275,6 +275,42 @@ export const TRANSACAO_RECEITA_QUERY = gql`
   }
 `;
 
+export const TRANSACAO_DESPESA_QUERY = gql`
+  query Transacao($id: Int!) {
+    transacao(id: $id) {
+      id
+      data
+      dataCompra
+      compraParcelada
+      categoria {
+        id
+        nome
+      }
+      descricao
+      fornecedor {
+        id
+        nome
+      }
+      instituicaoFinanceira {
+        id
+        nome
+      }
+      meioDeTransacao {
+        id
+        nome
+      }
+      observacao
+      situacaoFiscal
+      transacaoConcluido
+      valor
+      excluida
+      numeroDeParcelas
+      parcelaAtual
+      receita
+    }
+  }
+`;
+
 export const TRANSACAO_RELACIONADA_QUERY = gql`
   query DetalhesTransacao($id: Int!) {
     transacoesParceladas(id: $id) {

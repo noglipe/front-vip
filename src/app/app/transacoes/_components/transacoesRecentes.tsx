@@ -18,6 +18,8 @@ import {
 import { formatData, formatReal } from "../../../../lib/utils";
 import { CircleCheckBig, CircleEllipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { IfConcluidoCircle } from "./ifConcluido";
+import { MiniBtnEditar } from "./tbnEditar";
 
 interface DadosType {
   id: string;
@@ -46,10 +48,9 @@ export default function TransacoesRecentes({
 }: TRProps) {
   const [dados, setDados] = useState<DadosType[]>([]);
   const router = useRouter();
-  const { loading, error, data } = useQuery<{ [key: string]: DadosType[] }>(
-    query,
-    { client }
-  );
+  const { loading, error, data } = useQuery<{
+    [key: string]: DadosType[];
+  }>(query, { client });
 
   useEffect(() => {
     if (data && data[dataKey]) {
@@ -79,19 +80,16 @@ export default function TransacoesRecentes({
           </TableHeader>
           <TableBody>
             {dados.map((dado, index) => (
-              <TableRow
-                onClick={() => {
-                  router.push(`/app/transacoes/${dado.id}/`);
-                }}
-                key={index}
-                className="overflow-clip cursor-pointer"
-              >
-                <TableCell>
-                  {dado.transacaoConcluido ? (
-                    <CircleCheckBig className="text-green-600 " />
-                  ) : (
-                    <CircleEllipsis className="text-gray-500 " />
-                  )}
+              <TableRow key={index} className="overflow-clip cursor-pointer">
+                <TableCell className="flex flex-row gap-2 justify-center items-center">
+                  <div
+                    onClick={() => {
+                      router.push(`/app/transacoes/${dado.id}/`);
+                    }}
+                  >
+                    <IfConcluidoCircle concluido={dado.transacaoConcluido} />
+                  </div>
+                  <MiniBtnEditar receita={receita} id={dado.id} />
                 </TableCell>
                 <TableCell>{formatData(dado.data)}</TableCell>
                 <TableCell className="w-[50px] overflow-hidden">

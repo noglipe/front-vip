@@ -109,14 +109,7 @@ export default function EditarReceitaPage() {
   });
 
   const editarReceita = async () => {
-    console.log(date);
-    console.log(valor);
-    console.log(meio_de_transacao);
-    console.log(instituicao_financeira);
-    console.log(descricao);
-    console.log(fornecedores);
-    console.log(observacao);
-    console.log(transacao_concluido);
+
     try {
       receitaSchema.parse({
         date: date instanceof Date ? date.toISOString().split("T")[0] : date,
@@ -178,7 +171,8 @@ export default function EditarReceitaPage() {
       }
 
       alert("Receita atualizada com sucesso");
-      //router.push("/app/transacoes/receita/");
+      router.push("/app/transacoes/receita/");
+      window.location.reload();
     } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors(
@@ -209,7 +203,10 @@ export default function EditarReceitaPage() {
         ))}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <DatePickerForm setFunc={setDate} date={date} className="w-full" />
+          <DatePickerForm 
+          setFunc={setDate} 
+          date={date} 
+          className="w-full" />
           <div className="flex items-center gap-2">
             <Label htmlFor="valor">R$</Label>
             <Input

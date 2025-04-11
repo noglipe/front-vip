@@ -7,7 +7,7 @@ interface BtnEditarProps {
   id: string;
 }
 
-const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
+export const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
   const router = useRouter();
 
   const link = receita ? "receita" : "despesa";
@@ -22,4 +22,17 @@ const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
   );
 };
 
-export default BtnEditar;
+export const MiniBtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
+  const router = useRouter();
+
+  const link = receita ? "receita" : "despesa";
+
+  return (
+    <Button
+      className="flex text-center bg-transparent text-yellow-600 rounded-full cursor-pointer hover:bg-gray-300"
+      onClick={() => router.push(`/app/transacoes/${link}/${id}`)}
+    >
+      <Edit className="" size={14} />
+    </Button>
+  );
+};

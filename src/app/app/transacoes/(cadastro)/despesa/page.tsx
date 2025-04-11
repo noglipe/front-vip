@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DatePickerForm } from "../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
@@ -30,8 +30,8 @@ export default function CadastroDespesaPage() {
   const [categoria, setCategoria] = useState<number | any>();
   const [cartao_utilizado, setCartao] = useState<number | any>();
   const [meio_de_transacao, setMeioTransacao] = useState<number | any>();
-  const [data, setDate] = useState("");
-  const [data_compra, setDateCompra] = useState("");
+  const [date, setDate] = React.useState<any>();
+  const [date_compra, setDate_compra] = React.useState<any>();
   const [transacao_concluido, setConcluida] = useState(true);
   const [fornecedor, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
@@ -45,8 +45,8 @@ export default function CadastroDespesaPage() {
   const router = useRouter();
 
   const despesaSchema = z.object({
-    data: z.string().min(1, "A data é obrigatória."),
-    data_compra: z.string(),
+    date: z.string().min(1, "A data é obrigatória."),
+    data_compra: z.string().nullable(),
     valor: z.number(),
     categoria: z.number(),
     numero_de_parcelas: z.number(),
@@ -64,11 +64,29 @@ export default function CadastroDespesaPage() {
 
   const cadastrarDespesa = async () => {
     setLoading(true);
-
+    console.log({
+      date,
+      date_compra,
+      valor,
+      categoria,
+      numero_de_parcelas,
+      parcela_atual,
+      meio_de_transacao,
+      cartao_utilizado,
+      instituicao_financeira,
+      descricao,
+      fornecedor,
+      observacao,
+      situacao_fiscal,
+      compra_parcelada,
+      transacao_concluido,
+    });
     try {
       despesaSchema.parse({
-        data,
-        data_compra: data_compra ? data_compra : data,
+        date: date.toISOString().split("T")[0],
+        date_compra: date_compra
+          ? date_compra.toISOString().split("T")[0]
+          : date.toISOString().split("T")[0],
         valor,
         categoria: parseInt(categoria),
         numero_de_parcelas: numero_de_parcelas ? numero_de_parcelas : 1,
@@ -85,8 +103,9 @@ export default function CadastroDespesaPage() {
       });
 
       const despesaInput: DespesaInput = {
-        data,
-        data_compra: data_compra ? data_compra : "",
+        data: date ? date.toISOString().split("T")[0] : "",
+        data_compra: date_compra!==null ? date_compra.toISOString().split("T")[0]
+          : date.toISOString().split("T")[0],
         valor,
         categoria,
         numero_de_parcelas,
@@ -102,6 +121,8 @@ export default function CadastroDespesaPage() {
         transacao_concluido,
         receita: false,
       };
+
+      console.log(despesaInput);
 
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/`,
@@ -138,154 +159,156 @@ export default function CadastroDespesaPage() {
   };
 
   return (
-        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
-        <h2 className="text-xl font-bold text-gray-800 mb-2">Despesa</h2>
-          <div>
-            {Object.entries(errors).map(([key, message]) => (
-              <p key={key} className="text-red-500">
-                {message}
-              </p>
-            ))}
-          </div>
+    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
+      <h2 className="text-xl font-bold text-gray-800 mb-2">Despesa</h2>
+      <div>
+        {Object.entries(errors).map(([key, message]) => (
+          <p key={key} className="text-red-500">
+            {key} - {message}
+          </p>
+        ))}
+      </div>
 
-          <div className="flex gap-4 mb-4">
-            <Label>Despesa Simples</Label>
-            <Switch
-              className=""
-              checked={compra_parcelada}
-              onCheckedChange={setTipoDespesa}
-            />
-            <Label>Despesa Parcelada</Label>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <DatePickerForm
-              descricao={compra_parcelada ? "Data de pagamento" : null}
-              setFunc={setDate}
-              className={CALSS_INPUTS}
-            />
-            {compra_parcelada ? (
-              <DatePickerForm
-                setFunc={setDateCompra}
-                className={CALSS_INPUTS}
-                descricao="Data da Compra"
-              />
-            ) : (
-              ""
-            )}
+      <div className="flex gap-4 mb-4">
+        <Label>Despesa Simples</Label>
+        <Switch
+          className=""
+          checked={compra_parcelada}
+          onCheckedChange={setTipoDespesa}
+        />
+        <Label>Despesa Parcelada</Label>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <DatePickerForm
+          descricao={compra_parcelada ? "Data de pagamento" : null}
+          setFunc={setDate}
+          className={CALSS_INPUTS}
+          date={date}
+        />
+        {compra_parcelada ? (
+          <DatePickerForm
+            setFunc={setDate_compra}
+            className={CALSS_INPUTS}
+            descricao="Data da Compra"
+            date={date_compra}
+          />
+        ) : (
+          ""
+        )}
 
-            <div className="flex items-center gap-2">
-              <Label htmlFor="valor">R$</Label>
-              <Input
-                id="valor"
-                type="number"
-                placeholder="Valor"
-                className={CALSS_INPUTS}
-                onChange={(e) => setValor(parseFloat(e.target.value))}
-              />
-            </div>
-            <SelectBase
-              setFunc={setMeioTransacao}
-              query={MEIO_TRANSACAO_FORM_QUERY}
-              dataKey="meiosDeTransacao"
-              minutos={60}
-              titulo="Meios de Transações"
-              className={CALSS_INPUTS}
-              value={meio_de_transacao}
-            />
-            <SelectBase
-              setFunc={setInstituicaoFinanceira}
-              query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-              dataKey="instituicoesFinanceiras"
-              minutos={60}
-              titulo="Instituições Financeiras"
-              className={CALSS_INPUTS}
-              value={instituicao_financeira}
-            />
-            <SelectBaseBusca
-              setFunc={setCategoria}
-              query={CATEGORIAS_FORM_QUERY}
-              dataKey="categorias"
-              minutos={60}
-              titulo="Categorias"
-              className={CALSS_INPUTS}
-              value={categoria}
-            />
-            <SelectBaseBusca
-              setFunc={setFornecedores}
-              query={FORNECEDORES_QUERY}
-              dataKey="fornecedores"
-              minutos={1}
-              titulo="Fornecedores"
-              className={CALSS_INPUTS}
-              value={fornecedor}
-            />
-            <SelectBase
-              setFunc={setCartao}
-              query={CARTOES_FORM_QUERY}
-              dataKey="cartoesDeCredito"
-              minutos={60}
-              titulo="Cartão Utilizado"
-              className={CALSS_INPUTS}
-              value={cartao_utilizado}
-            />
-            {compra_parcelada ? (
-              <>
-                <Input
-                  type="number"
-                  placeholder="Parcela Atual"
-                  onChange={(e) => setParcelas(parseInt(e.target.value))}
-                  className={CALSS_INPUTS}
-                />
-                <Input
-                  type="number"
-                  placeholder="Número de Parcelas"
-                  onChange={(e) => setNumParcelas(parseInt(e.target.value))}
-                  className={CALSS_INPUTS}
-                />
-              </>
-            ) : (
-              ""
-            )}
-          </div>
-          <div className="flex flex-col items-center gap-2 mt-6">
-            <Input
-              type="text"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              placeholder="Descrição"
-              className={CALSS_INPUTS}
-            />
-
-            <Textarea
-              value={observacao}
-              onChange={(e) => setObservacao(e.target.value)}
-              placeholder="Observação"
-              className={CALSS_INPUTS}
-            />
-          </div>
-          <div className="flex flex-row gap-4 justify-center items-center mt-6">
-            <div className="flex items-center gap-2 h-full">
-              <Checkbox
-                className={`${CALSS_INPUTS} sm:h-10 w-10`}
-                id="terms"
-                checked={transacao_concluido}
-                onCheckedChange={() => setConcluida(!transacao_concluido)}
-              />
-              <Label htmlFor="terms">Transação Concluída</Label>
-            </div>
-            <div className="flex items-center gap-2 h-full">
-              <Checkbox
-                className={`${CALSS_INPUTS} sm:h-10 w-10`}
-                id="terms"
-                checked={situacao_fiscal}
-                onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}
-              />
-              <Label htmlFor="terms">Nota Fiscal</Label>
-            </div>
-            <Button className="" onClick={cadastrarDespesa}>
-              {loading ? <MiniLoading /> : "Cadastrar"}
-            </Button>
-          </div>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="valor">R$</Label>
+          <Input
+            id="valor"
+            type="number"
+            placeholder="Valor"
+            className={CALSS_INPUTS}
+            onChange={(e) => setValor(parseFloat(e.target.value))}
+          />
         </div>
+        <SelectBase
+          setFunc={setMeioTransacao}
+          query={MEIO_TRANSACAO_FORM_QUERY}
+          dataKey="meiosDeTransacao"
+          minutos={60}
+          titulo="Meios de Transações"
+          className={CALSS_INPUTS}
+          value={meio_de_transacao}
+        />
+        <SelectBase
+          setFunc={setInstituicaoFinanceira}
+          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+          dataKey="instituicoesFinanceiras"
+          minutos={60}
+          titulo="Instituições Financeiras"
+          className={CALSS_INPUTS}
+          value={instituicao_financeira}
+        />
+        <SelectBaseBusca
+          setFunc={setCategoria}
+          query={CATEGORIAS_FORM_QUERY}
+          dataKey="categorias"
+          minutos={60}
+          titulo="Categorias"
+          className={CALSS_INPUTS}
+          value={categoria}
+        />
+        <SelectBaseBusca
+          setFunc={setFornecedores}
+          query={FORNECEDORES_QUERY}
+          dataKey="fornecedores"
+          minutos={1}
+          titulo="Fornecedores"
+          className={CALSS_INPUTS}
+          value={fornecedor}
+        />
+        <SelectBase
+          setFunc={setCartao}
+          query={CARTOES_FORM_QUERY}
+          dataKey="cartoesDeCredito"
+          minutos={60}
+          titulo="Cartão Utilizado"
+          className={CALSS_INPUTS}
+          value={cartao_utilizado}
+        />
+        {compra_parcelada ? (
+          <>
+            <Input
+              type="number"
+              placeholder="Parcela Atual"
+              onChange={(e) => setParcelas(parseInt(e.target.value))}
+              className={CALSS_INPUTS}
+            />
+            <Input
+              type="number"
+              placeholder="Número de Parcelas"
+              onChange={(e) => setNumParcelas(parseInt(e.target.value))}
+              className={CALSS_INPUTS}
+            />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
+      <div className="flex flex-col items-center gap-2 mt-6">
+        <Input
+          type="text"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          placeholder="Descrição"
+          className={CALSS_INPUTS}
+        />
+
+        <Textarea
+          value={observacao}
+          onChange={(e) => setObservacao(e.target.value)}
+          placeholder="Observação"
+          className={CALSS_INPUTS}
+        />
+      </div>
+      <div className="flex flex-row gap-4 justify-center items-center mt-6">
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            id="terms"
+            checked={transacao_concluido}
+            onCheckedChange={() => setConcluida(!transacao_concluido)}
+          />
+          <Label htmlFor="terms">Transação Concluída</Label>
+        </div>
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            id="terms"
+            checked={situacao_fiscal}
+            onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}
+          />
+          <Label htmlFor="terms">Nota Fiscal</Label>
+        </div>
+        <Button className="" onClick={cadastrarDespesa}>
+          {loading ? <MiniLoading /> : "Cadastrar"}
+        </Button>
+      </div>
+    </div>
   );
 }
