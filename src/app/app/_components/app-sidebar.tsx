@@ -53,10 +53,23 @@ const menuLista = [
   },
 ];
 
+const menuRelatorio = [
+  {
+    nome: "Categoria",
+    link: "/app/transacoes/relatorio/categoria",
+  },
+  {
+    nome: "Despesa",
+    link: "/app/transacoes/despesa",
+  },
+];
+
 export function AppSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen2] = useState(false);
 
   const handleToggle = () => setIsOpen(!isOpen);
+  const handleToggle2 = () => setIsOpen(!isOpen2);
 
   return (
     <Sidebar className="print:hidden">
@@ -100,10 +113,38 @@ export function AppSidebar() {
               <CircleChevronRight className={" mr-2"} size={20} />
             )}
           </CollapsibleTrigger>
-
           <CollapsibleContent className="mt-2 ml-5 ">
             <div className="flex flex-col w-full ">
               {menuLista.map((item, index) => (
+                <Link
+                  className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
+                  key={index}
+                  href={item.link}
+                >
+                  {item.nome}
+                </Link>
+              ))}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+        <Collapsible>
+          <CollapsibleTrigger
+            className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+            onClick={handleToggle2}
+          >
+            <Link href={"/app/"} className="flex flex-row gap-2 ">
+              <Banknote /> Relatórios
+            </Link>
+            {isOpen2 ? (
+              <CircleChevronDown size={20} className={"mr-2"} />
+            ) : (
+              <CircleChevronRight className={" mr-2"} size={20} />
+            )}
+          </CollapsibleTrigger>
+
+          <CollapsibleContent className="mt-2 ml-5 ">
+            <div className="flex flex-col w-full ">
+              {menuRelatorio.map((item, index) => (
                 <Link
                   className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
                   key={index}
