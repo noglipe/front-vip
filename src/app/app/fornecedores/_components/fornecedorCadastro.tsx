@@ -52,14 +52,14 @@ export function FornecedorCadastro() {
       <h2 className="text-xl font-semibold mb-4">Cadastrar Fornecedor</h2>
       <div className="flex flex-row gap-4">
         <InputVip
-          nome="Nome"
+          placeholder="Nome"
           value={novoFornecedor.nome}
           setValue={(valor) =>
             setNovoFornecedor({ ...novoFornecedor, nome: valor })
           }
         />
         <InputVip
-          nome="Documento"
+          placeholder="Documento"
           value={novoFornecedor.documento}
           setValue={(valor) =>
             setNovoFornecedor({ ...novoFornecedor, documento: valor })

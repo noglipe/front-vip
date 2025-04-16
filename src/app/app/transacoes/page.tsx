@@ -3,12 +3,11 @@
 import { Card, CardDescription } from "@/components/UI/card";
 import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import PainelValor from "./_components/painelValor";
 import TabelaTransacoes from "../_components/tabelaTransacoes";
+import { url } from "@/lib/apollo-client";
 
 export default function Page() {
-  const router = useRouter();
   const [dados, setDados] = useState<TransacoesPropsApi | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any | null>();
@@ -16,15 +15,14 @@ export default function Page() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/`)
+    fetch(`${url}financeiro/transacao/`)
       .then((res) => {
-       
-        return res.json(); // converte o corpo da resposta para JSON
+        return res.json();
       })
       .then((data: TransacoesPropsApi) => {
-       
         setDados(data);
-        setLoading(false); // só depois de receber os dados
+        setLoading(false);
+        console.log(dados);
       })
       .catch((err) => {
         console.error("Erro ao buscar transações:", err);
@@ -35,7 +33,11 @@ export default function Page() {
 
   if (loading) return <Loading />;
   if (error)
-    return <p className="text-center text-red-500">Erro: {error.message}</p>;
+    return (
+      <p className="text-center text-red-500">
+        Erro: {error} - {error.message}
+      </p>
+    );
 
   const diferenca = dados
     ? (dados?.total_receitas || 0) - (dados?.total_despesas || 0)

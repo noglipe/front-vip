@@ -1,17 +1,17 @@
 import "./Input.css";
 
 interface InputProps {
-  nome: string;
+  placeholder?: string;
   value: string;
   className?: string;
   setValue: (novoValor: string) => void;
 }
 
-const InputVip = ({ nome, value, className, setValue  }: InputProps) => {
+const InputVip = ({ placeholder, value, className, setValue }: InputProps) => {
   const classN = `input-custom ${className}`.trim();
   return (
     <input
-      placeholder={nome}
+      placeholder={placeholder}
       type="text"
       value={value}
       onChange={(e) => setValue(e.target.value.toUpperCase())}

@@ -9,13 +9,9 @@ import {
 } from "@/components/UI/sidebar";
 
 import {
-  ArrowDown,
-  ArrowUp,
   Banknote,
   CircleChevronDown,
   CircleChevronRight,
-  CircleEllipsis,
-  EllipsisVerticalIcon,
   Handshake,
   HomeIcon,
 } from "lucide-react";
@@ -72,7 +68,7 @@ export function AppSidebar() {
   const handleToggle2 = () => setIsOpen(!isOpen2);
 
   return (
-    <Sidebar className="print:hidden">
+    <Sidebar className="print:hidden ">
       <div className="flex flex-row gap-2 p-4 items-center border-b-2">
         <Image
           src={logoImagem}
@@ -157,7 +153,7 @@ export function AppSidebar() {
           </CollapsibleContent>
         </Collapsible>
       </SidebarContent>
-      <SidebarFooter className="bg-red-800 text-white">
+      <SidebarFooter className=" text-red-200">
         <SidebarMenu>
           <div className="flex items-center gap-2 cursor-pointer p-2 hover:bg-red-600 rounded">
             <LogOut size={20} />

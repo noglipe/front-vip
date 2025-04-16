@@ -12,7 +12,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Props {
   setFunc: (date: any) => void;
-  className: string;
+  className?: string;
   descricao?: string | null ;
   date?: any
 }

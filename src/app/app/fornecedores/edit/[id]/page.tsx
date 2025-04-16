@@ -92,14 +92,14 @@ export default function EditarFornecedor() {
         {fornecedor && (
           <div className="flex flex-col gap-4">
             <InputVip
-              nome="Nome"
+              placeholder="Nome"
               value={fornecedor.nome}
               setValue={(valor) =>
                 setFornecedor({ ...fornecedor, nome: valor })
               }
             />
             <InputVip
-              nome="Documento"
+              placeholder="Documento"
               value={fornecedor.documento}
               setValue={(valor) =>
                 setFornecedor({ ...fornecedor, documento: valor })

@@ -100,3 +100,9 @@ interface TransacoesPropsApi {
     excluida: boolean
   }[]
 }
+
+interface CardSaldosProps {
+  nome: string;
+  id: string;
+  saldo: number;
+}

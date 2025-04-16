@@ -1,20 +1,16 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/UI/sidebar";
-import { AppSidebar } from "./_components/app-sidebar";
+import { SidebarProvider } from "@/components/UI/sidebar";
+import { ClientLayout } from "./_components/ClientLayout";
 
-export default function Layout({
+export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="pt-br" suppressHydrationWarning>
+      <body className="w-full">
         <SidebarProvider>
-          <AppSidebar />
-          <main className="container w-full">
-            <SidebarTrigger className="p-4 cursor-pointer print:hidden" />
-            <div className="container">{children}</div>
-          </main>
+          <ClientLayout>{children}</ClientLayout>
         </SidebarProvider>
       </body>
     </html>
