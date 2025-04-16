@@ -2,12 +2,11 @@
 
 import { DatePickerForm } from "@/components/form/datePickerForm";
 import { Loading } from "@/components/loading";
-import { Alert, AlertDescription, AlertTitle } from "@/components/UI/alert";
 import { Button } from "@/components/UI/button";
 import { Card, CardDescription } from "@/components/UI/card";
 import { url } from "@/lib/apollo-client";
 import { format } from "date-fns";
-import { AlertCircle, FilterIcon, Terminal } from "lucide-react";
+import {  FilterIcon } from "lucide-react";
 import { useState } from "react";
 import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
@@ -36,7 +35,6 @@ export default function Page() {
           setError(err);
           setLoading(false);
         });
-      console.log(data);
     } else {
       alert("Favor Inserir uma Data");
     }
@@ -60,13 +58,12 @@ export default function Page() {
           <Button onClick={handleBuscar}>Buscar</Button>
         </div>
       </Card>
-      
 
       {dados ? (
         <div className="container mx-auto mt-2 space-y-6">
           {/* Totais Financeiros */}
           <Card className="container p-4  rounded-xl">
-           <h2>Transações do dia {data ? format(data, "dd/MM/yyyy") : ""}</h2>
+            <h2>Transações do dia {data ? format(data, "dd/MM/yyyy") : ""}</h2>
             <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
               <PainelValor
                 valor={dados?.total_receitas || 0}
