@@ -19,10 +19,13 @@ interface Props<T extends SelectApi> {
   dataKey: string;
   titulo?: string;
   className?: string;
-  value: {
-    id: string;
-    nome: string;
-  } | any;
+  value:
+    | {
+        id: string;
+        nome: string;
+      }
+    | any;
+  filtro?: boolean;
 }
 
 export function SelectBase<T extends SelectApi>({
@@ -33,6 +36,7 @@ export function SelectBase<T extends SelectApi>({
   titulo,
   className,
   value,
+  filtro = false,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const { loading, error, data, refetch } = useQuery<{
@@ -43,9 +47,15 @@ export function SelectBase<T extends SelectApi>({
 
   useEffect(() => {
     if (data && data[dataKey]) {
-      setObjetos(data[dataKey]);
+      let lista = data[dataKey];
+      if (filtro) {
+        // Adiciona a opção "Todos" no início
+        const todosItem = { id: "todos", nome: "Todos" } as T;
+        lista = [todosItem, ...lista];
+      }
+      setObjetos(lista);
     }
-  }, [data, dataKey]);
+  }, [data, dataKey, filtro]);
 
   useEffect(() => {
     const intervalId = setInterval(
@@ -62,9 +72,12 @@ export function SelectBase<T extends SelectApi>({
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <Select onValueChange={(e) => setFunc(e)} value={value}>
+    <Select
+      onValueChange={(e) => setFunc(e)}
+      value={typeof value === "string" ? value : value?.id}
+    >
       <SelectTrigger className={className}>
-        <SelectValue placeholder={titulo ? titulo : `${dataKey}`}>
+        <SelectValue placeholder={titulo ?? dataKey}>
           {objetos.find((obj) => obj.id === value?.id)?.nome}
         </SelectValue>
       </SelectTrigger>

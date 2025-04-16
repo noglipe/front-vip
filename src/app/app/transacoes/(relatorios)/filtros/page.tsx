@@ -1,19 +1,109 @@
-"use client"
+"use client";
 
-import { Card } from "@/components/UI/card";
+import { DatePickerForm } from "@/components/form/datePickerForm";
+import { Loading } from "@/components/loading";
+import { Button } from "@/components/UI/button";
+import { Card, CardDescription } from "@/components/UI/card";
+import { url } from "@/lib/apollo-client";
+import { format } from "date-fns";
+import { FilterIcon } from "lucide-react";
 import { useState } from "react";
-import FiltrosTransacoes from "../_components/filtros";
+import PainelValor from "../../_components/painelValor";
+import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
+import TabelaTransacoesFiltros from "@/app/app/_components/tabelaTransacoesFiltros";
 
 export default function Page() {
-    const[dados, setDados] = useState<TransacoesPropsApi>()
+  const [dataI, setDataI] = useState();
+  const [dataF, setDataF] = useState();
+  const [dados, setDados] = useState<TransacoesPropsApi>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  function handleBuscar() {
+    setLoading(true);
+
+    if (dataI && dataF) {
+      fetch(
+        `${url}financeiro/transacao/entre-datas/?dataI=${format(
+          dataI,
+          "yyyy-MM-dd"
+        )}&dataF=${format(dataF, "yyyy-MM-dd")}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data: TransacoesPropsApi) => {
+          setDados(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Error ao buscar transacoes:", err);
+          setError(err);
+          setLoading(false);
+        });
+    } else {
+      alert("Favor Inserir uma Data");
+    }
+  }
+
+  if (loading) return <Loading />;
+  if (error) return <p className="text-center text-red-500">Erro: {error}</p>;
+
+  const diferenca = dados
+    ? (dados?.total_receitas || 0) - (dados?.total_despesas || 0)
+    : 0;
 
   return (
-    <section className="container p-8">
-      <Card className="p-4 w-full">
-        <FiltrosTransacoes />
-        <div>filtros</div>
-        <div>Tabela</div>
+    <div>
+      <Card className="p-4">
+        <div className="flex flex-row items-center justify-between gap-2">
+          <div className="flex gap-2 items-center">
+            <FilterIcon className="h-4 w-4" />
+            <DatePickerForm
+              setFunc={setDataI}
+              date={dataI}
+              descricao={"Data Inicial"}
+            />
+
+            <DatePickerForm
+              setFunc={setDataF}
+              date={dataF}
+              descricao={"Data Final"}
+            />
+          </div>
+          <Button onClick={handleBuscar}>Buscar</Button>
+        </div>
       </Card>
-    </section>
+
+      {dados ? (
+        <div className="container mx-auto mt-2 space-y-6">
+          {/* Totais Financeiros */}
+          <Card className="container p-4  rounded-xl">
+            <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
+              <PainelValor
+                valor={dados?.total_receitas || 0}
+                title="Total de Receitas"
+              />
+              <PainelValor
+                valor={dados?.total_despesas || 0}
+                title="Total de Despesas"
+              />
+              <PainelValor
+                valor={diferenca}
+                title=" Diferença (Lucro / Prejuízo)"
+              />
+            </div>
+            <CardDescription className="text-end font-bold">
+              *Dados referente ao mês vigente
+            </CardDescription>
+          </Card>
+
+          {/* Tabela de Transações */}
+          {dados && <TabelaTransacoesFiltros dados={dados.transacao} />}
+        </div>
+      ) : (
+        ""
+      )}
+    </div>
   );
 }

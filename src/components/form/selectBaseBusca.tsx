@@ -29,10 +29,13 @@ interface Props<T extends SelectApi> {
   dataKey: string;
   titulo?: string;
   className?: string;
-  value: {
-    id: number,
-    nome: string,
-  } | any;
+  value:
+    | {
+        id: number;
+        nome: string;
+      }
+    | any;
+  filtro?: boolean;
 }
 
 export function SelectBaseBusca<T extends SelectApi>({
@@ -43,6 +46,7 @@ export function SelectBaseBusca<T extends SelectApi>({
   titulo,
   className,
   value: initialValue,
+  filtro = false,
 }: Props<T>) {
   const [objetos, setObjetos] = useState<T[]>([]);
   const [open, setOpen] = React.useState(false);
@@ -55,11 +59,17 @@ export function SelectBaseBusca<T extends SelectApi>({
 
   useEffect(() => {
     if (data && data[dataKey]) {
-      setObjetos(data[dataKey]);
+      let lista = data[dataKey];
 
-      // Se temos valor inicial e o nome correspondente, setar
+      if (filtro) {
+        const todosItem = { id: "", nome: "Todos" } as T;
+        lista = [todosItem, ...lista];
+      }
+
+      setObjetos(lista);
+
       if (initialValue && !value) {
-        const selected = data[dataKey].find(
+        const selected = lista.find(
           (obj) => obj.id.toString() === initialValue.id.toString()
         );
         if (selected) {
@@ -67,7 +77,7 @@ export function SelectBaseBusca<T extends SelectApi>({
         }
       }
     }
-  }, [data, dataKey, initialValue, value]);
+  }, [data, dataKey, initialValue, value, filtro]);
 
   useEffect(() => {
     const intervalId = setInterval(
@@ -95,7 +105,7 @@ export function SelectBaseBusca<T extends SelectApi>({
           {value
             ? objetos.find((obj) => obj.nome === value)?.nome
             : `${titulo}`}
-          <ChevronsUpDown className="opacity-50" />
+          <ChevronsUpDown className="" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="overflow-hidden justify-between h-full w-full px-2 border-1 border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ">
@@ -119,7 +129,7 @@ export function SelectBaseBusca<T extends SelectApi>({
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === obj.nome ? "opacity-100" : "opacity-0"
+                      value === obj.nome ? "" : ""
                     )}
                   />
                 </CommandItem>

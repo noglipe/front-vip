@@ -46,6 +46,10 @@ interface TransacoesProps {
     id: number;
     nome: string;
   };
+  cartao_utilizado: {
+    id: number,
+    nome: string
+  }
   meio_de_transacao: {
     id: number;
     nome: string;
@@ -66,39 +70,50 @@ interface TransacoesData {
   transacao: TransacoesProps[];
 }
 
+interface TransacoesAPI {
+  id: number,
+  data: string,
+  categoria: {
+    id: number,
+    nome: string
+  },
+  descricao: string,
+  fornecedor: {
+    id: number,
+    nome: string
+  },
+  instituicao_financeira: {
+    id: number,
+    nome: string
+  },
+  meio_de_transacao: {
+    id: number,
+    nome: string
+  },
+  cartao_utilizado?: {
+    id: number,
+    bandeira_do_cartao: string,
+    ultimos_numeros: string
+  }
+  numero_de_parcelas: number,
+  observacao: string,
+  parcela_atual: number,
+  rastreioParcelas: number,
+  receita: boolean,
+  situacao_fiscal: boolean | null,
+  transacao_concluido: boolean | null,
+  valor: number,
+  excluida: boolean
+}
+
+interface TransacoesListAPi {
+  dados: TransacoesAPI[]
+}
+
 interface TransacoesPropsApi {
   total_despesas: number,
   total_receitas: number,
-  transacao: {
-    id: number,
-    data: string,
-    categoria: {
-      id: number,
-      nome: string
-    },
-    descricao: string,
-    fornecedor: {
-      id: number,
-      nome: string
-    },
-    instituicao_financeira: {
-      id: number,
-      nome: string
-    },
-    meio_de_transacao: {
-      id: number,
-      nome: string
-    },
-    numero_de_parcelas: number,
-    observacao: string,
-    parcela_atual: number,
-    rastreioParcelas: number,
-    receita: boolean,
-    situacaoFiscal: boolean | null,
-    transacaoConcluido: boolean | null,
-    valor: number,
-    excluida: boolean
-  }[]
+  transacao: TransacoesAPI[]
 }
 
 interface CardSaldosProps {
