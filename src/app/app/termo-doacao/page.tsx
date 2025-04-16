@@ -27,8 +27,8 @@ export default function TermoDoacaoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 print:bg-white print:p-0">
-      <div className=" bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto print:min-w-screen print:w-full print:mx-0 print:shadow-none print:border">
+    <div className="min-h-screen p-6 print:text-black print:bg-white print:p-0">
+      <div className=" rounded-lg shadow-lg p-8 max-w-2xl mx-auto print:min-w-screen print:w-full print:mx-0 print:shadow-none print:border">
         {/* Título */}
         <h1 className="text-2xl font-bold text-center mb-4 print:text-xl">
           TERMO DE DOAÇÃO
@@ -51,7 +51,7 @@ export default function TermoDoacaoPage() {
             <div>
               <Label
                 htmlFor="nomeDoador"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Nome Completo:
               </Label>
@@ -63,13 +63,13 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setNomeDoador(e.target.value);
                 }}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div>
               <Label
                 htmlFor="documentoDoador"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 CPF/CNPJ:
               </Label>
@@ -81,13 +81,13 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setDocumentoDoador(e.target.value);
                 }}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div>
               <Label
                 htmlFor="enderecoDoador"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Endereço Completo:
               </Label>
@@ -99,13 +99,13 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setEnderecoDoador(e.target.value);
                 }}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div>
               <Label
                 htmlFor="telefoneDoador"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Telefone:
               </Label>
@@ -118,13 +118,13 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setTelefoneDoador(e.target.value);
                 }}
-                className="telefone shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="telefone shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div className="col-span-1 md:col-span-2">
               <Label
                 htmlFor="emailDoador"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 E-mail:
               </Label>
@@ -136,7 +136,7 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setEmailDoador(e.target.value);
                 }}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function TermoDoacaoPage() {
           <div>
             <Label
               htmlFor="descricaoDoacao"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block  text-sm font-bold mb-2"
             >
               Descrição Detalhada do Bem Doado:
             </Label>
@@ -159,14 +159,14 @@ export default function TermoDoacaoPage() {
               onChange={(e) => {
                 setDescricaoDoacao(e.target.value);
               }}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             <div>
               <Label
                 htmlFor="valorDoacao"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Valor Estimado da Doação (R$):
               </Label>
@@ -178,13 +178,13 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setValorDoacao(parseFloat(e.target.value));
                 }}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div>
               <Label
                 htmlFor="dataDoacao"
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block  text-sm font-bold mb-2"
               >
                 Data da Doação:
               </Label>
@@ -197,14 +197,14 @@ export default function TermoDoacaoPage() {
                 onChange={(e) => {
                   setDataDoacao(e.target.value);
                 }}
-                className="flex shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="flex shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
           </div>
           <div className="mt-2">
             <Label
               htmlFor="condicoesEspecificas"
-              className="block text-gray-700 text-sm font-bold mb-2"
+              className="block  text-sm font-bold mb-2"
             >
               Condições Específicas da Doação (se houver):
             </Label>
@@ -215,12 +215,12 @@ export default function TermoDoacaoPage() {
               onChange={(e) => {
                 setCondicoesEspecificas(e.target.value);
               }}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
         </div>
 
-        <hr className="my-4 border-gray-300 print:border-gray-200" />
+        <hr className="my-4 print:border-gray-200" />
 
         {/* Termo de Doação (Visível na impressão) */}
         <div className="print:block">
@@ -311,14 +311,14 @@ export default function TermoDoacaoPage() {
           </p>
 
           <div className="mt-8 print:mt-4 flex flex-col items-center">
-            <div className="w-3/4 border-t-2 border-gray-400 pt-4 text-center print:border-t print:border-gray-300">
+            <div className="w-3/4 border-t-2  pt-4 text-center print:border-t print:border-gray-300">
               <p className="text-sm print:text-xs">
                 _______________________________________________
               </p>
               <p className="text-sm font-bold print:text-xs">Doador(a)</p>
               <p className="text-sm print:text-xs">{nomeDoador}</p>
             </div>
-            <div className="w-3/4 border-t-2 border-gray-400 pt-4 mt-6 text-center print:border-t print:border-gray-300 print:mt-2">
+            <div className="w-3/4 border-t-2  pt-4 mt-6 text-center print:border-t print:border-gray-300 print:mt-2">
               <p className="text-sm print:text-xs">
                 _______________________________________________
               </p>
@@ -328,13 +328,13 @@ export default function TermoDoacaoPage() {
               <p className="text-sm print:text-xs">{NOME_IGREJA}</p>
             </div>
             <div className="w-3/4 mt-6 print:mt-2 flex justify-between">
-              <div className="w-1/2 border-t border-gray-400 pt-2 text-center print:border-t print:border-gray-300">
+              <div className="w-1/2 border-t  pt-2 text-center print:border-t print:border-gray-300">
                 <p className="text-sm print:text-xs">
                   _________________________
                 </p>
                 <p className="text-sm font-bold print:text-xs">Testemunha 1</p>
               </div>
-              <div className="w-1/2 border-t border-gray-400 pt-2 text-center print:border-t print:border-gray-300">
+              <div className="w-1/2 border-t  pt-2 text-center print:border-t print:border-gray-300">
                 <p className="text-sm print:text-xs">
                   _________________________
                 </p>
