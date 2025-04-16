@@ -274,8 +274,8 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
                     <div className="flex justify-center items-center text-center gap-1">
                       <IfConcluidoCircle
                         concluido={
-                          transacao.transacaoConcluido
-                            ? transacao.transacaoConcluido
+                          transacao.transacao_concluido
+                            ? transacao.transacao_concluido
                             : false
                         }
                       />

@@ -4,6 +4,7 @@ import client from "../../../../lib/apollo-client";
 import InputVip from "../../_components/inputVip";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { MiniLoading } from "@/components/loading";
+import { Card } from "@/components/UI/card";
 
 export function FornecedorCadastro() {
   const [loading, setLoading] = useState(false);
@@ -48,7 +49,7 @@ export function FornecedorCadastro() {
   };
 
   return (
-    <div className="bg-white shadow-lg rounded-xl p-6 ">
+    <Card className=" shadow-lg rounded-xl p-6 ">
       <h2 className="text-xl font-semibold mb-4">Cadastrar Fornecedor</h2>
       <div className="flex flex-row gap-4">
         <InputVip
@@ -72,6 +73,6 @@ export function FornecedorCadastro() {
           {loading ? <MiniLoading /> : ""} Cadastrar
         </button>
       </div>
-    </div>
+    </Card>
   );
 }

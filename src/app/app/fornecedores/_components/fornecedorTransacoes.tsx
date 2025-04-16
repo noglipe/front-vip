@@ -11,6 +11,7 @@ import { formatData, formatReal } from "@/lib/utils";
 import { IfConcluidoCircle } from "../../transacoes/_components/ifConcluido";
 import { IfReceitaValor } from "../../transacoes/_components/ifReceita";
 import Link from "next/link";
+import { Card } from "@/components/UI/card";
 
 interface Transacao {
   view: boolean;
@@ -57,12 +58,12 @@ export default function TransacoesFornecedor({ view, id, setView }: Transacao) {
     return <p>Nenhuma transação encontrada.</p>;
 
   return (
-    <div className="flex bg-opacity-50 z-50">
-      <div className="relative bg-white shadow-lg rounded-xl p-6 w-[400px] max-w-full">
+    <Card className="flex z-50">
+      <div className="relative  shadow-lg rounded-xl p-6 w-[400px] max-w-full">
         {/* Botão de fechar */}
         <button
           onClick={() => setView(false)}
-          className="absolute top-2 right-2 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-400 h-8 w-8 cursor-pointer transition"
+          className="absolute bg-red-500 top-2 right-2 flex justify-center items-center rounded-full hover:bg-gray-400 h-8 w-8 cursor-pointer transition"
         >
           <X size={18} />
         </button>
@@ -77,13 +78,13 @@ export default function TransacoesFornecedor({ view, id, setView }: Transacao) {
             <Link href={`/app/transacoes/${obj.id}/`}>
               <div
                 key={obj.id}
-                className="grid grid-cols-3 items-center gap-3 p-2 border-b border-gray-200"
+                className="grid grid-cols-3 items-center gap-3 p-2  mb-2 border border-b-2 border-gray-400 hover:bg-gray-800"
               >
-                <div className="text-sm text-gray-700 flex gap-1 justify-center items-center">
+                <div className="text-sm flex gap-1 justify-center items-center">
                   <IfConcluidoCircle concluido={obj.transacaoConcluido} />
                   {formatData(obj.data)}
                 </div>
-                <div className="text-sm text-gray-800">{obj.descricao}</div>
+                <div className="text-sm ">{obj.descricao}</div>
                 <div className="text-sm font-medium">
                   <IfReceitaValor valor={obj.valor} receita={obj.receita} />
                 </div>
@@ -91,6 +92,6 @@ export default function TransacoesFornecedor({ view, id, setView }: Transacao) {
             </Link>
           ))}
       </div>
-    </div>
+    </Card>
   );
 }

@@ -50,8 +50,8 @@ export default function Recibo() {
   }
 
   return (
-    <div className="flex flex-col m-4 items-center justify-center min-h-screen bg-gray-100 p-4 print:items-start print:justify-start print:h-full print:w-screen print:m-0">
-      <div className="bg-white p-6 rounded-lg shadow-lg border-2 border-gray-800 max-w-lg print:max-w-full w-full print:w-full print:rounded-none print:shadow-none">
+    <div className="flex flex-col m-4 items-center justify-center min-h-screen print:text-black p-4 print:items-start print:justify-start print:h-full print:w-screen print:m-0">
+      <div className="print:bg-white p-6 rounded-lg shadow-lg border-2 border-gray-800 max-w-lg print:max-w-full w-full print:w-full print:rounded-none print:shadow-none">
         {/* Título */}
         <h1 className="text-2xl font-bold text-center mb-2">
           {dados?.receita ? "RECIBO DE RECEITA" : "RECIBO"}{" "}

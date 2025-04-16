@@ -22,12 +22,6 @@ export default function Page() {
     setLoading(true);
 
     if (dataI && dataF) {
-      alert(
-        `${url}financeiro/transacao/entre-datas/?dataI=${format(
-          dataI,
-          "yyyy-MM-dd"
-        )}&dataF=${format(dataF, "yyyy-MM-dd")}`
-      );
       fetch(
         `${url}financeiro/transacao/entre-datas/?dataI=${format(
           dataI,
@@ -98,9 +92,6 @@ export default function Page() {
                 title=" Diferença (Lucro / Prejuízo)"
               />
             </div>
-            <CardDescription className="text-end font-bold">
-              *Dados referente ao mês vigente
-            </CardDescription>
           </Card>
 
           {/* Tabela de Transações */}

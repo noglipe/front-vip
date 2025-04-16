@@ -11,7 +11,6 @@ import {
   CircleCheckBig,
   CircleEllipsis,
   FileText,
-  Edit,
   Trash2,
   ArchiveRestore,
 } from "lucide-react";
@@ -28,6 +27,10 @@ interface Transacao {
   dataCompra: string;
   categoria: {
     id: string;
+    nome: string;
+  };
+  cartaoUtilizado: {
+    id: number;
     nome: string;
   };
   descricao: string;
@@ -122,14 +125,6 @@ export default function DetalhesTransacao() {
           {/* Botões de ação */}
           {!transacao.excluida && (
             <div className="flex justify-end gap-4 mb-4 sm:flex-row flex-col">
-              <Button
-                onClick={() => {
-                  router.push(`/app/transacoes/recibo/${transacao.id}`);
-                }}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-sm cursor-pointer hover:bg-blue-400"
-              >
-                <FileText size={18} /> Recibo
-              </Button>
               <BtnEditar receita={transacao.receita} id={transacao.id} />
               <BtnRecibo id={transacao.id} />
               <Button
@@ -227,6 +222,14 @@ export default function DetalhesTransacao() {
                     {transacao.meioDeTransacao.nome}
                   </p>
                 </div>
+                {transacao.cartaoUtilizado !== null && (
+                  <div>
+                    <p className="text-gray-600">Cartão</p>
+                    <p className="text-lg font-semibold">
+                      {transacao.cartaoUtilizado.nome}
+                    </p>
+                  </div>
+                )}
                 <div>
                   <p className="text-gray-600">Instituição Financeira</p>
                   <p className="text-lg font-semibold">

@@ -9,7 +9,6 @@ import { format } from "date-fns";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 import PainelValor from "../../_components/painelValor";
-import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import TabelaTransacoesFiltros from "@/app/app/_components/tabelaTransacoesFiltros";
 
 export default function Page() {

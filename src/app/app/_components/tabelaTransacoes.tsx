@@ -25,7 +25,7 @@ import { BtnEditar } from "../transacoes/_components/tbnEditar";
 import BtnRecibo from "../transacoes/_components/tbnRecibo";
 import { Card, CardContent, CardTitle } from "@/components/UI/card";
 
-export default function TabelaTransacoes({ dados }: TabelaTransacoesProps) {
+export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
   const [termoDeBusca, setTermoDeBusca] = useState("");
   const [filterType, setFilterType] = useState<string>("todos");
 
@@ -103,8 +103,8 @@ export default function TabelaTransacoes({ dados }: TabelaTransacoesProps) {
                     <div className="flex justify-center items-center text-center gap-1">
                       <IfConcluidoCircle
                         concluido={
-                          transacao.transacaoConcluido
-                            ? transacao.transacaoConcluido
+                          transacao.transacao_concluido
+                            ? transacao.transacao_concluido
                             : false
                         }
                       />

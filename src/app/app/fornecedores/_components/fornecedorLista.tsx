@@ -6,7 +6,8 @@ import { FORNECEDORES_QUERY } from "@/graphql/query";
 import client from "../../../../lib/apollo-client";
 
 import { ListFilter, PenLine, Search } from "lucide-react";
-import {  Loading } from "@/components/loading";
+import { Loading } from "@/components/loading";
+import { Card } from "@/components/UI/card";
 
 interface Fornecedor {
   id: number;
@@ -37,23 +38,22 @@ export function FornecedorLista({ setView }: PropsList) {
     fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading)
-    return <Loading />
+  if (loading) return <Loading />;
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div className="flex-2 bg-white shadow-lg rounded-xl p-6">
+    <Card className="flex-2  shadow-lg rounded-xl p-6">
       <h2 className="text-xl font-semibold mb-4 text-center">
         Lista de Fornecedores
       </h2>
 
       {/* Campo de Busca */}
-      <div className="flex items-center mb-4 border rounded-lg p-2 bg-gray-100">
-        <Search size={18} className="text-gray-500 mr-2" />
+      <div className="flex items-center mb-4 border rounded-lg p-2 ">
+        <Search size={18} className=" mr-2" />
         <input
           type="text"
           placeholder="Buscar fornecedor..."
-          className="w-full bg-transparent outline-none text-gray-700"
+          className="w-full bg-transparent outline-none "
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -64,14 +64,12 @@ export function FornecedorLista({ setView }: PropsList) {
           filteredFornecedores.map((fornecedor) => (
             <div
               key={fornecedor.id}
-              className="flex justify-between items-center bg-gray-100 p-4 rounded-lg shadow-sm"
+              className="flex justify-between items-center p-4 rounded-lg shadow-sm border-b-amber-200 border"
             >
-              <div>
+              <div className="">
                 <p className="text-lg font-medium">{fornecedor.nome}</p>
                 {fornecedor.documento && (
-                  <p className="text-gray-600 text-sm">
-                    Documento: {fornecedor.documento}
-                  </p>
+                  <p className=" text-sm">Documento: {fornecedor.documento}</p>
                 )}
               </div>
               <div className="flex gap-2">
@@ -96,11 +94,9 @@ export function FornecedorLista({ setView }: PropsList) {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500">
-            Nenhum fornecedor encontrado.
-          </p>
+          <p className="text-center">Nenhum fornecedor encontrado.</p>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

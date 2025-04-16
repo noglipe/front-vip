@@ -220,6 +220,10 @@ export const DETALHES_TRANSACAO_QUERY = gql`
         id
         nome
       }
+      cartaoUtilizado {
+        id
+        nome
+      }
       instituicaoFinanceira {
         id
         nome
