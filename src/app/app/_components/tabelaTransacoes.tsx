@@ -29,8 +29,8 @@ export default function TabelaTransacoes({ dados }: TabelaTransacoesProps) {
   const [termoDeBusca, setTermoDeBusca] = useState("");
   const [filterType, setFilterType] = useState<string>("todos");
 
-  const CLASS_RECEITA = "text-green-900 cursor-pointer hover:bg-green-100";
-  const CLASS_DESPESA = "text-red-900 cursor-pointer hover:bg-red-100";
+  const CLASS_RECEITA = "text-green-400 cursor-pointer hover:bg-green-900";
+  const CLASS_DESPESA = "text-red-400 cursor-pointer hover:bg-red-900";
 
   const filtrarTransacoes = dados
     ? dados.filter((transacao) => {

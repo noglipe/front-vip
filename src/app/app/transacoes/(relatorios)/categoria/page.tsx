@@ -3,10 +3,8 @@ import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
 import { CATEGORIAS_FORM_QUERY } from "@/graphql/query";
-import { useQuery } from "@apollo/client";
 import { FilterIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import client from "../../../../../lib/apollo-client";
+import { useState } from "react";
 import { Loading } from "@/components/loading";
 import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
@@ -66,7 +64,7 @@ export default function Page() {
             dataKey="categorias"
             minutos={1}
             titulo="Categorias"
-            className="bg-white text-black w-2/3"
+            className="  w-2/3"
             value={categoria}
           />
           <Button onClick={handleBuscar}>Buscar</Button>
@@ -83,7 +81,7 @@ export default function Page() {
             <h2 className="text-xl font-semibold mb-2">
               Transações da Categoria
             </h2>
-            <Card className="container p-4 bg-gray-100 rounded-xl">
+            <Card className="container p-4  rounded-xl">
               <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
                 <PainelValor
                   valor={dados.total_receitas}

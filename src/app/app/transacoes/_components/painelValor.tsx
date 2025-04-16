@@ -13,8 +13,8 @@ interface PainelProps {
 }
 
 export default function PainelValor({ valor = 0, title }: PainelProps) {
-  const bg = valor > -1 ? "bg-green-100" : "bg-red-100";
-  const txt = valor > -1 ? "text-green-800" : "text-red-800";
+  const bg = valor > -1 ? "bg-green-800" : "bg-red-800";
+  const txt = valor > -1 ? "text-green-50" : "text-red-50";
 
   return (
     <Card className={`p-4 ${bg} rounded-md`}>
