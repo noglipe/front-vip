@@ -12,6 +12,7 @@ export default function RootLayout({
         <SidebarProvider>
           <ClientLayout>{children}</ClientLayout>
         </SidebarProvider>
+ 
       </body>
     </html>
   );

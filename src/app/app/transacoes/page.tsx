@@ -22,7 +22,6 @@ export default function Page() {
       .then((data: TransacoesPropsApi) => {
         setDados(data);
         setLoading(false);
-        console.log(dados);
       })
       .catch((err) => {
         console.error("Erro ao buscar transações:", err);
