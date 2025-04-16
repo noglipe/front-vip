@@ -11,9 +11,8 @@ export default function DashboardFinanceiro() {
       <Card className="p-1 flex flex-col gap-2 bg-card-foreground">
         <Saldos />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 rounded-xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 rounded-xl">
           <ComprasCartaoMes />
-
           <NConclidas />
         </div>
       </Card>

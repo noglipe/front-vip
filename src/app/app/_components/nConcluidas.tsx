@@ -93,7 +93,7 @@ export default function NConclidas() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Card className="p-4 col-span-full">
+      <Card className="p-4 col-span-full h-full">
         <CardContent>
           <h2 className="text-lg font-bold mb-4">Transações Não Concluídas</h2>
           <Table>
@@ -132,9 +132,7 @@ export default function NConclidas() {
                   <PaginationLink
                     href="#"
                     onClick={() => handlePageChange(idx + 1)}
-                    className={
-                      currentPage === idx + 1 ? "active bg-gray-300" : ""
-                    }
+                    className={currentPage === idx + 1 ? "active " : ""}
                   >
                     {idx + 1}
                   </PaginationLink>

@@ -39,7 +39,7 @@ export const PainelSaldos = ({
       <h2 className="text-2xl uppercase font-bold text-muted-foreground">
         {titulo}
       </h2>
-      <div className="flex flex-row gap-2">
+      <div className="flex flex-row flex-wrap items-end gap-2">
         {objetos?.map((obj: CardSaldosProps) => (
           <CardSaldos key={obj.id} {...obj} />
         ))}

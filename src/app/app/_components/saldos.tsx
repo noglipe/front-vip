@@ -30,7 +30,7 @@ export default function Saldos() {
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div className="p-4 md:bg-muted rounded-xl space-y-6">
+    <div className="p-4 bg-muted rounded-xl space-y-6">
       <PainelSaldos titulo="Caixas" objetos={dados?.caixas ?? []} />
       <Separator />
       <PainelSaldos

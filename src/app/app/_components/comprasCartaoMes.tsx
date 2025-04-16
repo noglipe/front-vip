@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
 import { useQuery } from "@apollo/client";
 import { CARTAO_MES_QUERY } from "@/graphql/query";
-import { Loading, MiniLoading } from "@/components/loading";
+import { MiniLoading } from "@/components/loading";
 import {
   Table,
   TableBody,
@@ -23,6 +23,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/UI/pagination";
+import { ScrollArea } from "@/components/UI/scroll-area";
 
 interface comprasCartaoMes {
   transacoes: {
@@ -87,7 +88,7 @@ export default function ComprasCartaoMes() {
 
   return (
     <div className="flex flex-col gap-4">
-      <Card className="p-4 col-span-full">
+      <Card className="p-4 col-span-full h-full">
         <CardContent>
           <h2 className="text-lg font-bold mb-4">
             Compras no Cartão do Mês Vigente
@@ -132,9 +133,7 @@ export default function ComprasCartaoMes() {
                   <PaginationLink
                     href="#"
                     onClick={() => handlePageChange(idx + 1)}
-                    className={
-                      currentPage === idx + 1 ? "active bg-gray-300" : ""
-                    }
+                    className={currentPage === idx + 1 ? "active " : ""}
                   >
                     {idx + 1}
                   </PaginationLink>
