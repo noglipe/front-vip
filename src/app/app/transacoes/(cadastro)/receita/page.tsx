@@ -18,7 +18,6 @@ import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
-import { CALSS_INPUTS } from "@/lib/constantes";
 import { DatePickerForm } from "@/components/form/datePickerForm";
 
 export default function CadastroReceitaPage() {
@@ -113,8 +112,8 @@ export default function CadastroReceitaPage() {
     }
   };
   return (
-        <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-gray-800 mb-2">Receita</h2>
+        <div className="w-full p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold  mb-2">Receita</h2>
           <div>
             {Object.entries(errors).map(([key, message]) => (
               <p key={key} className="text-red-500">
@@ -122,8 +121,8 @@ export default function CadastroReceitaPage() {
               </p>
             ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <DatePickerForm setFunc={setDate} date={date} className="w-full" />
+          <div className="grid grid-cols-6 gap-6">
+            <DatePickerForm setFunc={setDate} date={date} className="w-full bg-transparent" />
 
             <div className="flex items-center gap-2">
               <Label htmlFor="valor">R$</Label>
@@ -131,7 +130,7 @@ export default function CadastroReceitaPage() {
                 id="valor"
                 type="number"
                 placeholder="Valor"
-                className={CALSS_INPUTS}
+                className={"w-full"}
                 onChange={(e) => setValor(parseFloat(e.target.value))}
               />
             </div>
@@ -142,7 +141,7 @@ export default function CadastroReceitaPage() {
               dataKey="meiosDeTransacao"
               minutos={60}
               titulo="Meios de Transações"
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
             <SelectBase
               setFunc={setinstituicaoFinanceira}
@@ -150,7 +149,7 @@ export default function CadastroReceitaPage() {
               dataKey="instituicoesFinanceiras"
               minutos={60}
               titulo="Instituições Financeiras"
-              className={CALSS_INPUTS}
+              className={"w-full"}
               value={instituicao_financeira}
             />
             <SelectBaseBusca
@@ -159,7 +158,7 @@ export default function CadastroReceitaPage() {
               dataKey="categorias"
               minutos={1}
               titulo="Categorias"
-              className={CALSS_INPUTS}
+              className={"w-full bg-transparent"}
               value={categoria}
             />
             <SelectBaseBusca
@@ -168,7 +167,7 @@ export default function CadastroReceitaPage() {
               dataKey="fornecedores"
               minutos={1}
               titulo="Fornecedores"
-              className={CALSS_INPUTS}
+              className={"w-full bg-transparent"}
               value={fornecedores}
             />
           </div>
@@ -178,20 +177,20 @@ export default function CadastroReceitaPage() {
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Descrição"
-              className={CALSS_INPUTS}
+              className={"w-full "}
             />
 
             <Textarea
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
               placeholder="Observação"
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
           </div>
           <div className="flex justify-center gap-4 mt-12">
             <div className="flex items-center gap-2 h-full">
               <Checkbox
-                className={`${CALSS_INPUTS} sm:h-10 w-10`}
+                className={`sm:h-10 w-10`}
                 id="terms"
                 checked={transacao_concluido}
                 onCheckedChange={() => setConcluida(!transacao_concluido)}

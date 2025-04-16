@@ -20,14 +20,14 @@ export default function Layout({
   }
 
   return (
-    <div className="flex justify-center items-center p-4 w-full">
-      <Card>
+    <div className="flex flex-row  p-4 w-full">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Cadastro</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-2">
+        <CardContent className="flex flex-col gap-8">
           {children}
-          <div >
+          <div className="w-full">
             {isDespesa && (
               <TransacoesRecentes
                 receita={false}

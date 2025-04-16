@@ -191,8 +191,8 @@ export default function EditarReceitaPage() {
 
   return (
 
-      <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
+      <div className="container mx-auto p-6  rounded-lg shadow-md">
+        <h2 className="text-xl font-bold  mb-4">
           Editar 
         </h2>
 
@@ -213,7 +213,7 @@ export default function EditarReceitaPage() {
               id="valor"
               type="number"
               value={valor}
-              className={CALSS_INPUTS}
+              className={'w-full'}
               onChange={(e) => setValor(parseFloat(e.target.value))}
             />
           </div>
@@ -225,7 +225,7 @@ export default function EditarReceitaPage() {
             dataKey="meiosDeTransacao"
             minutos={60}
             titulo="Meios de Transações"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
           <SelectBase
             setFunc={setinstituicaoFinanceira}
@@ -234,7 +234,7 @@ export default function EditarReceitaPage() {
             dataKey="instituicoesFinanceiras"
             minutos={60}
             titulo="Instituições Financeiras"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
           <SelectBaseBusca
             setFunc={setCategoria}
@@ -243,7 +243,7 @@ export default function EditarReceitaPage() {
             dataKey="categorias"
             minutos={1}
             titulo="Categorias"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
           <SelectBaseBusca
             setFunc={setFornecedores}
@@ -252,7 +252,7 @@ export default function EditarReceitaPage() {
             dataKey="fornecedores"
             minutos={1}
             titulo="Fornecedores"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
         </div>
 
@@ -262,20 +262,20 @@ export default function EditarReceitaPage() {
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
             placeholder="Descrição"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
           <Textarea
             value={observacao}
             onChange={(e) => setObservacao(e.target.value)}
             placeholder="Observação"
-            className={CALSS_INPUTS}
+            className={'w-full'}
           />
         </div>
 
         <div className="flex justify-center gap-4 mt-12">
           <div className="flex items-center gap-2 h-full">
             <Checkbox
-              className={`${CALSS_INPUTS} sm:h-10 w-10`}
+              className={` sm:h-10 w-10`}
               id="terms"
               checked={transacao_concluido}
               onCheckedChange={() => setConcluida(!transacao_concluido)}

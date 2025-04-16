@@ -46,7 +46,7 @@ export default function CadastroDespesaPage() {
 
   const despesaSchema = z.object({
     date: z.string().min(1, "A data é obrigatória."),
-    data_compra: z.string().nullable(),
+    data_compra: z.string().nullable().optional(),
     valor: z.number(),
     categoria: z.number(),
     numero_de_parcelas: z.number(),
@@ -82,11 +82,14 @@ export default function CadastroDespesaPage() {
       transacao_concluido,
     });
     try {
+      const dataCompraFormatada =
+        date_compra && date_compra !== "undefined"
+          ? new Date(date_compra).toISOString().split("T")[0]
+          : null;
+
       despesaSchema.parse({
         date: date.toISOString().split("T")[0],
-        date_compra: date_compra
-          ? date_compra.toISOString().split("T")[0]
-          : date.toISOString().split("T")[0],
+        date_compra: dataCompraFormatada,
         valor,
         categoria: parseInt(categoria),
         numero_de_parcelas: numero_de_parcelas ? numero_de_parcelas : 1,
@@ -104,7 +107,8 @@ export default function CadastroDespesaPage() {
 
       const despesaInput: DespesaInput = {
         data: date ? date.toISOString().split("T")[0] : "",
-        data_compra: date_compra!==null ? date_compra.toISOString().split("T")[0]
+        data_compra: date_compra
+          ? date_compra.toISOString().split("T")[0]
           : date.toISOString().split("T")[0],
         valor,
         categoria,
@@ -153,14 +157,14 @@ export default function CadastroDespesaPage() {
           )
         );
       } else {
-        alert("Erro ao cadastrar despesa");
+        alert(`Erro ao cadastrar despesa - ${error}`);
       }
     }
   };
 
   return (
-    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
-      <h2 className="text-xl font-bold text-gray-800 mb-2">Despesa</h2>
+    <div className="container mx-auto p-6 rounded-lg shadow-md ">
+      <h2 className="text-xl font-bold  mb-2">Despesa</h2>
       <div>
         {Object.entries(errors).map(([key, message]) => (
           <p key={key} className="text-red-500">
@@ -182,13 +186,13 @@ export default function CadastroDespesaPage() {
         <DatePickerForm
           descricao={compra_parcelada ? "Data de pagamento" : null}
           setFunc={setDate}
-          className={CALSS_INPUTS}
+          className={"w-full"}
           date={date}
         />
         {compra_parcelada ? (
           <DatePickerForm
             setFunc={setDate_compra}
-            className={CALSS_INPUTS}
+            className={"w-full"}
             descricao="Data da Compra"
             date={date_compra}
           />
@@ -202,7 +206,7 @@ export default function CadastroDespesaPage() {
             id="valor"
             type="number"
             placeholder="Valor"
-            className={CALSS_INPUTS}
+            className={"w-full"}
             onChange={(e) => setValor(parseFloat(e.target.value))}
           />
         </div>
@@ -212,7 +216,7 @@ export default function CadastroDespesaPage() {
           dataKey="meiosDeTransacao"
           minutos={60}
           titulo="Meios de Transações"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={meio_de_transacao}
         />
         <SelectBase
@@ -221,7 +225,7 @@ export default function CadastroDespesaPage() {
           dataKey="instituicoesFinanceiras"
           minutos={60}
           titulo="Instituições Financeiras"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={instituicao_financeira}
         />
         <SelectBaseBusca
@@ -230,7 +234,7 @@ export default function CadastroDespesaPage() {
           dataKey="categorias"
           minutos={60}
           titulo="Categorias"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={categoria}
         />
         <SelectBaseBusca
@@ -239,7 +243,7 @@ export default function CadastroDespesaPage() {
           dataKey="fornecedores"
           minutos={1}
           titulo="Fornecedores"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={fornecedor}
         />
         <SelectBase
@@ -248,7 +252,7 @@ export default function CadastroDespesaPage() {
           dataKey="cartoesDeCredito"
           minutos={60}
           titulo="Cartão Utilizado"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={cartao_utilizado}
         />
         {compra_parcelada ? (
@@ -257,13 +261,13 @@ export default function CadastroDespesaPage() {
               type="number"
               placeholder="Parcela Atual"
               onChange={(e) => setParcelas(parseInt(e.target.value))}
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
             <Input
               type="number"
               placeholder="Número de Parcelas"
               onChange={(e) => setNumParcelas(parseInt(e.target.value))}
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
           </>
         ) : (
@@ -276,20 +280,20 @@ export default function CadastroDespesaPage() {
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
           placeholder="Descrição"
-          className={CALSS_INPUTS}
+          className={"w-full"}
         />
 
         <Textarea
           value={observacao}
           onChange={(e) => setObservacao(e.target.value)}
           placeholder="Observação"
-          className={CALSS_INPUTS}
+          className={"w-full"}
         />
       </div>
       <div className="flex flex-row gap-4 justify-center items-center mt-6">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
-            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            className={` sm:h-10 w-10`}
             id="terms"
             checked={transacao_concluido}
             onCheckedChange={() => setConcluida(!transacao_concluido)}
@@ -298,7 +302,7 @@ export default function CadastroDespesaPage() {
         </div>
         <div className="flex items-center gap-2 h-full">
           <Checkbox
-            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            className={`${"w-full"} sm:h-10 w-10`}
             id="terms"
             checked={situacao_fiscal}
             onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}

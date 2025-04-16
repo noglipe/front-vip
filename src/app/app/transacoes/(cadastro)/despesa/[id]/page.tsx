@@ -57,7 +57,6 @@ import { CALSS_INPUTS } from "@/lib/constantes";
 import { useQuery } from "@apollo/client";
 import client from "../../../../../../lib/apollo-client";
 
-
 export default function EditarDespesaPage() {
   const router = useRouter();
   const params = useParams();
@@ -233,8 +232,8 @@ export default function EditarDespesaPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-md ">
-      <h2 className="text-xl font-bold text-gray-800 mb-2">Editar Despesa</h2>
+    <div className="container mx-auto p-6  rounded-lg shadow-md ">
+      <h2 className="text-xl font-bold  mb-2">Editar Despesa</h2>
       <div>
         {Object.entries(errors).map(([key, message]) => (
           <p key={key} className="text-red-500">
@@ -255,12 +254,12 @@ export default function EditarDespesaPage() {
           descricao={compra_parcelada ? "Data de pagamento" : null}
           setFunc={setDate}
           date={date}
-          className={CALSS_INPUTS}
+          className={"w-full"}
         />
         {compra_parcelada && (
           <DatePickerForm
             setFunc={setDateCompra}
-            className={CALSS_INPUTS}
+            className={"w-full"}
             descricao="Data da Compra"
             date={date_compra}
           />
@@ -272,7 +271,7 @@ export default function EditarDespesaPage() {
             id="valor"
             type="number"
             placeholder="Valor"
-            className={CALSS_INPUTS}
+            className={"w-full"}
             value={valor}
             onChange={(e) => setValor(parseFloat(e.target.value))}
           />
@@ -284,7 +283,7 @@ export default function EditarDespesaPage() {
           dataKey="meiosDeTransacao"
           minutos={60}
           titulo="Meios de Transações"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={meio_de_transacao}
         />
         <SelectBase
@@ -293,7 +292,7 @@ export default function EditarDespesaPage() {
           dataKey="instituicoesFinanceiras"
           minutos={60}
           titulo="Instituições Financeiras"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={instituicao_financeira}
         />
         <SelectBaseBusca
@@ -302,7 +301,7 @@ export default function EditarDespesaPage() {
           dataKey="categorias"
           minutos={60}
           titulo="Categorias"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={categoria}
         />
         <SelectBaseBusca
@@ -311,7 +310,7 @@ export default function EditarDespesaPage() {
           dataKey="fornecedores"
           minutos={1}
           titulo="Fornecedores"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={fornecedor}
         />
         <SelectBase
@@ -320,7 +319,7 @@ export default function EditarDespesaPage() {
           dataKey="cartoesDeCredito"
           minutos={60}
           titulo="Cartão Utilizado"
-          className={CALSS_INPUTS}
+          className={"w-full"}
           value={cartao_utilizado}
         />
         {compra_parcelada && (
@@ -330,14 +329,14 @@ export default function EditarDespesaPage() {
               placeholder="Parcela Atual"
               value={parcela_atual}
               onChange={(e) => setParcelasAtual(parseInt(e.target.value))}
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
             <Input
               type="number"
               placeholder="Número de Parcelas"
               value={numero_de_parcelas}
               onChange={(e) => setNumParcelas(parseInt(e.target.value))}
-              className={CALSS_INPUTS}
+              className={"w-full"}
             />
           </>
         )}
@@ -349,20 +348,20 @@ export default function EditarDespesaPage() {
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
           placeholder="Descrição"
-          className={CALSS_INPUTS}
+          className={"w-full"}
         />
         <Textarea
           value={observacao}
           onChange={(e) => setObservacao(e.target.value)}
           placeholder="Observação"
-          className={CALSS_INPUTS}
+          className={"w-full"}
         />
       </div>
 
       <div className="flex flex-row gap-4 justify-center items-center mt-6">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
-            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            className={`${"w-full"} sm:h-10 w-10`}
             checked={transacao_concluido}
             onCheckedChange={() => setConcluida(!transacao_concluido)}
           />
@@ -370,7 +369,7 @@ export default function EditarDespesaPage() {
         </div>
         <div className="flex items-center gap-2 h-full">
           <Checkbox
-            className={`${CALSS_INPUTS} sm:h-10 w-10`}
+            className={`${"w-full"} sm:h-10 w-10`}
             checked={situacao_fiscal}
             onCheckedChange={() => setSituacao_fiscal(!situacao_fiscal)}
           />

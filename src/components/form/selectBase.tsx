@@ -76,7 +76,7 @@ export function SelectBase<T extends SelectApi>({
       onValueChange={(e) => setFunc(e)}
       value={typeof value === "string" ? value : value?.id}
     >
-      <SelectTrigger className={className}>
+      <SelectTrigger className={`${className} bg-black text-white`}>
         <SelectValue placeholder={titulo ?? dataKey}>
           {objetos.find((obj) => obj.id === value?.id)?.nome}
         </SelectValue>
