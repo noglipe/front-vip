@@ -6,6 +6,7 @@ import { Button } from "@/components/UI/button";
 import { Input } from "@/components/UI/input";
 import { TIPO_ARQUIVO_QUERY } from "@/graphql/query";
 import { converterImagemParaPdf } from "@/lib/conversorImagemPdf";
+import { uploadParaS3 } from "@/lib/s3Config";
 import { File, X } from "lucide-react";
 import { useState } from "react";
 
@@ -39,6 +40,55 @@ export default function SelectArquivo() {
 
     setArquivoSelecionado(null);
     setTipoSelecionado(null);
+  };
+
+  const enviarArquivos = async () => {
+    const resultados = [];
+
+    console.log("Teste de Envio");
+
+    for (const item of listaArquivos) {
+      const { caminho, nome } = await uploadParaS3(item.arquivo);
+      resultados.push({ caminho, nome, tipoId: item.tipo.id });
+    }
+
+    console.log("Arquivos enviados:", resultados);
+    // Aqui você pode fazer um POST para sua API e salvar no banco
+  };
+
+  function enviar() {
+    listaArquivos &&
+      listaArquivos.map((arquivo) => enviarArquivoParaBackend(arquivo.arquivo));
+  }
+  const enviarArquivoParaBackend = async (arquivo: File) => {
+    const formData = new FormData();
+    formData.append("file", arquivo);
+
+    console.log(formData);
+
+    try {
+      const response = await fetch(
+        "http://localhost:8000/financeiro/arquivo/upload/",
+        {
+          method: "POST",
+          headers: {
+            //Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Arquivo enviado com sucesso", data);
+        const caminhoDoArquivo = data.file_url; // URL ou caminho do arquivo no S3
+        // Agora você pode salvar o caminho no seu banco de dados
+      } else {
+        console.error("Erro ao enviar arquivo", data);
+      }
+    } catch (error) {
+      console.error("Erro de conexão", error);
+    }
   };
 
   const removerArquivo = (index: number) => {
@@ -95,6 +145,7 @@ export default function SelectArquivo() {
         >
           Adicionar Arquivo
         </Button>
+        <Button onClick={enviar}>Teste</Button>
       </div>
 
       {listaArquivos.length > 0 && (

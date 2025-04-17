@@ -47,7 +47,7 @@ export default function Page() {
       {dados ? (
         <div className="container mx-auto p-6 space-y-6">
           {/* Totais Financeiros */}
-          <Card className="container p-4 bg-gray-100 rounded-xl">
+          <Card className="container p-4 rounded-xl">
             <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
               <PainelValor
                 valor={dados?.total_receitas || 0}
