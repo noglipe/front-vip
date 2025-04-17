@@ -87,13 +87,13 @@ export default function ComprasCartaoMes() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 h-full">
       <Card className="p-4 col-span-full h-full">
         <CardContent>
           <h2 className="text-lg font-bold mb-4">
             Compras no Cartão do Mês Vigente
           </h2>
-          <Table>
+          <Table className="h-full">
             <TableHeader>
               <TableRow>
                 <TableHead>data</TableHead>
@@ -102,7 +102,7 @@ export default function ComprasCartaoMes() {
                 <TableHead>cartaoUtilizado</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="h-full">
               {dados?.transacoes?.map((dado, index) => (
                 <TableRow
                   key={index}

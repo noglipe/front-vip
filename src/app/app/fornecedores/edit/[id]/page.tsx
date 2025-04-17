@@ -75,8 +75,8 @@ export default function EditarFornecedor() {
   }
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="relative bg-white shadow-lg rounded-xl p-6 w-[400px] max-w-full">
+    <div className="fixed inset-0 flex items-center justify-center  bg-opacity-50 z-50">
+      <div className="relative bg-muted shadow-lg rounded-xl p-6 w-[400px] max-w-full">
         {/* Botão de fechar */}
         <button
           onClick={() => router.push("/app/fornecedores")}

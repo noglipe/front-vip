@@ -38,6 +38,7 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
+  TIPO_ARQUIVO_QUERY,
   TRANSACAO_RECEITA_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
@@ -61,6 +62,7 @@ export default function EditarReceitaPage() {
   const [observacao, setObservacao] = useState("");
   const [valor, setValor] = useState<any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
 
   const router = useRouter();
   const params = useParams();
@@ -109,7 +111,6 @@ export default function EditarReceitaPage() {
   });
 
   const editarReceita = async () => {
-
     try {
       receitaSchema.parse({
         date: date instanceof Date ? date.toISOString().split("T")[0] : date,
@@ -190,106 +191,101 @@ export default function EditarReceitaPage() {
   };
 
   return (
+    <div className="container mx-auto p-6  rounded-lg shadow-md">
+      <h2 className="text-xl font-bold  mb-4">Editar</h2>
 
-      <div className="container mx-auto p-6  rounded-lg shadow-md">
-        <h2 className="text-xl font-bold  mb-4">
-          Editar 
-        </h2>
+      {Object.entries(errors).map(([key, message]) => (
+        <p key={key} className="text-red-500">
+          {message}
+        </p>
+      ))}
 
-        {Object.entries(errors).map(([key, message]) => (
-          <p key={key} className="text-red-500">
-            {message}
-          </p>
-        ))}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <DatePickerForm 
-          setFunc={setDate} 
-          date={date} 
-          className="w-full" />
-          <div className="flex items-center gap-2">
-            <Label htmlFor="valor">R$</Label>
-            <Input
-              id="valor"
-              type="number"
-              value={valor}
-              className={'w-full'}
-              onChange={(e) => setValor(parseFloat(e.target.value))}
-            />
-          </div>
-
-          <SelectBase
-            setFunc={setMeioTransacao}
-            value={meio_de_transacao}
-            query={MEIO_TRANSACAO_FORM_QUERY}
-            dataKey="meiosDeTransacao"
-            minutos={60}
-            titulo="Meios de Transações"
-            className={'w-full'}
-          />
-          <SelectBase
-            setFunc={setinstituicaoFinanceira}
-            value={instituicao_financeira}
-            query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-            dataKey="instituicoesFinanceiras"
-            minutos={60}
-            titulo="Instituições Financeiras"
-            className={'w-full'}
-          />
-          <SelectBaseBusca
-            setFunc={setCategoria}
-            value={categoria}
-            query={CATEGORIAS_FORM_QUERY}
-            dataKey="categorias"
-            minutos={1}
-            titulo="Categorias"
-            className={'w-full'}
-          />
-          <SelectBaseBusca
-            setFunc={setFornecedores}
-            value={fornecedores}
-            query={FORNECEDORES_QUERY}
-            dataKey="fornecedores"
-            minutos={1}
-            titulo="Fornecedores"
-            className={'w-full'}
-          />
-        </div>
-
-        <div className="flex flex-col gap-2 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <DatePickerForm setFunc={setDate} date={date} className="w-full" />
+        <div className="flex items-center gap-2">
+          <Label htmlFor="valor">R$</Label>
           <Input
-            type="text"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Descrição"
-            className={'w-full'}
-          />
-          <Textarea
-            value={observacao}
-            onChange={(e) => setObservacao(e.target.value)}
-            placeholder="Observação"
-            className={'w-full'}
+            id="valor"
+            type="number"
+            value={valor}
+            className={"w-full"}
+            onChange={(e) => setValor(parseFloat(e.target.value))}
           />
         </div>
 
-        <div className="flex justify-center gap-4 mt-12">
-          <div className="flex items-center gap-2 h-full">
-            <Checkbox
-              className={` sm:h-10 w-10`}
-              id="terms"
-              checked={transacao_concluido}
-              onCheckedChange={() => setConcluida(!transacao_concluido)}
-            />
-            <Label htmlFor="terms">Transação Concluída</Label>
-          </div>
-          <Button
-            className="cursor-pointer flex justify-center items-center"
-            onClick={() => editarReceita()}
-          >
-            {loading ? <MiniLoading /> : ""} Salvar Alterações
-          </Button>
-        </div>
+        <SelectBase
+          setFunc={setMeioTransacao}
+          value={meio_de_transacao}
+          query={MEIO_TRANSACAO_FORM_QUERY}
+          dataKey="meiosDeTransacao"
+          minutos={60}
+          titulo="Meios de Transações"
+          className={"w-full"}
+        />
+        <SelectBase
+          setFunc={setinstituicaoFinanceira}
+          value={instituicao_financeira}
+          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+          dataKey="instituicoesFinanceiras"
+          minutos={60}
+          titulo="Instituições Financeiras"
+          className={"w-full"}
+        />
+        <SelectBaseBusca
+          setFunc={setCategoria}
+          value={categoria}
+          query={CATEGORIAS_FORM_QUERY}
+          dataKey="categorias"
+          minutos={1}
+          titulo="Categorias"
+          className={"w-full"}
+        />
+        <SelectBaseBusca
+          setFunc={setFornecedores}
+          value={fornecedores}
+          query={FORNECEDORES_QUERY}
+          dataKey="fornecedores"
+          minutos={1}
+          titulo="Fornecedores"
+          className={"w-full"}
+        />
       </div>
 
+      <div className="flex flex-col gap-2 mt-4">
+        <Input
+          type="text"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          placeholder="Descrição"
+          className={"w-full"}
+        />
+        <Textarea
+          value={observacao}
+          onChange={(e) => setObservacao(e.target.value)}
+          placeholder="Observação"
+          className={"w-full"}
+        />
+      </div>
+
+      <div className="flex justify-center gap-4 mt-12">
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className={` sm:h-10 w-10`}
+            id="terms"
+            checked={transacao_concluido}
+            onCheckedChange={() => setConcluida(!transacao_concluido)}
+          />
+          <Label htmlFor="terms">Transação Concluída</Label>
+        </div>
+        <Button
+          className="cursor-pointer flex justify-center items-center"
+          onClick={() => editarReceita()}
+        >
+          {loading ? <MiniLoading /> : ""} Salvar Alterações
+        </Button>
+      </div>
+
+      
+    </div>
   );
 }

@@ -353,3 +353,12 @@ export const RECIBO_QUERY = gql`
     }
   }
 `;
+
+export const TIPO_ARQUIVO_QUERY = gql`
+  query tipoArquivo {
+    tipoArquivo {
+      id
+      nome
+    }
+  }
+`;

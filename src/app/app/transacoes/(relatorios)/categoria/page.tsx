@@ -12,7 +12,7 @@ import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 export default function Page() {
   const [categoria, setCategoria] = useState<any>(null);
   const [id_categoria, setId_categoria] = useState<number | null>(null);
-  const [dados, setDados] = useState<TransacoesData | undefined>();
+  const [dados, setDados] = useState<TransacoesPropsApi | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [balanco, setBalanco] = useState(0);
@@ -33,7 +33,7 @@ export default function Page() {
             `Erro ao buscar dados da categoria: ${response.status}`
         );
       }
-      const data: TransacoesData = await response.json();
+      const data: TransacoesPropsApi = await response.json();
       setDados(data);
     } catch (err: any) {
       setError(err.message);

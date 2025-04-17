@@ -10,6 +10,7 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
+  TIPO_ARQUIVO_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
@@ -19,6 +20,8 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { DatePickerForm } from "@/components/form/datePickerForm";
+import { File } from "lucide-react";
+import SelectArquivo from "../../_components/SelectArquivo";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<
@@ -34,6 +37,7 @@ export default function CadastroReceitaPage() {
   const [valor, setValor] = useState<number | any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
+  const [tipoArquivo, setTipoArquivo] = useState<any>();
   const router = useRouter();
 
   const receitaSchema = z.object({
@@ -112,98 +116,105 @@ export default function CadastroReceitaPage() {
     }
   };
   return (
-        <div className="w-full p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold  mb-2">Receita</h2>
-          <div>
-            {Object.entries(errors).map(([key, message]) => (
-              <p key={key} className="text-red-500">
-                {message}
-              </p>
-            ))}
-          </div>
-          <div className="grid grid-cols-6 gap-6">
-            <DatePickerForm setFunc={setDate} date={date} className="w-full bg-transparent" />
+    <div className="w-full p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold  mb-2">Receita</h2>
+      <div>
+        {Object.entries(errors).map(([key, message]) => (
+          <p key={key} className="text-red-500">
+            {message}
+          </p>
+        ))}
+      </div>
+      <div className="grid grid-cols-6 gap-6">
+        <DatePickerForm
+          setFunc={setDate}
+          date={date}
+          className="w-full bg-transparent"
+        />
 
-            <div className="flex items-center gap-2">
-              <Label htmlFor="valor">R$</Label>
-              <Input
-                id="valor"
-                type="number"
-                placeholder="Valor"
-                className={"w-full"}
-                onChange={(e) => setValor(parseFloat(e.target.value))}
-              />
-            </div>
-            <SelectBase
-              setFunc={setMeioTransacao}
-              value={categoria?.toString()}
-              query={MEIO_TRANSACAO_FORM_QUERY}
-              dataKey="meiosDeTransacao"
-              minutos={60}
-              titulo="Meios de Transações"
-              className={"w-full"}
-            />
-            <SelectBase
-              setFunc={setinstituicaoFinanceira}
-              query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-              dataKey="instituicoesFinanceiras"
-              minutos={60}
-              titulo="Instituições Financeiras"
-              className={"w-full"}
-              value={instituicao_financeira}
-            />
-            <SelectBaseBusca
-              setFunc={setCategoria}
-              query={CATEGORIAS_FORM_QUERY}
-              dataKey="categorias"
-              minutos={1}
-              titulo="Categorias"
-              className={"w-full bg-transparent"}
-              value={categoria}
-            />
-            <SelectBaseBusca
-              setFunc={setFornecedores}
-              query={FORNECEDORES_QUERY}
-              dataKey="fornecedores"
-              minutos={1}
-              titulo="Fornecedores"
-              className={"w-full bg-transparent"}
-              value={fornecedores}
-            />
-          </div>
-          <div className="flex flex-col gap-2 mt-4">
-            <Input
-              type="text"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-              placeholder="Descrição"
-              className={"w-full "}
-            />
-
-            <Textarea
-              value={observacao}
-              onChange={(e) => setObservacao(e.target.value)}
-              placeholder="Observação"
-              className={"w-full"}
-            />
-          </div>
-          <div className="flex justify-center gap-4 mt-12">
-            <div className="flex items-center gap-2 h-full">
-              <Checkbox
-                className={`sm:h-10 w-10`}
-                id="terms"
-                checked={transacao_concluido}
-                onCheckedChange={() => setConcluida(!transacao_concluido)}
-              />
-              <Label htmlFor="terms">Transação Concluída</Label>
-            </div>
-            <Button
-              className="cursor-pointer flex justify-center items-center"
-              onClick={() => cadastrarReceita()}
-            >
-              {loading ? <MiniLoading /> : ""} Cadastrar
-            </Button>
-          </div>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="valor">R$</Label>
+          <Input
+            id="valor"
+            type="number"
+            placeholder="Valor"
+            className={"w-full"}
+            onChange={(e) => setValor(parseFloat(e.target.value))}
+          />
         </div>
+        <SelectBase
+          setFunc={setMeioTransacao}
+          value={categoria?.toString()}
+          query={MEIO_TRANSACAO_FORM_QUERY}
+          dataKey="meiosDeTransacao"
+          minutos={60}
+          titulo="Meios de Transações"
+          className={"w-full"}
+        />
+        <SelectBase
+          setFunc={setinstituicaoFinanceira}
+          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+          dataKey="instituicoesFinanceiras"
+          minutos={60}
+          titulo="Instituições Financeiras"
+          className={"w-full"}
+          value={instituicao_financeira}
+        />
+        <SelectBaseBusca
+          setFunc={setCategoria}
+          query={CATEGORIAS_FORM_QUERY}
+          dataKey="categorias"
+          minutos={1}
+          titulo="Categorias"
+          className={"w-full bg-transparent"}
+          value={categoria}
+        />
+        <SelectBaseBusca
+          setFunc={setFornecedores}
+          query={FORNECEDORES_QUERY}
+          dataKey="fornecedores"
+          minutos={1}
+          titulo="Fornecedores"
+          className={"w-full bg-transparent"}
+          value={fornecedores}
+        />
+      </div>
+      <div className="flex flex-col gap-2 mt-4">
+        <Input
+          type="text"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+          placeholder="Descrição"
+          className={"w-full "}
+        />
+
+        <Textarea
+          value={observacao}
+          onChange={(e) => setObservacao(e.target.value)}
+          placeholder="Observação"
+          className={"w-full"}
+        />
+      </div>
+
+      <SelectArquivo />
+
+      <div className="flex justify-center gap-4 mt-12">
+        <div className="flex items-center gap-2 h-full">
+          <Checkbox
+            className={`sm:h-10 w-10`}
+            id="terms"
+            checked={transacao_concluido}
+            onCheckedChange={() => setConcluida(!transacao_concluido)}
+          />
+          <Label htmlFor="terms">Transação Concluída</Label>
+        </div>
+        <Button
+          className="cursor-pointer flex justify-center items-center"
+          onClick={() => cadastrarReceita()}
+        >
+          {loading ? <MiniLoading /> : ""} Cadastrar
+        </Button>
+      </div>
+    </div>
   );
 }
