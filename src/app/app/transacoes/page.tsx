@@ -39,7 +39,7 @@ export default function Page() {
     );
 
   const diferenca = dados
-    ? (dados?.total_receitas || 0) - (dados?.total_despesas || 0)
+    ? (dados?.total_receitas || 0) + (dados?.total_despesas || 0)
     : 0;
 
   return (

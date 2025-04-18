@@ -121,3 +121,15 @@ interface CardSaldosProps {
   id: string;
   saldo: number;
 }
+
+type TipoArquivoApi = {
+  id: number;
+  nome: string;
+};
+
+type ArquivoApi = {
+  arquivo: File;
+  tipo: TipoArquivoApi;
+  caminho?: string;
+  nome?: string;
+};

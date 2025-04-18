@@ -1,6 +1,5 @@
 "use client";
 
-import { SelectBase } from "@/components/form/selectBase";
 import { SelectVip } from "@/components/form/selectVip";
 import { Button } from "@/components/UI/button";
 import { Input } from "@/components/UI/input";
@@ -8,24 +7,21 @@ import { TIPO_ARQUIVO_QUERY } from "@/graphql/query";
 import { converterImagemParaPdf } from "@/lib/conversorImagemPdf";
 import { uploadParaS3 } from "@/lib/s3Config";
 import { File, X } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-type TipoArquivo = {
-  id: number;
-  nome: string;
-};
+interface SelectArquivoProps {
+  setListaArquivos: Dispatch<SetStateAction<ArquivoApi[]>>;
+  listaArquivos: ArquivoApi[];
+}
 
-type ArquivoComTipo = {
-  arquivo: File;
-  tipo: TipoArquivo;
-};
-
-export default function SelectArquivo() {
+export default function SelectArquivo({
+  setListaArquivos,
+  listaArquivos,
+}: SelectArquivoProps) {
   const [arquivoSelecionado, setArquivoSelecionado] = useState<File | null>(
     null
   );
   const [tipoSelecionado, setTipoSelecionado] = useState<any>(null);
-  const [listaArquivos, setListaArquivos] = useState<ArquivoComTipo[]>([]);
 
   const adicionarArquivo = () => {
     if (!arquivoSelecionado || !tipoSelecionado) {
@@ -57,23 +53,24 @@ export default function SelectArquivo() {
   };
 
   function enviar() {
-    listaArquivos &&
-      listaArquivos.map((arquivo) => enviarArquivoParaBackend(arquivo.arquivo));
+    listaArquivos.forEach((item, index) => {
+      enviarArquivoParaBackend(item.arquivo, item.tipo, index);
+    });
   }
-  const enviarArquivoParaBackend = async (arquivo: File) => {
+
+  const enviarArquivoParaBackend = async (
+    arquivo: File,
+    tipo: any,
+    index: number
+  ) => {
     const formData = new FormData();
     formData.append("file", arquivo);
-
-    console.log(formData);
 
     try {
       const response = await fetch(
         "http://localhost:8000/financeiro/arquivo/upload/",
         {
           method: "POST",
-          headers: {
-            //Authorization: `Bearer ${token}`,
-          },
           body: formData,
         }
       );
@@ -81,8 +78,17 @@ export default function SelectArquivo() {
       const data = await response.json();
       if (response.ok) {
         console.log("Arquivo enviado com sucesso", data);
-        const caminhoDoArquivo = data.file_url; // URL ou caminho do arquivo no S3
-        // Agora você pode salvar o caminho no seu banco de dados
+
+        // Atualiza a lista com os dados do back
+        setListaArquivos((prev) => {
+          const atualizada = [...prev];
+          atualizada[index] = {
+            ...atualizada[index],
+            caminho: data.caminho,
+            nome: data.nome,
+          };
+          return atualizada;
+        });
       } else {
         console.error("Erro ao enviar arquivo", data);
       }
@@ -113,7 +119,7 @@ export default function SelectArquivo() {
   };
 
   return (
-    <div className="flex flex-col gap-4 mt-4 border border-white rounded-xl p-2">
+    <div className="flex flex-col gap-4 mt-4 border border-white rounded-xl p-8">
       <h4 className="flex items-center gap-2">
         <File /> Adicionar Arquivo{" "}
         {tipoSelecionado?.nome && `- ${tipoSelecionado.nome}`}

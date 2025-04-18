@@ -38,6 +38,7 @@ export default function CadastroReceitaPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [tipoArquivo, setTipoArquivo] = useState<any>();
+  const [listaArquivos, setListaArquivos] = useState<any>([]);
   const router = useRouter();
 
   const receitaSchema = z.object({
@@ -196,7 +197,10 @@ export default function CadastroReceitaPage() {
         />
       </div>
 
-      <SelectArquivo />
+      <SelectArquivo
+        listaArquivos={listaArquivos}
+        setListaArquivos={setListaArquivos}
+      />
 
       <div className="flex justify-center gap-4 mt-12">
         <div className="flex items-center gap-2 h-full">

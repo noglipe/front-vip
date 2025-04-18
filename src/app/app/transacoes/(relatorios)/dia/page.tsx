@@ -44,7 +44,7 @@ export default function Page() {
   if (error) return <p className="text-center text-red-500">Erro: {error}</p>;
 
   const diferenca = dados
-    ? (dados?.total_receitas || 0) - (dados?.total_despesas || 0)
+    ? (dados?.total_receitas || 0) + (dados?.total_despesas || 0)
     : 0;
 
   return (

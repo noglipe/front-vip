@@ -21,6 +21,7 @@ import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
 import { CALSS_INPUTS } from "@/lib/constantes";
+import SelectArquivo from "../../_components/SelectArquivo";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
@@ -42,6 +43,9 @@ export default function CadastroDespesaPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
+
   const router = useRouter();
 
   const despesaSchema = z.object({
@@ -290,6 +294,9 @@ export default function CadastroDespesaPage() {
           className={"w-full"}
         />
       </div>
+
+      <SelectArquivo setListaArquivos={setListaArquivos} listaArquivos={listaArquivos} />
+
       <div className="flex flex-row gap-4 justify-center items-center mt-6">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
