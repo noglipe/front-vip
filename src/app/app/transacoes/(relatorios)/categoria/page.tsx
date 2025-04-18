@@ -92,7 +92,7 @@ export default function Page() {
                   title="Total de Despesas"
                 />
                 <PainelValor
-                  valor={dados.total_receitas - dados.total_despesas}
+                  valor={dados.total_receitas + dados.total_despesas}
                   title="Total de Despesas"
                 />
               </div>
