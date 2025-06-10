@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DatePickerForm } from "../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
@@ -20,7 +20,6 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
-import { CALSS_INPUTS } from "@/lib/constantes";
 import SelectArquivo from "../../_components/SelectArquivo";
 
 export default function CadastroDespesaPage() {
@@ -43,10 +42,61 @@ export default function CadastroDespesaPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [idTransacao, SetIdTransacao] = useState("");
 
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
 
   const router = useRouter();
+
+  const enviarArquivoParaBackend = async (
+    arquivo: File,
+    tipo: any,
+    index: number
+  ) => {
+    const formData = new FormData();
+    formData.append("file", arquivo);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/arquivo/upload/`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.ok) {
+        console.log("Arquivo enviado com sucesso", data);
+
+        // Atualiza a lista com os dados do back
+        setListaArquivos((prev) => {
+          const atualizada = [...prev];
+          atualizada[index] = {
+            ...atualizada[index],
+            caminho: data.caminho,
+            nome: data.nome,
+          };
+          return atualizada;
+        });
+      } else {
+        console.error("Erro ao enviar arquivo", data);
+      }
+    } catch (error) {
+      console.error("Erro de conexão", error);
+    }
+  };
+
+  function enviarArquivo() {
+    console.log("Enviar Arquivo");
+    listaArquivos &&
+      listaArquivos.forEach((item, index) => {
+        enviarArquivoParaBackend(item.arquivo, item.tipo, index);
+      });
+  }
 
   const despesaSchema = z.object({
     date: z.string().min(1, "A data é obrigatória."),
@@ -68,23 +118,6 @@ export default function CadastroDespesaPage() {
 
   const cadastrarDespesa = async () => {
     setLoading(true);
-    console.log({
-      date,
-      date_compra,
-      valor,
-      categoria,
-      numero_de_parcelas,
-      parcela_atual,
-      meio_de_transacao,
-      cartao_utilizado,
-      instituicao_financeira,
-      descricao,
-      fornecedor,
-      observacao,
-      situacao_fiscal,
-      compra_parcelada,
-      transacao_concluido,
-    });
     try {
       const dataCompraFormatada =
         date_compra && date_compra !== "undefined"
@@ -130,10 +163,8 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
-      console.log(despesaInput);
-
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,6 +176,13 @@ export default function CadastroDespesaPage() {
         setLoading(false);
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      console.log("ID da transação criada:", data.id);
+      console.log(listaArquivos);
+
+      SetIdTransacao(data.id);
+      enviarArquivo();
 
       alert("Despesa cadastrada");
       setLoading(false);
@@ -165,6 +203,10 @@ export default function CadastroDespesaPage() {
       }
     }
   };
+
+  useEffect(() => {
+    console.log(listaArquivos);
+  }, [listaArquivos]);
 
   return (
     <div className="container mx-auto p-6 rounded-lg shadow-md ">
@@ -295,7 +337,10 @@ export default function CadastroDespesaPage() {
         />
       </div>
 
-      <SelectArquivo setListaArquivos={setListaArquivos} listaArquivos={listaArquivos} />
+      <SelectArquivo
+        setListaArquivos={setListaArquivos}
+        listaArquivos={listaArquivos}
+      />
 
       <div className="flex flex-row gap-4 justify-center items-center mt-6">
         <div className="flex items-center gap-2 h-full">

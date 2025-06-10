@@ -113,7 +113,7 @@ export default function EditarReceitaPage() {
   const editarReceita = async () => {
     try {
       receitaSchema.parse({
-        date: date instanceof Date ? date.toISOString().split("T")[0] : date,
+        date: date instanceof Date ? date?.toISOString().split("T")[0] : date,
         valor: parseFloat(valor),
         categoria:
           typeof categoria !== "string"

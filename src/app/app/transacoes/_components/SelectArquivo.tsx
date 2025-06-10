@@ -5,9 +5,8 @@ import { Button } from "@/components/UI/button";
 import { Input } from "@/components/UI/input";
 import { TIPO_ARQUIVO_QUERY } from "@/graphql/query";
 import { converterImagemParaPdf } from "@/lib/conversorImagemPdf";
-import { uploadParaS3 } from "@/lib/s3Config";
 import { File, X } from "lucide-react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 interface SelectArquivoProps {
   setListaArquivos: Dispatch<SetStateAction<ArquivoApi[]>>;
@@ -22,6 +21,12 @@ export default function SelectArquivo({
     null
   );
   const [tipoSelecionado, setTipoSelecionado] = useState<any>(null);
+  const [listaFiltro, SetListaFiltro] = useState<ArquivoApi[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    SetListaFiltro(listaArquivos);
+  }, [listaArquivos]);
 
   const adicionarArquivo = () => {
     if (!arquivoSelecionado || !tipoSelecionado) {
@@ -36,64 +41,9 @@ export default function SelectArquivo({
 
     setArquivoSelecionado(null);
     setTipoSelecionado(null);
-  };
 
-  const enviarArquivos = async () => {
-    const resultados = [];
-
-    console.log("Teste de Envio");
-
-    for (const item of listaArquivos) {
-      const { caminho, nome } = await uploadParaS3(item.arquivo);
-      resultados.push({ caminho, nome, tipoId: item.tipo.id });
-    }
-
-    console.log("Arquivos enviados:", resultados);
-    // Aqui você pode fazer um POST para sua API e salvar no banco
-  };
-
-  function enviar() {
-    listaArquivos.forEach((item, index) => {
-      enviarArquivoParaBackend(item.arquivo, item.tipo, index);
-    });
-  }
-
-  const enviarArquivoParaBackend = async (
-    arquivo: File,
-    tipo: any,
-    index: number
-  ) => {
-    const formData = new FormData();
-    formData.append("file", arquivo);
-
-    try {
-      const response = await fetch(
-        "http://localhost:8000/financeiro/arquivo/upload/",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Arquivo enviado com sucesso", data);
-
-        // Atualiza a lista com os dados do back
-        setListaArquivos((prev) => {
-          const atualizada = [...prev];
-          atualizada[index] = {
-            ...atualizada[index],
-            caminho: data.caminho,
-            nome: data.nome,
-          };
-          return atualizada;
-        });
-      } else {
-        console.error("Erro ao enviar arquivo", data);
-      }
-    } catch (error) {
-      console.error("Erro de conexão", error);
+    if(fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -128,6 +78,7 @@ export default function SelectArquivo({
       <div className="flex flex-row gap-2">
         <Input
           type="file"
+          ref={fileInputRef}
           placeholder="Selecionar Arquivo"
           onChange={(e) => {
             const file = e.target.files?.[0];
@@ -151,7 +102,6 @@ export default function SelectArquivo({
         >
           Adicionar Arquivo
         </Button>
-        <Button onClick={enviar}>Teste</Button>
       </div>
 
       {listaArquivos.length > 0 && (
