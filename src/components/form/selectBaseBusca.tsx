@@ -129,7 +129,7 @@ export function SelectBaseBusca<T extends SelectApi>({
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === obj.nome ? "" : ""
+                      value === obj.nome ? "visible" : "invisible"
                     )}
                   />
                 </CommandItem>
