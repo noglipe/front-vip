@@ -42,7 +42,6 @@ export default function CadastroDespesaPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [idsArquivo, SetIdsArquivos] = useState([]);
 
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
 
@@ -52,7 +51,8 @@ export default function CadastroDespesaPage() {
     arquivo: File,
     tipo: any,
     index: number,
-    IdT: string
+    IdT: string,
+    ids?: number[] | null
   ) => {
     const formData = new FormData();
     formData.append("file", arquivo);
@@ -82,13 +82,13 @@ export default function CadastroDespesaPage() {
 
         let bodyArquivo: any;
 
-        if (idsArquivo) {
+        if (ids) {
           bodyArquivo = {
             caminho: data.caminho,
             nome: data.nome,
             tipo_id: tipo.id,
             transacao_id: IdT,
-            ids_transacao: idsArquivo,
+            ids_transacao: ids,
           };
         } else {
           bodyArquivo = {
@@ -121,10 +121,10 @@ export default function CadastroDespesaPage() {
     }
   };
 
-  function enviarArquivo(IdT: string) {
+  function enviarArquivo(IdT: string, ids?: number[] | null) {
     listaArquivos &&
       listaArquivos.forEach((item, index) => {
-        enviarArquivoParaBackend(item.arquivo, item.tipo, index, IdT);
+        enviarArquivoParaBackend(item.arquivo, item.tipo, index, IdT, ids);
       });
   }
 
@@ -210,17 +210,16 @@ export default function CadastroDespesaPage() {
           `Status: ${response.status} Mensagem: ${response.statusText}`
         );
       }
-
       if (data.ids) {
-        SetIdsArquivos(data.ids);
+        enviarArquivo(data.id, data.ids);
+      } else {
+        enviarArquivo(data.id);
       }
-
-      enviarArquivo(data.id);
 
       alert("Despesa cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/despesa/");
-      window.location.reload();
+      //router.push("/app/transacoes/despesa/");
+      // window.location.reload();
     } catch (error) {
       setLoading(false);
       console.error("Erro na validação ou requisição:", error);
@@ -236,10 +235,6 @@ export default function CadastroDespesaPage() {
       }
     }
   };
-
-  useEffect(() => {
-    console.log(listaArquivos);
-  }, [listaArquivos]);
 
   return (
     <div className="container mx-auto p-6 rounded-lg shadow-md ">
