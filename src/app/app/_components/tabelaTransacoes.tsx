@@ -89,7 +89,7 @@ export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
               <TableHead>Descrição / Categoria</TableHead>
               <TableHead>Meio de Pagamento</TableHead>
               <TableHead>Valor</TableHead>
-              <TableHead>Ações</TableHead>
+              <TableHead colSpan={3}>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -122,12 +122,18 @@ export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
                     {transacao.instituicao_financeira?.nome || "N/A"}
                   </TableCell>
                   <TableCell>{formatReal(transacao.valor)}</TableCell>
-                  <TableCell className="grid grid-cols-3 gap-1 items-center justify-center">
+                  <TableCell>
+                    {" "}
                     <BtnVisualizar id={transacao.id.toString()} />
+                  </TableCell>
+                  <TableCell>
+                    {" "}
                     <BtnEditar
                       receita={transacao.receita}
                       id={transacao.id.toString()}
                     />
+                  </TableCell>
+                  <TableCell>
                     <BtnRecibo id={transacao.id.toString()} />
                   </TableCell>
                 </TableRow>

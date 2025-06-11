@@ -10,9 +10,9 @@ import client from "../../../../lib/apollo-client";
 import {
   CircleCheckBig,
   CircleEllipsis,
-  FileText,
   Trash2,
   ArchiveRestore,
+  File,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
@@ -65,6 +65,7 @@ export default function DetalhesTransacao() {
   const router = useRouter();
   const id = parseInt(params.id as string);
   const [dados, setDados] = useState<Transacao>();
+  const [dadosArquivos, setDadosArquivos] = useState([]);
   const { loading, error, data } = useQuery<{ transacao: Transacao }>(
     DETALHES_TRANSACAO_QUERY,
     {
@@ -72,6 +73,29 @@ export default function DetalhesTransacao() {
       client,
     }
   );
+
+  useEffect(() => {
+    const buscarArquivos = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivos-por-transacao/${id}`
+        );
+
+        const data2 = await response.json();
+
+        if (response.ok) {
+          console.log(data2);
+          setDadosArquivos(data2.arquivos);
+        } else {
+          console.error("Erro ao buscar arquivos:", data);
+        }
+      } catch (error) {
+        console.error("Erro de conexão ao buscar arquivos:", error);
+      }
+    };
+
+    buscarArquivos();
+  }, []);
 
   useEffect(() => {
     if (data?.transacao) {
@@ -208,6 +232,28 @@ export default function DetalhesTransacao() {
                   </div>
                 )}
               </div>
+
+              {dadosArquivos && (
+                <div className="mt-8 mb-4">
+                  <h3 className="text-xl font-bold mb-3 border-b pb-2">
+                    Arquivos
+                  </h3>
+                  <ul>
+                    {dadosArquivos.map((arquivo: any, index: number) => (
+                      <li key={arquivo.id} className="mb-2">
+                        <a
+                          href={arquivo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline flex flex-row gap-1 items-center"
+                        >
+                          <File size={14} />[{arquivo.tipo}] - {index + 1}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Informações Bancárias */}
