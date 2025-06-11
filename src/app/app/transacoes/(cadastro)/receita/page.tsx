@@ -85,7 +85,7 @@ export default function CadastroReceitaPage() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/receita/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -126,7 +126,7 @@ export default function CadastroReceitaPage() {
           </p>
         ))}
       </div>
-      <div className="grid grid-cols-6 gap-6">
+      <div className="grid grid-cols-3 gap-6">
         <DatePickerForm
           setFunc={setDate}
           date={date}
@@ -145,7 +145,7 @@ export default function CadastroReceitaPage() {
         </div>
         <SelectBase
           setFunc={setMeioTransacao}
-          value={categoria?.toString()}
+          value={meio_de_transacao}
           query={MEIO_TRANSACAO_FORM_QUERY}
           dataKey="meiosDeTransacao"
           minutos={60}
