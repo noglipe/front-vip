@@ -293,12 +293,16 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
                     {transacao.instituicao_financeira?.nome || "N/A"}
                   </TableCell>
                   <TableCell>{formatReal(transacao.valor)}</TableCell>
-                  <TableCell className="grid grid-cols-3 gap-1 items-center justify-center">
+                  <TableCell>
                     <BtnVisualizar id={transacao.id.toString()} />
+                  </TableCell>
+                  <TableCell>
                     <BtnEditar
                       receita={transacao.receita}
                       id={transacao.id.toString()}
                     />
+                  </TableCell>
+                  <TableCell>
                     <BtnRecibo id={transacao.id.toString()} />
                   </TableCell>
                 </TableRow>

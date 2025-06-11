@@ -122,18 +122,12 @@ export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
                     {transacao.instituicao_financeira?.nome || "N/A"}
                   </TableCell>
                   <TableCell>{formatReal(transacao.valor)}</TableCell>
-                  <TableCell>
-                    {" "}
+                  <TableCell className="flex flex-row gap-1">
                     <BtnVisualizar id={transacao.id.toString()} />
-                  </TableCell>
-                  <TableCell>
-                    {" "}
                     <BtnEditar
                       receita={transacao.receita}
                       id={transacao.id.toString()}
                     />
-                  </TableCell>
-                  <TableCell>
                     <BtnRecibo id={transacao.id.toString()} />
                   </TableCell>
                 </TableRow>
