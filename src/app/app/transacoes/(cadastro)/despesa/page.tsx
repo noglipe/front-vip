@@ -42,7 +42,7 @@ export default function CadastroDespesaPage() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [situacao_fiscal, setSituacao_fiscal] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [idTransacao, SetIdTransacao] = useState("");
+  const [idsArquivo, SetIdsArquivos] = useState([]);
 
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
 
@@ -51,14 +51,15 @@ export default function CadastroDespesaPage() {
   const enviarArquivoParaBackend = async (
     arquivo: File,
     tipo: any,
-    index: number
+    index: number,
+    IdT: string
   ) => {
     const formData = new FormData();
     formData.append("file", arquivo);
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/arquivo/upload/`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivo/upload/`,
         {
           method: "POST",
           body: formData,
@@ -67,11 +68,7 @@ export default function CadastroDespesaPage() {
 
       const data = await response.json();
 
-      console.log(data);
-
       if (response.ok) {
-        console.log("Arquivo enviado com sucesso", data);
-
         // Atualiza a lista com os dados do back
         setListaArquivos((prev) => {
           const atualizada = [...prev];
@@ -82,19 +79,52 @@ export default function CadastroDespesaPage() {
           };
           return atualizada;
         });
-      } else {
-        console.error("Erro ao enviar arquivo", data);
+
+        let bodyArquivo: any;
+
+        if (idsArquivo) {
+          bodyArquivo = {
+            caminho: data.caminho,
+            nome: data.nome,
+            tipo_id: tipo.id,
+            transacao_id: IdT,
+            ids_transacao: idsArquivo,
+          };
+        } else {
+          bodyArquivo = {
+            caminho: data.caminho,
+            nome: data.nome,
+            tipo_id: tipo.id,
+            transacao_id: IdT,
+          };
+        }
+
+        const salvarResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivos/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bodyArquivo),
+          }
+        );
+
+        const salvarData = await salvarResponse.json();
+
+        if (!salvarResponse.ok) {
+          console.error("Erro ao salvar arquivo no banco", salvarData);
+        }
       }
     } catch (error) {
       console.error("Erro de conexão", error);
     }
   };
 
-  function enviarArquivo() {
-    console.log("Enviar Arquivo");
+  function enviarArquivo(IdT: string) {
     listaArquivos &&
       listaArquivos.forEach((item, index) => {
-        enviarArquivoParaBackend(item.arquivo, item.tipo, index);
+        enviarArquivoParaBackend(item.arquivo, item.tipo, index, IdT);
       });
   }
 
@@ -181,17 +211,16 @@ export default function CadastroDespesaPage() {
         );
       }
 
-      console.log(data);
-      //console.log("ID da transação criada:", data.id);
-      console.log(listaArquivos);
+      if (data.ids) {
+        SetIdsArquivos(data.ids);
+      }
 
-      //SetIdTransacao(data.id);
-      enviarArquivo();
+      enviarArquivo(data.id);
 
       alert("Despesa cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/despesa/");
-      window.location.reload();
+      //router.push("/app/transacoes/despesa/");
+      // window.location.reload();
     } catch (error) {
       setLoading(false);
       console.error("Erro na validação ou requisição:", error);
