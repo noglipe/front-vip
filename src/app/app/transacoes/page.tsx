@@ -48,7 +48,7 @@ export default function Page() {
         <div className="container mx-auto p-6 space-y-6">
           {/* Totais Financeiros */}
           <Card className="container p-4 rounded-xl">
-            <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className=" grid grid-cols-1 md:grid-cols-3 gap-2">
               <PainelValor
                 valor={dados?.total_receitas || 0}
                 title="Total de Receitas"
@@ -59,7 +59,7 @@ export default function Page() {
               />
               <PainelValor
                 valor={diferenca}
-                title=" Diferença (Lucro / Prejuízo)"
+                title=" Diferença"
               />
             </div>
             <CardDescription className="text-end font-bold">

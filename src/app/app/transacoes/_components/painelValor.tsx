@@ -17,14 +17,10 @@ export default function PainelValor({ valor = 0, title }: PainelProps) {
   const txt = valor > -1 ? "text-green-50" : "text-red-50";
 
   return (
-    <Card className={`p-4 ${bg} rounded-md`}>
-      <CardHeader>
-        <CardTitle>
-          <div className={`text-lg font-bold ${txt}`}>{title}</div>
-        </CardTitle>
-      </CardHeader>
+    <Card className={`p-4 ${bg} rounded-sm`}>
       <CardContent>
-        <p className="text-2xl font-semibold">{formatReal(valor)}</p>
+        <div className={`text-sm font-bold ${txt}`}>{title}</div>
+        <p className="text-md font-semibold">{formatReal(valor)}</p>
       </CardContent>
     </Card>
   );

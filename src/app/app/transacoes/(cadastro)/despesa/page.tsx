@@ -219,8 +219,8 @@ export default function CadastroDespesaPage() {
 
       alert("Despesa cadastrada");
       setLoading(false);
-      //router.push("/app/transacoes/despesa/");
-      // window.location.reload();
+      router.push("/app/transacoes/despesa/");
+      window.location.reload();
     } catch (error) {
       setLoading(false);
       console.error("Erro na validação ou requisição:", error);
