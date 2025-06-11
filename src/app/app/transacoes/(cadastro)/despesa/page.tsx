@@ -164,7 +164,7 @@ export default function CadastroDespesaPage() {
       };
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/`,
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/despesa/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -172,16 +172,20 @@ export default function CadastroDespesaPage() {
         }
       );
 
+      const data = await response.json();
+
       if (!response.ok) {
         setLoading(false);
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(
+          `Status: ${response.status} Mensagem: ${response.statusText}`
+        );
       }
 
-      const data = await response.json();
-      console.log("ID da transação criada:", data.id);
+      console.log(data);
+      //console.log("ID da transação criada:", data.id);
       console.log(listaArquivos);
 
-      SetIdTransacao(data.id);
+      //SetIdTransacao(data.id);
       enviarArquivo();
 
       alert("Despesa cadastrada");
