@@ -23,6 +23,7 @@ import {
 } from "@/components/UI/table";
 import GraficoCaixas from "./_components/graficosCaixas";
 import GraficoMeses from "./_components/graficoMeses";
+import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 
 type Custos = {
   nome: string;
@@ -70,6 +71,8 @@ export default function Page() {
   const [selctAtivo, SetSelectAtivo] = useState(true);
   const [loading, setLoading] = useState(false);
   const [dados, setDados] = useState<DadosRelatorio | null>(null);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [centroSelecionado, setCentroSelecionado] = useState<string>("");
 
   const meses = [
     "Janeiro",
@@ -92,6 +95,11 @@ export default function Page() {
       consultaAno();
     }
   }, [ano, mes]);
+
+  function abrirModal(centroNome: string) {
+    setCentroSelecionado(centroNome);
+    setModalAberto(true);
+  }
 
   async function consultaAno() {
     setLoading(true);
@@ -142,6 +150,12 @@ export default function Page() {
           <Loading />
         ) : (
           <>
+            <CentroDetalhesModal
+              open={modalAberto}
+              onClose={() => setModalAberto(false)}
+              nomeCentro={centroSelecionado}
+              ano={ano}
+            />
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Card Entrada */}
               <Card>
@@ -251,7 +265,15 @@ export default function Page() {
                     <TableBody>
                       {dados?.custosPorCentro.map((item) => (
                         <TableRow key={item.nome}>
-                          <TableCell>{item.nome}</TableCell>
+                          <TableCell>
+                            <button
+                              onClick={() => abrirModal(item.nome)}
+                              className="hover:text-blue-800"
+                              type="button"
+                            >
+                              {item.nome}
+                            </button>
+                          </TableCell>
                           <TableCell
                             className={
                               item.total.totalReceita < 0
