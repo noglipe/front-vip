@@ -15,6 +15,7 @@ import {
   Handshake,
   HomeIcon,
   LogOut,
+  NotepadText,
 } from "lucide-react";
 
 import logoImagem from "../../../../public/logos/logo.png";
@@ -37,6 +38,7 @@ const menuLista = [
 ];
 
 const menuRelatorio = [
+  { nome: "Anual", link: "/app/transacoes/anual" },
   { nome: "Categoria", link: "/app/transacoes/categoria" },
   { nome: "Dia", link: "/app/transacoes/dia" },
   { nome: "Período", link: "/app/transacoes/periodo" },
@@ -117,7 +119,7 @@ export function AppSidebar() {
               className={CLASS_SIDEBAR + " flex flex-row justify-between"}
             >
               <div className="flex flex-row gap-2">
-                <Banknote /> Relatórios
+                <NotepadText /> Relatórios
               </div>
               {isOpenRelatorio ? (
                 <CircleChevronDown size={20} className="mr-2" />

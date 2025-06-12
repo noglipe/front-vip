@@ -68,7 +68,7 @@ interface DadosRelatorio {
 }
 
 export default function Page() {
-  const [ano, setAno] = useState<number | null>(2025);
+  const [ano, setAno] = useState<number | null>(null);
   const [mes, setMes] = useState<string | null | undefined>(null);
   const [selctAtivo, SetSelectAtivo] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -140,7 +140,7 @@ export default function Page() {
             Relatório Financeiro {mes && `- ${meses[parseInt(mes) - 1]} de`}{" "}
             {ano}
           </h1>
-          <p className="text-muted-foreground text-sm text-center sm:text-right">
+          <p className="text-muted-foreground text-sm text-left">
             Visão geral das Finanças
           </p>
         </div>
@@ -154,167 +154,169 @@ export default function Page() {
         {loading ? (
           <Loading />
         ) : (
-          <>
-            <CentroDetalhesModal
-              open={modalAberto}
-              onClose={() => setModalAberto(false)}
-              nomeCentro={centroSelecionado}
-              ano={ano}
-            />
+          ano && (
+            <>
+              <CentroDetalhesModal
+                open={modalAberto}
+                onClose={() => setModalAberto(false)}
+                nomeCentro={centroSelecionado}
+                ano={ano}
+              />
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Card Entrada */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total de Entradas
-                  </CardTitle>
-                  <TrendingUp className="h-4 w-4 text-green-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-green-600">
-                    {formatReal(dados?.totalReceita)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Receitas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
-                    {ano}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card Saída */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    Total de Saídas
-                  </CardTitle>
-                  <TrendingDown className="h-4 w-4 text-red-600" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold text-red-600">
-                    {formatReal(dados?.totalDespesa)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Despesas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
-                    {ano}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card Saldo */}
-              <Card>
-                <CardHeader className="flex flex-row items-center justify-between pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {mes ? "Saldo Mensal" : "Saldo Anual"}
-                  </CardTitle>
-                  <DollarSign
-                    className={`h-4 w-4 ${
-                      dados && dados?.total >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  />
-                </CardHeader>
-                <CardContent>
-                  <div
-                    className={`text-2xl font-bold ${
-                      dados && dados.total >= 0
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {formatReal(dados?.total)}
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {dados && dados.total >= 0
-                      ? "Resultado positivo"
-                      : "Resultado negativo"}
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Chart de Caixa */}
-            <Card className="mt-4 shadow-md rounded-xl border border-gray-200">
-              <CardContent className="p-4">
-                <h2 className="text-xl font-semibold mb-4">Caixa</h2>
-                <div className="grid gap-2 md:grid-cols-4">
-                  {dados?.custosPorCaixas.map((caixa) => (
-                    <div key={caixa.nome}>
-                      <GraficoCaixas data={caixa} />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {/* Card Entrada */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total de Entradas
+                    </CardTitle>
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-green-600">
+                      {formatReal(dados?.totalReceita)}
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    <p className="text-xs text-muted-foreground">
+                      Receitas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
+                      {ano}
+                    </p>
+                  </CardContent>
+                </Card>
 
-            {mes ? (
-              ""
-            ) : (
-              <Card className="mt-2">
-                <CardContent>
-                  <GraficoMeses dados={dados?.ano} />
+                {/* Card Saída */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      Total de Saídas
+                    </CardTitle>
+                    <TrendingDown className="h-4 w-4 text-red-600" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold text-red-600">
+                      {formatReal(dados?.totalDespesa)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Despesas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
+                      {ano}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Card Saldo */}
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      {mes ? "Saldo Mensal" : "Saldo Anual"}
+                    </CardTitle>
+                    <DollarSign
+                      className={`h-4 w-4 ${
+                        dados && dados?.total >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    />
+                  </CardHeader>
+                  <CardContent>
+                    <div
+                      className={`text-2xl font-bold ${
+                        dados && dados.total >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {formatReal(dados?.total)}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {dados && dados.total >= 0
+                        ? "Resultado positivo"
+                        : "Resultado negativo"}
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Chart de Caixa */}
+              <Card className="mt-4 shadow-md rounded-xl border border-gray-200">
+                <CardContent className="p-4">
+                  <h2 className="text-xl font-semibold mb-4">Caixa</h2>
+                  <div className="grid gap-2 md:grid-cols-4">
+                    {dados?.custosPorCaixas.map((caixa) => (
+                      <div key={caixa.nome}>
+                        <GraficoCaixas data={caixa} />
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
-            )}
 
-            {/* Tabela Centro de Custo */}
-            <Card className="mt-2">
-              <CardHeader>
-                <CardTitle>Centro de Custo</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Centro de Custo</TableHead>
-                        <TableHead>Receita</TableHead>
-                        <TableHead>Despesa</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dados?.custosPorCentro.map((item) => (
-                        <TableRow key={item.nome}>
-                          <TableCell>
-                            <Button
-                              onClick={() => abrirModal(item.nome)}
-                              className="hover:text-blue-800"
-                              type="button"
-                            >
-                              {item.nome}
-                            </Button>
-                          </TableCell>
-                          <TableCell
-                            className={
-                              item.total.totalReceita < 0
-                                ? "text-red-600"
-                                : "text-green-600"
-                            }
-                          >
-                            {item.total.totalReceita
-                              ? formatReal(item.total.totalReceita)
-                              : "-"}
-                          </TableCell>
-                          <TableCell
-                            className={
-                              item.total.totalDespesa <= 0
-                                ? "text-red-600"
-                                : "text-green-600"
-                            }
-                          >
-                            {item.total.totalDespesa
-                              ? formatReal(item.total.totalDespesa)
-                              : "-"}
-                          </TableCell>
+              {mes ? (
+                ""
+              ) : (
+                <Card className="mt-2">
+                  <CardContent>
+                    <GraficoMeses dados={dados?.ano} />
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Tabela Centro de Custo */}
+              <Card className="mt-2">
+                <CardHeader>
+                  <CardTitle>Centro de Custo</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Centro de Custo</TableHead>
+                          <TableHead>Receita</TableHead>
+                          <TableHead>Despesa</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </>
+                      </TableHeader>
+                      <TableBody>
+                        {dados?.custosPorCentro.map((item) => (
+                          <TableRow key={item.nome}>
+                            <TableCell>
+                              <Button
+                                onClick={() => abrirModal(item.nome)}
+                                className="hover:text-blue-800"
+                                type="button"
+                              >
+                                {item.nome}
+                              </Button>
+                            </TableCell>
+                            <TableCell
+                              className={
+                                item.total.totalReceita < 0
+                                  ? "text-red-600"
+                                  : "text-green-600"
+                              }
+                            >
+                              {item.total.totalReceita
+                                ? formatReal(item.total.totalReceita)
+                                : "-"}
+                            </TableCell>
+                            <TableCell
+                              className={
+                                item.total.totalDespesa <= 0
+                                  ? "text-red-600"
+                                  : "text-green-600"
+                              }
+                            >
+                              {item.total.totalDespesa
+                                ? formatReal(item.total.totalDespesa)
+                                : "-"}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )
         )}
       </div>
     </div>
