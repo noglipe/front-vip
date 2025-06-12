@@ -1,48 +1,83 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/UI/card'
+} from "@/components/UI/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from '@/components/UI/chart'
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+} from "@/components/UI/chart";
+import { formatReal } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+type Mes = {
+  mes: string;
+  totalReceita: number;
+  totalDespesa: number;
+};
+
+type Ano = {
+  saltoTotal: number;
+  totalReceita: number;
+  totalDespesa: number;
+  mes: Mes[];
+};
+
+interface Props {
+  dados?: Ano;
+}
+
+const mesNome = (numero: string) =>
+  ({
+    "01": "Janeiro",
+    "02": "Fevereiro",
+    "03": "Março",
+    "04": "Abril",
+    "05": "Maio",
+    "06": "Junho",
+    "07": "Julho",
+    "08": "Agosto",
+    "09": "Setembro",
+    "10": "Outubro",
+    "11": "Novembro",
+    "12": "Dezembro",
+  }[numero] ?? numero);
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  receita: {
+    label: "Receita",
+    color: "var(--chart-2)",
   },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
+  despesa: {
+    label: "Despesa",
+    color: "var(--chart-5)",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
-export default function GraficoMeses() {
+export default function GraficoMeses({ dados }: Props) {
+  const isMobile = useIsMobile();
+  if (!dados) return null;
+
+  const chartData = Object.entries(dados.mes)
+    .sort(([a], [b]) => Number(a) - Number(b)) // Ordena os meses numericamente
+    .map(([mes, valores]) => ({
+      month: mesNome(mes),
+      receita: Math.abs(Number(valores.totalReceita)),
+      despesa: Math.abs(Number(valores.totalDespesa)),
+    }));
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Despesas Por Mês</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -51,27 +86,26 @@ export default function GraficoMeses() {
             <XAxis
               dataKey="month"
               tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickMargin={5}
+              axisLine={true}
+              tickFormatter={(value) =>
+                isMobile ? value.slice(0, 1) : value.slice(0, 3)
+              }
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-            <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            <Bar dataKey="receita" fill="var(--color-receita)" radius={4} />
+            <Bar dataKey="despesa" fill="var(--color-despesa)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Saldo Total: {formatReal(dados.saltoTotal)}
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }
