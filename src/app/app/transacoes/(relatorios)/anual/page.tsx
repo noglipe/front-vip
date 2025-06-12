@@ -25,6 +25,7 @@ import GraficoCaixas from "./_components/graficosCaixas";
 import GraficoMeses from "./_components/graficoMeses";
 import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 import { Button } from "@/components/UI/button";
+import { TabelaModal } from "./_components/TabelaModal";
 
 type Custos = {
   nome: string;
@@ -73,6 +74,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [dados, setDados] = useState<DadosRelatorio | null>(null);
   const [modalAberto, setModalAberto] = useState(false);
+
   const [centroSelecionado, setCentroSelecionado] = useState<string>("");
 
   const meses = [
@@ -159,7 +161,7 @@ export default function Page() {
               nomeCentro={centroSelecionado}
               ano={ano}
             />
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Card Entrada */}
               <Card>
@@ -174,7 +176,8 @@ export default function Page() {
                     {formatReal(dados?.totalReceita)}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Receitas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano {ano}
+                    Receitas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
+                    {ano}
                   </p>
                 </CardContent>
               </Card>
@@ -192,7 +195,8 @@ export default function Page() {
                     {formatReal(dados?.totalDespesa)}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Despesas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano {ano}
+                    Despesas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano{" "}
+                    {ano}
                   </p>
                 </CardContent>
               </Card>
@@ -201,7 +205,7 @@ export default function Page() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium">
-                    {mes ? "Saldo Mensal" : "Saldo Anual"} 
+                    {mes ? "Saldo Mensal" : "Saldo Anual"}
                   </CardTitle>
                   <DollarSign
                     className={`h-4 w-4 ${
@@ -236,7 +240,7 @@ export default function Page() {
                 <h2 className="text-xl font-semibold mb-4">Caixa</h2>
                 <div className="grid gap-2 md:grid-cols-4">
                   {dados?.custosPorCaixas.map((caixa) => (
-                    <div>
+                    <div key={caixa.nome}>
                       <GraficoCaixas data={caixa} />
                     </div>
                   ))}

@@ -17,6 +17,9 @@ import {
 } from "@/components/UI/chart";
 import { formatReal } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Button } from "@/components/UI/button";
+import { TabelaModal } from "./TabelaModal";
+import { useState } from "react";
 
 type Mes = {
   mes: string;
@@ -63,6 +66,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function GraficoMeses({ dados }: Props) {
+  const [modalAbertoTabela, setModalAbertoTabela] = useState(false);
   const isMobile = useIsMobile();
   if (!dados) return null;
 
@@ -76,8 +80,20 @@ export default function GraficoMeses({ dados }: Props) {
 
   return (
     <Card>
+      <TabelaModal
+        open={modalAbertoTabela}
+        onClose={() => setModalAbertoTabela(false)}
+        ano={dados}
+      />
       <CardHeader>
         <CardTitle>Despesas Por Mês</CardTitle>
+        <Button
+          onClick={() => setModalAbertoTabela(true)}
+          className="w-24"
+          type="button"
+        >
+          Ver Tabela
+        </Button>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
