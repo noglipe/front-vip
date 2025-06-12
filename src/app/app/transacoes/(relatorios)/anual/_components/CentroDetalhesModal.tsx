@@ -18,6 +18,7 @@ import {
 import { formatReal } from "@/lib/utils";
 import { XIcon } from "lucide-react";
 import { Separator } from "@/components/UI/separator";
+import { Button } from "@/components/UI/button";
 
 interface Props {
   open: boolean;
@@ -44,7 +45,6 @@ interface Detalhe {
 export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
   const [dados, setDados] = useState<Detalhe[] | null>(null);
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     if (open) {
@@ -80,10 +80,10 @@ export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
                         <TableHead className="whitespace-nowrap">
                           Categoria
                         </TableHead>
-                        <TableHead className="whitespace-nowrap">
+                        <TableHead className="whitespace-nowrap text-green-500">
                           Receita
                         </TableHead>
-                        <TableHead className="whitespace-nowrap">
+                        <TableHead className="whitespace-nowrap text-red-500">
                           Despesa
                         </TableHead>
                       </TableRow>
@@ -94,10 +94,10 @@ export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
                           <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis ">
                             {item.nome}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis ">
+                          <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis text-green-500">
                             {formatReal(item.receita)}
                           </TableCell>
-                          <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis ">
+                          <TableCell className="whitespace-nowrap overflow-hidden text-ellipsis text-red-500">
                             {formatReal(item.despesa)}
                           </TableCell>
                         </TableRow>
@@ -105,19 +105,22 @@ export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
                     </TableBody>
                   </Table>
                 </div>
-                <div className="flex flex-row gap-4 w-full">
-                  <div className="flex flex-col">
-                    <div>Receita:</div>
-                    <div>{formatReal(item.totalReceita)}</div>
-                  </div>
-                  <div className="flex flex-col">
-                    <div>Despesa:</div>
-                    <div>{formatReal(item.totalDespesa)}</div>
-                  </div>
-                  <div className="flex flex-col">
-                    <div>Total:</div>
-                    <div>{formatReal(item.total)}</div>
-                  </div>
+                <div className="flex flex-row gap-4 w-full mt-4">
+                  <Button className="flex flex-col text-left ">
+                    Receita:
+                    <br />
+                    {formatReal(item.totalReceita)}
+                  </Button>
+                  <Button className="flex flex-col text-left">
+                    Despesa:
+                    <br />
+                    {formatReal(item.totalDespesa)}
+                  </Button>
+                  <Button className="flex flex-col text-left">
+                    Total:
+                    <br />
+                    {formatReal(item.total)}
+                  </Button>
                 </div>
               </div>
             ))}

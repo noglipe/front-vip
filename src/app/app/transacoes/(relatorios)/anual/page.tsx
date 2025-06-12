@@ -24,6 +24,7 @@ import {
 import GraficoCaixas from "./_components/graficosCaixas";
 import GraficoMeses from "./_components/graficoMeses";
 import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
+import { Button } from "@/components/UI/button";
 
 type Custos = {
   nome: string;
@@ -119,6 +120,8 @@ export default function Page() {
       }
       const data = await response.json();
 
+      console.log(data);
+
       setDados(data);
     } catch (error) {
       console.error(error);
@@ -156,6 +159,7 @@ export default function Page() {
               nomeCentro={centroSelecionado}
               ano={ano}
             />
+            
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Card Entrada */}
               <Card>
@@ -170,7 +174,7 @@ export default function Page() {
                     {formatReal(dados?.totalReceita)}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Receitas do ano {ano}
+                    Receitas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano {ano}
                   </p>
                 </CardContent>
               </Card>
@@ -188,7 +192,7 @@ export default function Page() {
                     {formatReal(dados?.totalDespesa)}
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Despesas do ano {ano}
+                    Despesas de {mes && ` ${meses[parseInt(mes) - 1]}`} do ano {ano}
                   </p>
                 </CardContent>
               </Card>
@@ -197,7 +201,7 @@ export default function Page() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Saldo Anual
+                    {mes ? "Saldo Mensal" : "Saldo Anual"} 
                   </CardTitle>
                   <DollarSign
                     className={`h-4 w-4 ${
@@ -240,17 +244,20 @@ export default function Page() {
               </CardContent>
             </Card>
 
-            <Card className="mt-2">
-              <CardContent>
-                <GraficoMeses dados={dados?.ano} />
-              </CardContent>
-            </Card>
+            {mes ? (
+              ""
+            ) : (
+              <Card className="mt-2">
+                <CardContent>
+                  <GraficoMeses dados={dados?.ano} />
+                </CardContent>
+              </Card>
+            )}
 
             {/* Tabela Centro de Custo */}
             <Card className="mt-2">
               <CardHeader>
                 <CardTitle>Centro de Custo</CardTitle>
-                <CardDescription>Dados financeiros mês a mês</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -266,13 +273,13 @@ export default function Page() {
                       {dados?.custosPorCentro.map((item) => (
                         <TableRow key={item.nome}>
                           <TableCell>
-                            <button
+                            <Button
                               onClick={() => abrirModal(item.nome)}
                               className="hover:text-blue-800"
                               type="button"
                             >
                               {item.nome}
-                            </button>
+                            </Button>
                           </TableCell>
                           <TableCell
                             className={
