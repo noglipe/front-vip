@@ -43,7 +43,7 @@ interface BoxFilterProps {
 export function BoxFilter({ label, children }: Readonly<BoxFilterProps>) {
   return (
     <div className="flex-col gap-1">
-      {label ?? <Label>{label}</Label>}
+      {label && <Label>{label}</Label>}
       {children}
     </div>
   );
@@ -78,20 +78,20 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
 
       const matchesType =
         filterType === "todos" ||
-        (filterType === "receitas" && transacao.receita === true) ||
-        (filterType === "despesas" && transacao.receita === false);
+        (filterType === "receitas" && transacao.receita) ||
+        (filterType === "despesas" && !transacao.receita);
 
       const matchesType2 =
         situacaoFiscal === "todos" ||
-        (situacaoFiscal === "Com Nota" && transacao.situacao_fiscal === true) ||
-        (situacaoFiscal === "Sem Nota" && transacao.situacao_fiscal === false);
+        (situacaoFiscal === "Com Nota" && transacao.situacao_fiscal) ||
+        (situacaoFiscal === "Sem Nota" && !transacao.situacao_fiscal);
 
       const matchesConcluida =
         concluida === "todos" ||
         (concluida === "Transacoes Concluidas" &&
-          transacao.transacao_concluido === true) ||
+          transacao.transacao_concluido) ||
         (concluida === "Transacoes Pendentes" &&
-          transacao.transacao_concluido === false);
+          !transacao.transacao_concluido);
 
       const matchesMeio =
         !meioTransacao ||
@@ -119,17 +119,17 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
         fornecedor === "todos" ||
         transacao?.fornecedor?.id.toString() === fornecedor;
 
-      console.log(transacao);
+
       return (
-        matchesFornecedor &&
-        matchesCategoria &&
-        matchesCartao &&
-        matchesInstituicao &&
         matchBusca &&
         matchesType &&
         matchesType2 &&
         matchesConcluida &&
-        matchesMeio
+        matchesMeio &&
+        matchesInstituicao &&
+        matchesCartao &&
+        matchesCategoria &&
+        matchesFornecedor
       );
     });
   }
