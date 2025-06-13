@@ -27,6 +27,7 @@ import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 import { Button } from "@/components/UI/button";
 import { TabelaModal } from "./_components/TabelaModal";
 import { decryptData } from "@/lib/crip";
+import { ApiNovo } from "@/lib/api";
 
 type Custos = {
   nome: string;
@@ -110,27 +111,14 @@ export default function Page() {
     try {
       let url = "";
       if (mes) {
-        url = `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/relatorio/?ano=${ano}&mes=${mes}`;
+        url = `financeiro/relatorio/?ano=${ano}&mes=${mes}`;
       } else {
-        url = `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/relatorio/?ano=${ano}`;
+        url = `financeiro/relatorio/?ano=${ano}`;
       }
 
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${decryptData(localStorage.getItem("data")).access}`,
-          "Content-Type": "application/json", // se for enviar JSON no body
-        },
-        credentials: "include",
-      });
+      const response = await ApiNovo(url);
 
-      if (!response.ok) {
-        console.error(response.status);
-        return;
-      }
       const data = await response.json();
-
-      console.log(data);
 
       setDados(data);
     } catch (error) {

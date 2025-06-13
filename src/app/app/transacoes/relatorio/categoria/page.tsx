@@ -8,31 +8,21 @@ import { useState } from "react";
 import { Loading } from "@/components/loading";
 import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
+import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
   const [categoria, setCategoria] = useState<any>(null);
-  const [id_categoria, setId_categoria] = useState<number | null>(null);
   const [dados, setDados] = useState<TransacoesPropsApi | undefined>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [balanco, setBalanco] = useState(0);
 
   const featchDadosategoria = async (id: number) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/filtrar/categoria/${id}`
-      );
-      if (!response.ok) {
-        console.log(response);
-        const errorData = await response.json();
-        throw new Error(
-          errorData?.error ||
-            `Erro ao buscar dados da categoria: ${response.status}`
-        );
-      }
+      const response = await ApiNovo(`financeiro/filtrar/categoria/${id}`);
+
       const data: TransacoesPropsApi = await response.json();
       setDados(data);
     } catch (err: any) {

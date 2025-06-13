@@ -38,12 +38,15 @@ const menuLista = [
 ];
 
 const menuRelatorio = [
-  { nome: "Anual", link: "/app/transacoes/anual" },
-  { nome: "Categoria", link: "/app/transacoes/categoria" },
-  { nome: "Dia", link: "/app/transacoes/dia" },
-  { nome: "Período", link: "/app/transacoes/periodo" },
-  { nome: "Ultimos Cadastros", link: "/app/transacoes/ultimos-cadastros" },
-  { nome: "Filtros", link: "/app/transacoes/filtros" },
+  { nome: "Anual", link: "/app/transacoes/relatorio/anual" },
+  { nome: "Categoria", link: "/app/transacoes/relatorio/categoria" },
+  { nome: "Dia", link: "/app/transacoes/relatorio/dia" },
+  { nome: "Período", link: "/app/transacoes/relatorio/periodo" },
+  {
+    nome: "Ultimos Cadastros",
+    link: "/app/transacoes/relatorio/ultimos-cadastros",
+  },
+  { nome: "Filtros", link: "/app/transacoes/relatorio/filtros" },
 ];
 
 export function AppSidebar() {

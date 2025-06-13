@@ -8,45 +8,33 @@ import { useEffect, useState } from "react";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import Link from "next/link";
 import { ArrowUpToLine } from "lucide-react";
+import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
-  const [dadosA, setDadosA] = useState<TransacoesPropsApi>();
+  const [dadosAtualizados, setDadosAtualizados] =
+    useState<TransacoesPropsApi>();
   const [dados, setDados] = useState<TransacoesPropsApi>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
+    const getDados = async () => {
+      setLoading(true);
 
-    fetch(`${url}financeiro/transacao/ultimas-transacoes-atualizadas/`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data: TransacoesPropsApi) => {
-        setDadosA(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error ao buscar transacoes:", err);
-        setError(err);
-        setLoading(false);
-      });
+      const response = await ApiNovo(
+        `financeiro/transacao/ultimas-transacoes-atualizadas/`
+      );
+      setDadosAtualizados(await response.json());
 
-    fetch(`${url}financeiro/transacao/ultimas-transacoes-cadastradas/`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data: TransacoesPropsApi) => {
-        setDados(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error ao buscar transacoes:", err);
-        setError(err);
-        setLoading(false);
-      });
+      const response2 = await ApiNovo(
+        `financeiro/transacao/ultimas-transacoes-cadastradas/`
+      );
+      setDados(await response2.json());
 
-    setLoading(false);
+      setLoading(false);
+    };
+
+    getDados();
   }, []);
 
   if (loading) return <Loading />;
@@ -93,7 +81,9 @@ export default function Page() {
               Ultimas Transações Atualizadas
             </h2>
 
-            {dadosA && <TabelaTransacoes dados={dadosA.transacao} />}
+            {dadosAtualizados && (
+              <TabelaTransacoes dados={dadosAtualizados.transacao} />
+            )}
           </Card>
         </div>
       ) : (

@@ -6,10 +6,11 @@ import { Button } from "@/components/UI/button";
 import { Card, CardDescription } from "@/components/UI/card";
 import { url } from "@/lib/apollo-client";
 import { format } from "date-fns";
-import {  FilterIcon } from "lucide-react";
+import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
+import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
   const [data, setData] = useState();
@@ -17,24 +18,15 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  function handleBuscar() {
+  async function handleBuscar() {
     setLoading(true);
 
     if (data) {
       const dia = format(data, "yyyy-MM-dd");
-      fetch(`${url}financeiro/transacao/dia/${dia}/`)
-        .then((res) => {
-          return res.json();
-        })
-        .then((data: TransacoesPropsApi) => {
-          setDados(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error ao buscar transacoes:", err);
-          setError(err);
-          setLoading(false);
-        });
+      const response = await ApiNovo(`financeiro/transacao/dia/${dia}/`);
+      const res = await response.json();
+      setDados(res);
+      setLoading(false);
     } else {
       alert("Favor Inserir uma Data");
     }

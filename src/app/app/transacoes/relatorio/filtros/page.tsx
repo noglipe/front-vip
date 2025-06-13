@@ -4,12 +4,12 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { Loading } from "@/components/loading";
 import { Button } from "@/components/UI/button";
 import { Card, CardDescription } from "@/components/UI/card";
-import { url } from "@/lib/apollo-client";
 import { format } from "date-fns";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 import PainelValor from "../../_components/painelValor";
-import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
+import TabelaTransacoesFiltros from "@/app/app/_components/tabelaTransacoesFiltros";
+import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
   const [dataI, setDataI] = useState();
@@ -18,28 +18,19 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  function handleBuscar() {
+  async function handleBuscar() {
     setLoading(true);
 
     if (dataI && dataF) {
-      fetch(
-        `${url}financeiro/transacao/entre-datas/?dataI=${format(
+      const response = await ApiNovo(
+        `financeiro/transacao/entre-datas/?dataI=${format(
           dataI,
           "yyyy-MM-dd"
         )}&dataF=${format(dataF, "yyyy-MM-dd")}`
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .then((data: TransacoesPropsApi) => {
-          setDados(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Error ao buscar transacoes:", err);
-          setError(err);
-          setLoading(false);
-        });
+      );
+      const res = await response.json();
+      setDados(res);
+      setLoading(false);
     } else {
       alert("Favor Inserir uma Data");
     }
@@ -92,10 +83,13 @@ export default function Page() {
                 title=" Diferença (Lucro / Prejuízo)"
               />
             </div>
+            <CardDescription className="text-end font-bold">
+              *Dados referente ao mês vigente
+            </CardDescription>
           </Card>
 
           {/* Tabela de Transações */}
-          {dados && <TabelaTransacoes dados={dados.transacao} />}
+          {dados && <TabelaTransacoesFiltros dados={dados.transacao} />}
         </div>
       ) : (
         ""

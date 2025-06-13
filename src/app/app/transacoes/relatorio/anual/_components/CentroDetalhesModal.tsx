@@ -17,8 +17,8 @@ import {
 } from "@/components/UI/table";
 import { formatReal } from "@/lib/utils";
 import { XIcon } from "lucide-react";
-import { Separator } from "@/components/UI/separator";
 import { Button } from "@/components/UI/button";
+import { ApiNovo } from "@/lib/api";
 
 interface Props {
   open: boolean;
@@ -49,13 +49,17 @@ export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
   useEffect(() => {
     if (open) {
       setLoading(true);
-      fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/centro-de-custo/?centro=${nomeCentro}&ano=${ano}`
-      )
-        .then((res) => res.json())
-        .then(setDados)
-        .catch(console.error)
-        .finally(() => setLoading(false));
+
+      const getDados = async () => {
+        const response = await ApiNovo(
+          `financeiro/centro-de-custo/?centro=${nomeCentro}&ano=${ano}`
+        );
+        const dados = await response.json();
+        setDados(dados);
+        setLoading(false);
+      };
+
+      getDados();
     }
   }, [open, nomeCentro]);
 

@@ -15,7 +15,6 @@ import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/UI/chart";
 import { formatReal } from "@/lib/utils";
 
