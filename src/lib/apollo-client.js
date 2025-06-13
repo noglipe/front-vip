@@ -1,17 +1,21 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
 // Verifica o hostname (localhost ou IP de rede)
 const host =
   typeof window !== "undefined" ? window.location.hostname : "localhost";
 
-// Usa URLs diferentes dependendo do acesso
 export const url =
   host === "localhost"
-    ? process.env.NEXT_PUBLIC_BACKEND_URL // ex: http://localhost:8000/
-    : process.env.NEXT_PUBLIC_BACKEND_URL2; // ex: http://192.168.0.168:8000/
+    ? process.env.NEXT_PUBLIC_BACKEND_URL
+    : process.env.NEXT_PUBLIC_BACKEND_URL2;
+
+const httpLink = createHttpLink({
+  uri: `${url}graphql/`,
+  credentials: "include", // envia cookies, inclusive HttpOnly
+});
 
 const client = new ApolloClient({
-  uri: `${url}graphql/`,
+  link: httpLink,
   cache: new InMemoryCache(),
 });
 
