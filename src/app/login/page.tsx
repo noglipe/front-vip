@@ -45,7 +45,6 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const result = await login(username, password);
-      console.log(result)
       setLoading(false);
       router.push("/app");
     } catch (err) {

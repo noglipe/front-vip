@@ -1,4 +1,5 @@
 
+
 export async function login(username: string, password: string) {
     const formData = new FormData();
     formData.append("username", username);
@@ -14,5 +15,11 @@ export async function login(username: string, password: string) {
         throw new Error("Login inválido");
     }
 
-    return response.json();
+    const data = await response.json();
+
+    console.log(data)
+
+    localStorage.setItem("access_token", data.access);
+
+    return data;
 }
