@@ -17,8 +17,7 @@ import { Label } from "../../components/UI/label";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
 import { Eye, EyeOff } from "lucide-react";
-import { set } from "date-fns";
-import { Loading, MiniLoading } from "@/components/loading";
+import { MiniLoading } from "@/components/loading";
 
 const TEXTS = {
   title: "Login",

@@ -20,6 +20,7 @@ import { Button } from "@/components/UI/button";
 import { IfConcluidoCircle, IfConcluidoText } from "../_components/ifConcluido";
 import BtnRecibo from "../_components/tbnRecibo";
 import { BtnEditar } from "../_components/tbnEditar";
+import { ApiNovo } from "@/lib/api";
 
 interface Transacao {
   id: string;
@@ -77,14 +78,13 @@ export default function DetalhesTransacao() {
   useEffect(() => {
     const buscarArquivos = async () => {
       try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivos-por-transacao/${id}`
+        const response = await ApiNovo(
+          `financeiro/arquivos-por-transacao/${id}`
         );
 
         const data2 = await response.json();
 
         if (response.ok) {
-          console.log(data2);
           setDadosArquivos(data2.arquivos);
         } else {
           console.error("Erro ao buscar arquivos:", data);

@@ -5,6 +5,7 @@ import InputVip from "../../_components/inputVip";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { MiniLoading } from "@/components/loading";
 import { Card } from "@/components/UI/card";
+import { ApiNovo } from "@/lib/api";
 
 export function FornecedorCadastro() {
   const [loading, setLoading] = useState(false);
@@ -22,19 +23,11 @@ export function FornecedorCadastro() {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/fornecedor/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(novoFornecedor),
-        }
-      );
-
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await ApiNovo(
+        "financeiro/fornecedor/",
+        "POST",
+        novoFornecedor
+      )
 
       const result = await response.json();
       alert(result.mensagem);

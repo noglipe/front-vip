@@ -1,4 +1,4 @@
-
+import {encryptData } from '../lib/crip'
 
 export async function login(username: string, password: string) {
     const formData = new FormData();
@@ -19,7 +19,7 @@ export async function login(username: string, password: string) {
 
     console.log(data)
 
-    localStorage.setItem("access_token", data.access);
+    localStorage.setItem("data", encryptData(data));
 
     return data;
 }

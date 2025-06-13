@@ -50,6 +50,8 @@ import { number, string, z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
 import { CALSS_INPUTS } from "@/lib/constantes";
 import { useQuery } from "@apollo/client";
+import { decryptData } from "@/lib/crip";
+import { ApiNovo } from "@/lib/api";
 
 export default function EditarReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<any>();
@@ -62,7 +64,6 @@ export default function EditarReceitaPage() {
   const [observacao, setObservacao] = useState("");
   const [valor, setValor] = useState<any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  
 
   const router = useRouter();
   const params = useParams();
@@ -156,18 +157,11 @@ export default function EditarReceitaPage() {
         receita: true,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/${id}/receita`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(receitaInput),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const response = await ApiNovo(
+        `financeiro/transacao/${id}/receita`,
+        "PUT",
+        receitaInput
+      )
 
       alert("Receita atualizada com sucesso");
       router.push("/app/transacoes/receita/");
@@ -282,8 +276,6 @@ export default function EditarReceitaPage() {
           {loading ? <MiniLoading /> : ""} Salvar Alterações
         </Button>
       </div>
-
-      
     </div>
   );
 }

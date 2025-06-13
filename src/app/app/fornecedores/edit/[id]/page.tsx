@@ -8,6 +8,7 @@ import { useQuery } from "@apollo/client";
 
 import client from "../../../../../lib/apollo-client";
 import { FORNECEDOR_QUERY } from "@/graphql/query";
+import { ApiNovo } from "@/lib/api";
 
 interface Fornecedor {
   id: number;
@@ -46,19 +47,14 @@ export default function EditarFornecedor() {
 
     setSaving(true);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/fornecedor/${fornecedor.id}/`, // Endpoint Django Ninja
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(fornecedor),
-        }
+      const response = await ApiNovo(
+        `financeiro/fornecedor/${fornecedor.id}/`,
+        "PUT",
+        fornecedor
       );
 
-      if (!response.ok) throw new Error("Erro ao salvar fornecedor.");
-
       alert("Fornecedor atualizado com sucesso!");
-      router.push("/app/fornecedores/"); // Redireciona para a lista de fornecedores
+      router.push("/app/fornecedores?refetch=true"); // Redireciona para a lista de fornecedores
     } catch (error) {
       console.error(error);
       alert("Erro ao atualizar fornecedor.");

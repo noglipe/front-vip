@@ -17,16 +17,23 @@ interface Fornecedor {
 
 interface PropsList {
   setView: (id: number) => void;
+  onRefetchReady?: (refetchFn: () => void) => void;
 }
 
-export function FornecedorLista({ setView }: PropsList) {
+export function FornecedorLista({ setView, onRefetchReady }: PropsList) {
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const { loading, error, data } = useQuery<{ fornecedores: Fornecedor[] }>(
-    FORNECEDORES_QUERY,
-    { client }
-  );
+
+  const { loading, error, data, refetch } = useQuery<{
+    fornecedores: Fornecedor[];
+  }>(FORNECEDORES_QUERY, { client });
   const router = useRouter();
+
+  useEffect(() => {
+    if (onRefetchReady) {
+      onRefetchReady(refetch);
+    }
+  }, [refetch, onRefetchReady]);
 
   useEffect(() => {
     if (data?.fornecedores) {

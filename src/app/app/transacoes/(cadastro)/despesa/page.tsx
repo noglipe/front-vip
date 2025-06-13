@@ -21,6 +21,8 @@ import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
 import SelectArquivo from "../../_components/SelectArquivo";
+import { decryptData } from "@/lib/crip";
+import { ApiNovo } from "@/lib/api";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
@@ -193,23 +195,14 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/despesa/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(despesaInput),
-        }
+      const response = await ApiNovo(
+        `financeiro/transacao/despesa/`,
+        "POST",
+        despesaInput
       );
 
       const data = await response.json();
 
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(
-          `Status: ${response.status} Mensagem: ${response.statusText}`
-        );
-      }
       if (data.ids) {
         enviarArquivo(data.id, data.ids);
       } else {

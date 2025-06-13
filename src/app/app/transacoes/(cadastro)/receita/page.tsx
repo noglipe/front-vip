@@ -10,7 +10,6 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
-  TIPO_ARQUIVO_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
@@ -20,8 +19,8 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { DatePickerForm } from "@/components/form/datePickerForm";
-import { File } from "lucide-react";
-import SelectArquivo from "../../_components/SelectArquivo";
+import { decryptData } from "@/lib/crip";
+import { ApiNovo } from "@/lib/api";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<
@@ -37,8 +36,6 @@ export default function CadastroReceitaPage() {
   const [valor, setValor] = useState<number | any>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
-  const [tipoArquivo, setTipoArquivo] = useState<any>();
-  const [listaArquivos, setListaArquivos] = useState<any>([]);
   const router = useRouter();
 
   const receitaSchema = z.object({
@@ -84,19 +81,7 @@ export default function CadastroReceitaPage() {
         receita: true,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/receita/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(receitaInput),
-        }
-      );
-
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      await ApiNovo(`financeiro/transacao/receita/`, "POST", receitaInput);
 
       alert("Receita cadastrada");
       setLoading(false);
@@ -196,11 +181,6 @@ export default function CadastroReceitaPage() {
           className={"w-full"}
         />
       </div>
-
-      <SelectArquivo
-        listaArquivos={listaArquivos}
-        setListaArquivos={setListaArquivos}
-      />
 
       <div className="flex justify-center gap-4 mt-12">
         <div className="flex items-center gap-2 h-full">

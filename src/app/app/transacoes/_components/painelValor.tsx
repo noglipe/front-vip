@@ -1,9 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from "@/components/UI/card";
 import { formatReal } from "@/lib/utils";
 

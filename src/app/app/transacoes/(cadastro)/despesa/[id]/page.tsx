@@ -53,9 +53,11 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
-import { CALSS_INPUTS } from "@/lib/constantes";
+
 import { useQuery } from "@apollo/client";
 import client from "../../../../../../lib/apollo-client";
+
+import { ApiNovo } from "@/lib/api";
 
 export default function EditarDespesaPage() {
   const router = useRouter();
@@ -81,7 +83,7 @@ export default function EditarDespesaPage() {
   const [excluido, setExcluido] = useState(true);
   const [receita, setReceita] = useState(true);
 
-  const { loading, error, data, refetch } = useQuery<{ transacao: Transacao }>(
+  const { loading, error, data } = useQuery<{ transacao: Transacao }>(
     TRANSACAO_DESPESA_QUERY,
     { variables: { id }, client }
   );
@@ -201,16 +203,11 @@ export default function EditarDespesaPage() {
         receita,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/${id}/despesa`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(despesaInput),
-        }
-      );
-
-      if (!response.ok) throw new Error(`Erro: ${response.status}`);
+      const response = await ApiNovo(
+        `financeiro/transacao/${id}/despesa`,
+        "PUT",
+        despesaInput
+      )
 
       alert("Despesa atualizada com sucesso");
       router.push("/app/transacoes/despesa/");

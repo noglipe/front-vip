@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { ENDERECO_IGREJA, NOME_IGREJA, LOCAL_IGREJA } from "@/lib/constantes";
 import { Input } from "@/components/UI/input";

@@ -26,6 +26,7 @@ import GraficoMeses from "./_components/graficoMeses";
 import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 import { Button } from "@/components/UI/button";
 import { TabelaModal } from "./_components/TabelaModal";
+import { decryptData } from "@/lib/crip";
 
 type Custos = {
   nome: string;
@@ -114,7 +115,14 @@ export default function Page() {
         url = `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/relatorio/?ano=${ano}`;
       }
 
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${decryptData(localStorage.getItem("data")).access}`,
+          "Content-Type": "application/json", // se for enviar JSON no body
+        },
+        credentials: "include",
+      });
 
       if (!response.ok) {
         console.error(response.status);

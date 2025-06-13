@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { decryptData } from "./crip";
 
 // Verifica o hostname (localhost ou IP de rede)
 const host =
@@ -16,12 +17,12 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("access_token");
+  const token = decryptData(localStorage.getItem("data")).access;
 
   return {
     headers: {
       ...headers,
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 });

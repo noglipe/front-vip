@@ -16,7 +16,6 @@ import {
 } from "@/components/UI/table";
 
 import { formatData, formatReal } from "../../../../lib/utils";
-import { CircleCheckBig, CircleEllipsis } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { IfConcluidoCircle } from "./ifConcluido";
 import { MiniBtnEditar } from "./tbnEditar";

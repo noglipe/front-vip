@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import client from "../../../lib/apollo-client";
 import { useQuery } from "@apollo/client";
 import { N_CONCLIDAS_QUERY } from "@/graphql/query";
-import { Loading, MiniLoading } from "@/components/loading";
+import { MiniLoading } from "@/components/loading";
 import {
   Table,
   TableBody,

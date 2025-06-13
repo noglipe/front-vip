@@ -23,7 +23,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/UI/pagination";
-import { ScrollArea } from "@/components/UI/scroll-area";
+
 
 interface comprasCartaoMes {
   transacoes: {

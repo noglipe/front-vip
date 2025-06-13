@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import PainelValor from "./_components/painelValor";
 import TabelaTransacoes from "../_components/tabelaTransacoes";
 import { url } from "@/lib/apollo-client";
+import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
   const [dados, setDados] = useState<TransacoesPropsApi | null>(null);
@@ -15,19 +16,14 @@ export default function Page() {
   useEffect(() => {
     setLoading(true);
 
-    fetch(`${url}financeiro/transacao/`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((data: TransacoesPropsApi) => {
-        setDados(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar transações:", err);
-        setError(err);
-        setLoading(false);
-      });
+    const getDados = async () => {
+      const response = await ApiNovo(`financeiro/transacao/`, "GET");
+      const dados = await response.json();
+      setDados(dados);
+      setLoading(false);
+    };
+
+    getDados();
   }, []);
 
   if (loading) return <Loading />;
@@ -57,10 +53,7 @@ export default function Page() {
                 valor={dados?.total_despesas || 0}
                 title="Total de Despesas"
               />
-              <PainelValor
-                valor={diferenca}
-                title=" Diferença"
-              />
+              <PainelValor valor={diferenca} title=" Diferença" />
             </div>
             <CardDescription className="text-end font-bold">
               *Dados referente ao mês vigente
