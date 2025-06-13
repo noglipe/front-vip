@@ -45,7 +45,13 @@ export default function LoginPage() {
       setLoading(true);
       const result = await login(username, password);
       setLoading(false);
-      router.push("/app");
+      if (result) {
+        const url = localStorage.getItem("RefreshLocal");
+        localStorage.removeItem("RefreshLocal");
+        url && router.push(url);
+      } else {
+        router.push("/app");
+      }
     } catch (err) {
       setErro("Usuário ou Senha Inválidos.");
     }

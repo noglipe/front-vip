@@ -108,7 +108,7 @@ export default function ComprasCartaoMes() {
                   key={index}
                   className="cursor-pointer"
                   onClick={() =>
-                    router.push(`/app/transacoes/${dado.categoria.id}`)
+                    router.push(`/app/transacoes/${dado.id}`)
                   }
                 >
                   <TableCell>{dado.data}</TableCell>

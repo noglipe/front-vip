@@ -1,5 +1,6 @@
 import { SidebarProvider } from "@/components/UI/sidebar";
 import { ClientLayout } from "./_components/ClientLayout";
+import VerificarLogin from "@/components/verificarLogin";
 
 export default function RootLayout({
   children,
@@ -9,6 +10,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br" suppressHydrationWarning>
       <body className="w-full">
+        <VerificarLogin />
         <SidebarProvider>
           <ClientLayout>{children}</ClientLayout>
         </SidebarProvider>

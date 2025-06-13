@@ -115,8 +115,8 @@ export default function DetalhesTransacao() {
 
   async function alterarTransacao(id: string, del: boolean) {
     const url_api = del
-      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/${id}/`
-      : `${process.env.NEXT_PUBLIC_BACKEND_URL}/financeiro/transacao/${id}/restaurar`;
+      ? `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/${id}/`
+      : `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/transacao/${id}/restaurar`;
 
     const mtd = del ? "DELETE" : "PUT";
     const msg = del ? "excluída" : "restaurada";

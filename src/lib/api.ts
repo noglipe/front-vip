@@ -1,11 +1,12 @@
 import { decryptData } from "./crip";
+import { redirect } from "next/navigation";
 
 export async function ApiNovo(
     url: string,
     method: string = "GET",
     dados: any = null
 ) {
-    const token = decryptData(localStorage.getItem("data"))?.access;
+    const token = await decryptData(localStorage.getItem("data"))?.access;
 
     const headers: HeadersInit = {
         "Content-Type": "application/json",

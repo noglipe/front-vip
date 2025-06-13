@@ -16,6 +16,7 @@ interface App {
 
 export default function Saldos() {
   const [dados, setDados] = useState<App[] | any>(null);
+  
   const { loading, error, data } = useQuery<{ app: App[] }>(APP_QUERY, {
     client,
   });
