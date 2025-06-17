@@ -100,7 +100,6 @@ export default function FormularioCompra() {
           return atualizada;
         });
 
-        console.log(bodyArquivo.transacao_id);
         const salvarResponse = await ApiNovo(
           "financeiro/arquivos/",
           "POST",

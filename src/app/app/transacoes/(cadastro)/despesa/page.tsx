@@ -60,12 +60,10 @@ export default function CadastroDespesaPage() {
     formData.append("file", arquivo);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivo/upload/`,
-        {
-          method: "POST",
-          body: formData,
-        }
+      const response = await ApiNovo(
+        "financeiro/arquivo/upload/",
+        "POST",
+        formData
       );
 
       const data = await response.json();
@@ -101,15 +99,10 @@ export default function CadastroDespesaPage() {
           };
         }
 
-        const salvarResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}financeiro/arquivos/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bodyArquivo),
-          }
+        const salvarResponse = await ApiNovo(
+          "financeiro/arquivos/",
+          "POST",
+          bodyArquivo
         );
 
         const salvarData = await salvarResponse.json();
@@ -211,8 +204,8 @@ export default function CadastroDespesaPage() {
 
       alert("Despesa cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/despesa/");
-      window.location.reload();
+      //router.push("/app/transacoes/despesa/");
+     // window.location.reload();
     } catch (error) {
       setLoading(false);
       console.error("Erro na validação ou requisição:", error);
