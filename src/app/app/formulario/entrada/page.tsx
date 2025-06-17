@@ -1,5 +1,7 @@
 "use client";
 
+import { LogoCarregando, MiniLoading } from "@/components/loading";
+import { Button } from "@/components/UI/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +20,10 @@ import {
 } from "@/components/UI/table";
 import { ApiNovo } from "@/lib/api";
 import { formatData, formatReal } from "@/lib/utils";
-import { CheckCircle, File, XCircle } from "lucide-react";
-import Link from "next/link";
+import { CheckCircle, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
+import Validar from "./_compnente/validar";
+import Link from "next/link";
 
 type Arquivo = {
   id: number;
@@ -44,30 +47,39 @@ type Item = {
 export default function Page() {
   const [dados, setDados] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reload, setReload] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function getDados() {
-      try {
-        const response = await ApiNovo(
-          `financeiro/formulario/formulario-entrada/`
-        );
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados");
-        }
-        const json = await response.json();
-        console.log(json);
-        setDados(json.items);
-      } catch (err: any) {
-        setError(err.message || "Erro desconhecido");
-      } finally {
-        setLoading(false);
+  async function getDados() {
+    try {
+      const response = await ApiNovo(
+        `financeiro/formulario/formulario-entrada/`
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados");
       }
+      const json = await response.json();
+      console.log(json);
+      setDados(json.items);
+    } catch (err: any) {
+      setError(err.message || "Erro desconhecido");
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     getDados();
   }, []);
 
-  if (loading) return <div>Carregando dados...</div>;
+  useEffect(() => {
+    if (reload) {
+      getDados();
+      setReload(false);
+    }
+  }, [reload]);
+
+  if (loading) return <LogoCarregando />;
   if (error) return <div>Erro: {error}</div>;
 
   return (
@@ -83,45 +95,30 @@ export default function Page() {
             <TableHead>Dinheiro</TableHead>
             <TableHead>Pix</TableHead>
             <TableHead>Cartão</TableHead>
-            <TableHead>Arquivos</TableHead>
-            <TableHead>Validado</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {dados.map((item, index) => (
-            <TableRow key={index}>
-              <TableCell>{formatData(item.data)}</TableCell>
+            <TableRow>
+              <TableCell>
+                <Link key={index} href={`/app/formulario/entrada/${item.id}/`}>
+                  {item.validado ? (
+                    <CheckCircle className="text-green-500 inline-block " />
+                  ) : (
+                    <XCircle className="text-red-500 inline-block " />
+                  )}{" "}
+                  {formatData(item.data)}
+                </Link>
+              </TableCell>
               <TableCell>{item.descricao}</TableCell>
               <TableCell>{item.categoria}</TableCell>
               <TableCell>{formatReal(item.dinheiro)}</TableCell>
               <TableCell>{formatReal(item.pix)}</TableCell>
               <TableCell>{formatReal(item.cartao)}</TableCell>
+
               <TableCell>
-                {item.arquivos && item.arquivos?.length > 0 && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <File className="text-green-500 inline-block " />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>Arquivos</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {item.arquivos.map((a, index) => (
-                        <Link key={a.id} href={a.link} target="_blank">
-                          <DropdownMenuItem>
-                            {index + 1} - {a.tipo}
-                          </DropdownMenuItem>
-                        </Link>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </TableCell>
-              <TableCell className="">
-                {item.validado ? (
-                  <CheckCircle className="text-green-500 inline-block " />
-                ) : (
-                  <XCircle className="text-red-500 inline-block " />
-                )}
+                <Validar item={item} onValidated={() => setReload(true)} />
               </TableCell>
             </TableRow>
           ))}

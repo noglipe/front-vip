@@ -53,3 +53,11 @@ export function MiniLoading() {
     </div>
   );
 }
+
+export function LogoCarregando() {
+  return (
+    <div className="flex flex-row gap-1">
+      <MiniLoading /> Carregando dados...
+    </div>
+  );
+}

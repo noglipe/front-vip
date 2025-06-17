@@ -51,8 +51,10 @@ const menuRelatorio = [
 ];
 
 const menuFormulario = [
-  { nome: "Compra", link: "/app/formulario/compra/cadastro" },
-  { nome: "Entrada", link: "/app/formulario/entrada/cadastro" },
+  { nome: "Registrar Compra", link: "/app/formulario/compra/cadastro" },
+  { nome: "Visualizar Compra", link: "/app/formulario/compra/" },
+  { nome: "Registrar Entrada", link: "/app/formulario/entrada/cadastro" },
+  { nome: "Visualizar Entrada", link: "/app/formulario/entrada/" },
 ];
 
 export function AppSidebar() {
