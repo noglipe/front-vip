@@ -22,12 +22,14 @@ import {
   MEIO_TRANSACAO_FORM_QUERY,
 } from "@/graphql/query";
 import { ApiNovo } from "@/lib/api";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function FormularioCompra() {
   const [parcelada, setParcelada] = useState(false);
   const [date, setDate] = useState<Date | null>(new Date());
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     tipoCompra: "",
@@ -170,6 +172,9 @@ export default function FormularioCompra() {
       ) {
         enviarArquivo(data.id);
       }
+
+      router.push("app/formulario/compra/cadastro");
+      window.location.reload();
 
       if (res.ok) {
         alert("Entrada salva com sucesso!");
