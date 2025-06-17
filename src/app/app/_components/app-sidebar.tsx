@@ -12,6 +12,7 @@ import {
   Banknote,
   CircleChevronDown,
   CircleChevronRight,
+  FormInput,
   Handshake,
   HomeIcon,
   LogOut,
@@ -49,9 +50,15 @@ const menuRelatorio = [
   { nome: "Filtros", link: "/app/transacoes/relatorio/filtros" },
 ];
 
+const menuFormulario = [
+  { nome: "Compra", link: "/app/formulario/compra/cadastro" },
+  { nome: "Entrada", link: "/app/formulario/entrada/cadastro" },
+];
+
 export function AppSidebar() {
   const [isOpenFinanceiro, setIsOpenFinanceiro] = useState(false);
   const [isOpenRelatorio, setIsOpenRelatorio] = useState(false);
+  const [isOpenFormulario, setIsOpenFormulario] = useState(false);
 
   return (
     <Sidebar className="print:hidden">
@@ -83,6 +90,38 @@ export function AppSidebar() {
           >
             <Handshake /> Termo de Doação
           </Link>
+
+          {/* Formulário */}
+          <Collapsible
+            open={isOpenFormulario}
+            onOpenChange={setIsOpenFormulario}
+          >
+            <CollapsibleTrigger
+              className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+            >
+              <div className="flex flex-row gap-2">
+                <FormInput /> Formulários
+              </div>
+              {isOpenFormulario ? (
+                <CircleChevronDown size={20} className="mr-2" />
+              ) : (
+                <CircleChevronRight size={20} className="mr-2" />
+              )}
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-2 ml-5">
+              <div className="flex flex-col w-full">
+                {menuFormulario.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.link}
+                    className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
+                  >
+                    {item.nome}
+                  </Link>
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Financeiro */}
           <Collapsible

@@ -9,6 +9,7 @@ export default function VerificarLogin() {
   const pathname = usePathname();
 
   useEffect(() => {
+    
     const verificar = async () => {
       try {
         const dadosCriptografados = localStorage.getItem("data");

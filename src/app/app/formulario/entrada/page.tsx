@@ -1,188 +1,119 @@
 "use client";
 
-import { useState } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/UI/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/UI/table";
+import { ApiNovo } from "@/lib/api";
+import { CheckCircle, File, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function FormularioCompra() {
-  const [parcelada, setParcelada] = useState(false);
+type Arquivo = {
+  id: number;
+  link: string;
+  tipo: string;
+};
+
+type Item = {
+  id: number;
+  data: string;
+  descricao: string;
+  dinheiro: string;
+  pix: string;
+  picpay: string;
+  cartao: string;
+  categoria: string | null;
+  validado: boolean;
+  arquivos: Arquivo[];
+};
+
+export default function Page() {
+  const [dados, setDados] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function getDados() {
+      try {
+        const response = await ApiNovo(
+          `financeiro/formulario/formulario-entrada/`
+        );
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados");
+        }
+        const json = await response.json();
+        console.log(json);
+        setDados(json.items);
+      } catch (err: any) {
+        setError(err.message || "Erro desconhecido");
+      } finally {
+        setLoading(false);
+      }
+    }
+    getDados();
+  }, []);
+
+  if (loading) return <div>Carregando dados...</div>;
+  if (error) return <div>Erro: {error}</div>;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
-      <h1 className="text-xl font-bold mb-4">Formulário de Compra</h1>
-      <form className="space-y-4">
-        {/* Data da entrada */}
-        <div>
-          <label className="block font-medium">Data da Entrada:</label>
-          <input
-            type="date"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="data"
-          />
-        </div>
+    <div style={{ padding: "1rem", fontFamily: "Arial, sans-serif" }}>
+      <h1>Entradas Registradas no Formulário</h1>
 
-        {/* Tipo de compra */}
-        <div>
-          <label className="block font-medium">Tipo de Compra:</label>
-          <select
-            className="w-full border border-gray-300 p-2 rounded"
-            name="tipo"
-          >
-            <option value="">---------</option>
-            <option value="produto">Produto</option>
-            <option value="servico">Serviço</option>
-          </select>
-        </div>
-
-        {/* Categoria */}
-        <div>
-          <label className="block font-medium">Categoria:</label>
-          <select
-            className="w-full border border-gray-300 p-2 rounded"
-            name="categoria"
-          >
-            <option value="">---------</option>
-            <option value="alimento">Alimento</option>
-            <option value="equipamento">Equipamento</option>
-            {/* Adicione outras categorias aqui */}
-          </select>
-        </div>
-
-        {/* Descrição */}
-        <div>
-          <label className="block font-medium">Descrição:</label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="descricao"
-          />
-        </div>
-
-        {/* Autorizada por */}
-        <div>
-          <label className="block font-medium">Autorizada por:</label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="autorizada_por"
-          />
-        </div>
-
-        {/* Meio de pagamento */}
-        <div>
-          <label className="block font-medium">Meio de Pagamento:</label>
-          <select
-            className="w-full border border-gray-300 p-2 rounded"
-            name="meio_pagamento"
-          >
-            <option value="">---------</option>
-            <option value="dinheiro">Dinheiro</option>
-            <option value="pix">Pix</option>
-            <option value="cartao">Cartão</option>
-          </select>
-        </div>
-
-        {/* Cartão utilizado */}
-        <div>
-          <label className="block font-medium">Cartão Utilizado:</label>
-          <select
-            className="w-full border border-gray-300 p-2 rounded"
-            name="cartao_utilizado"
-          >
-            <option value="">---------</option>
-            <option value="visa">Visa</option>
-            <option value="master">Mastercard</option>
-            {/* Adicione outros cartões */}
-          </select>
-        </div>
-
-        {/* Compra parcelada */}
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            id="parcelada"
-            checked={parcelada}
-            onChange={() => setParcelada(!parcelada)}
-          />
-          <label htmlFor="parcelada">Compra parcelada?</label>
-        </div>
-
-        {/* Valor */}
-        <div>
-          <label className="block font-medium">Valor:</label>
-          <input
-            type="number"
-            step="0.01"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="valor"
-          />
-        </div>
-
-        {/* Valor da parcela */}
-        {parcelada && (
-          <>
-            <div>
-              <label className="block font-medium">Valor da Parcela:</label>
-              <input
-                type="number"
-                step="0.01"
-                className="w-full border border-gray-300 p-2 rounded"
-                name="valor_parcela"
-                defaultValue={0}
-              />
-            </div>
-
-            <div>
-              <label className="block font-medium">
-                Quantidade de Parcelas:
-              </label>
-              <input
-                type="number"
-                className="w-full border border-gray-300 p-2 rounded"
-                name="qtd_parcelas"
-              />
-            </div>
-          </>
-        )}
-
-        {/* Frete */}
-        <div>
-          <label className="block font-medium">
-            Valor Frete (caso se aplique):
-          </label>
-          <input
-            type="number"
-            step="0.01"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="frete"
-          />
-        </div>
-
-        {/* Observação */}
-        <div>
-          <label className="block font-medium">Observação:</label>
-          <textarea
-            className="w-full border border-gray-300 p-2 rounded"
-            name="observacao"
-            rows={3}
-          />
-        </div>
-
-        {/* Nota fiscal */}
-        <div>
-          <label className="block font-medium">Nota Fiscal:</label>
-          <input
-            type="file"
-            className="w-full border border-gray-300 p-2 rounded"
-            name="nota_fiscal"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Enviar
-        </button>
-      </form>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Data</TableHead>
+            <TableHead>Descrição</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead>Dinheiro</TableHead>
+            <TableHead>Pix</TableHead>
+            <TableHead>Cartão</TableHead>
+            <TableHead>Arquivos</TableHead>
+            <TableHead>Validado</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {dados.map((item, index) => (
+            <TableRow key={index}>
+              <TableCell>{item.data}</TableCell>
+              <TableCell>{item.descricao}</TableCell>
+              <TableCell>{item.categoria}</TableCell>
+              <TableCell>{item.dinheiro}</TableCell>
+              <TableCell>{item.pix}</TableCell>
+              <TableCell>{item.cartao}</TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuItem>Billing</DropdownMenuItem>
+                    <DropdownMenuItem>Team</DropdownMenuItem>
+                    <DropdownMenuItem>Subscription</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                {item.arquivos && (
+                  <File className="text-green-500 inline-block " />
+                )}
+              </TableCell>
+              <TableCell className="">
+                {item.validado ? (
+                  <CheckCircle className="text-green-500 inline-block " />
+                ) : (
+                  <XCircle className="text-red-500 inline-block " />
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

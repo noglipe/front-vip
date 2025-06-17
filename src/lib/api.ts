@@ -29,8 +29,9 @@ export async function ApiNovo(
   }
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, options);
-
+  console.log(response.status)
   if (!response.ok) {
+    console.log(response.status)
     throw new Error(`Erro na Requisição! status: ${response.status}`);
   }
 

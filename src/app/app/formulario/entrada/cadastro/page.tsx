@@ -110,7 +110,7 @@ export default function EntradaPage() {
         className=" shadow-md rounded-xl p-6 w-full space-y-4"
       >
         <h1 className="text-2xl font-bold text-center mb-4">
-          Registrar Entrada
+          Formulário de Entrada
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
