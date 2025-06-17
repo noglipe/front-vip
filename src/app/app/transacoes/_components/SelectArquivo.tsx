@@ -42,7 +42,7 @@ export default function SelectArquivo({
     setArquivoSelecionado(null);
     setTipoSelecionado(null);
 
-    if(fileInputRef.current) {
+    if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
@@ -97,6 +97,7 @@ export default function SelectArquivo({
         />
 
         <Button
+          type="button"
           onClick={adicionarArquivo}
           className="bg-green-600 text-white px-4 py-2 rounded"
         >

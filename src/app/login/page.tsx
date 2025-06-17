@@ -48,7 +48,7 @@ export default function LoginPage() {
       if (result) {
         const url = localStorage.getItem("RefreshLocal");
         localStorage.removeItem("RefreshLocal");
-        url && router.push(url);
+        url ? router.push(url): router.push("/app");
       } else {
         router.push("/app");
       }

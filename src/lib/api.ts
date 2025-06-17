@@ -1,35 +1,38 @@
 import { decryptData } from "./crip";
-import { redirect } from "next/navigation";
 
 export async function ApiNovo(
-    url: string,
-    method: string = "GET",
-    dados: any = null
+  url: string,
+  method: string = "GET",
+  dados: any = null
 ) {
-    const token = await decryptData(localStorage.getItem("data"))?.access;
+  const token = await decryptData(localStorage.getItem("data"))?.access;
 
-    const headers: HeadersInit = {
-        "Content-Type": "application/json",
-    };
+  const headers: HeadersInit = {};
 
-    if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const options: RequestInit = {
+    method,
+    headers,
+  };
+
+  if (dados) {
+    if (dados instanceof FormData) {
+      options.body = dados;
+      // NÃO define Content-Type, o browser define automaticamente com boundary
+    } else {
+      headers["Content-Type"] = "application/json";
+      options.body = JSON.stringify(dados);
     }
+  }
 
-    const options: RequestInit = {
-        method,
-        headers,
-    };
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, options);
 
-    if (dados) {
-        options.body = JSON.stringify(dados);
-    }
+  if (!response.ok) {
+    throw new Error(`Erro na Requisição! status: ${response.status}`);
+  }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, options);
-
-    if (!response.ok) {
-        throw new Error(`Error na Requisição! status: ${response.status}`);
-    }
-
-    return response;
+  return response;
 }

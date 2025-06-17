@@ -17,8 +17,6 @@ export async function login(username: string, password: string) {
 
     const data = await response.json();
 
-    console.log(data)
-
     localStorage.setItem("data", encryptData(data));
 
     return data;

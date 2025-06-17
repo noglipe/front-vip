@@ -8,6 +8,7 @@ import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../UI/calendar";
+import { Input } from "../UI/input";
 
 interface Props {
   setFunc: (date: any) => void;
@@ -40,12 +41,12 @@ export function DatePickerForm({ setFunc, className, descricao, date }: Props) {
 
   return (
     <div className={cn("flex gap-2 items-center", className)}>
-      <input
+      <Input
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         placeholder="dd/mm/aaaa"
-        className="border rounded-md px-3 py-2 w-[140px] text-sm"
+        className="border rounded-md px-3 py-2 text-sm "
       />
 
       <Popover>

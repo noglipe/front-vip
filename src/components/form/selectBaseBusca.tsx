@@ -54,6 +54,7 @@ export function SelectBaseBusca<T extends SelectApi>({
   const { loading, error, data, refetch } = useQuery<{
     [key: string]: T[];
   }>(query, {
+    fetchPolicy: "network-only",
     client,
   });
 
@@ -100,7 +101,7 @@ export function SelectBaseBusca<T extends SelectApi>({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={"flex justify-between overflow-hidden " + className}
+          className={"flex justify-between overflow-hidden bg-black w-full"}
         >
           {value
             ? objetos.find((obj) => obj.nome === value)?.nome
@@ -110,7 +111,7 @@ export function SelectBaseBusca<T extends SelectApi>({
       </PopoverTrigger>
       <PopoverContent className="overflow-hidden justify-between h-full w-full px-2 border-1 border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 ">
         <Command>
-          <CommandInput placeholder={`Buscar por ${dataKey}`} className="h-9" />
+          <CommandInput placeholder={`Buscar por ${dataKey}`} className="h-9 bg-black" />
           <CommandList>
             <CommandEmpty>Não Encontrado</CommandEmpty>
             <CommandGroup>
