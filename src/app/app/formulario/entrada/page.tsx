@@ -1,6 +1,13 @@
 "use client";
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/UI/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/UI/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -10,7 +17,9 @@ import {
   TableRow,
 } from "@/components/UI/table";
 import { ApiNovo } from "@/lib/api";
+import { formatData, formatReal } from "@/lib/utils";
 import { CheckCircle, File, XCircle } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Arquivo = {
@@ -29,7 +38,7 @@ type Item = {
   cartao: string;
   categoria: string | null;
   validado: boolean;
-  arquivos: Arquivo[];
+  arquivos?: Arquivo[];
 };
 
 export default function Page() {
@@ -81,26 +90,30 @@ export default function Page() {
         <TableBody>
           {dados.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.data}</TableCell>
+              <TableCell>{formatData(item.data)}</TableCell>
               <TableCell>{item.descricao}</TableCell>
               <TableCell>{item.categoria}</TableCell>
-              <TableCell>{item.dinheiro}</TableCell>
-              <TableCell>{item.pix}</TableCell>
-              <TableCell>{item.cartao}</TableCell>
+              <TableCell>{formatReal(item.dinheiro)}</TableCell>
+              <TableCell>{formatReal(item.pix)}</TableCell>
+              <TableCell>{formatReal(item.cartao)}</TableCell>
               <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuItem>Subscription</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                {item.arquivos && (
-                  <File className="text-green-500 inline-block " />
+                {item.arquivos && item.arquivos?.length > 0 && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <File className="text-green-500 inline-block " />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Arquivos</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {item.arquivos.map((a, index) => (
+                        <Link key={a.id} href={a.link} target="_blank">
+                          <DropdownMenuItem>
+                            {index + 1} - {a.tipo}
+                          </DropdownMenuItem>
+                        </Link>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 )}
               </TableCell>
               <TableCell className="">
