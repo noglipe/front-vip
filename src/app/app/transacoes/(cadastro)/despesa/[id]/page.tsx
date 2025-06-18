@@ -58,6 +58,7 @@ import { useQuery } from "@apollo/client";
 import client from "../../../../../../lib/apollo-client";
 
 import { ApiNovo } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 
 export default function EditarDespesaPage() {
   const router = useRouter();
@@ -207,7 +208,7 @@ export default function EditarDespesaPage() {
         `financeiro/transacao/${id}/despesa`,
         "PUT",
         despesaInput
-      )
+      );
 
       alert("Despesa atualizada com sucesso");
       router.push("/app/transacoes/despesa/");
@@ -229,8 +230,24 @@ export default function EditarDespesaPage() {
   };
 
   return (
-    <div className="container mx-auto p-6  rounded-lg shadow-md ">
-      <h2 className="text-xl font-bold  mb-2">Editar Despesa</h2>
+    <Card className="p-4 rounded-lg shadow-md ">
+      <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center">
+          <h2 className="text-xl font-bold  mb-2">EDITAR DESPESA {id}</h2>
+
+          <div className="flex gap-4">
+            <Label>
+              {compra_parcelada ? "DESPESA PARCELADA" : "DESPESA SIMPLES"}
+            </Label>
+            <Switch
+              className=""
+              checked={compra_parcelada}
+              onCheckedChange={setCompraParcelada}
+            />
+          </div>
+        </CardTitle>
+      </CardHeader>
+
       <div>
         {Object.entries(errors).map(([key, message]) => (
           <p key={key} className="text-red-500">
@@ -238,15 +255,8 @@ export default function EditarDespesaPage() {
           </p>
         ))}
       </div>
-      <div className="flex gap-4 mb-4">
-        <Label>Despesa Simples</Label>
-        <Switch
-          checked={compra_parcelada}
-          onCheckedChange={setCompraParcelada}
-        />
-        <Label>Despesa Parcelada</Label>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <DatePickerForm
           descricao={compra_parcelada ? "Data de pagamento" : null}
           setFunc={setDate}
@@ -337,9 +347,9 @@ export default function EditarDespesaPage() {
             />
           </>
         )}
-      </div>
+      </CardContent>
 
-      <div className="flex flex-col items-center gap-2 mt-6">
+      <CardContent className="flex flex-col items-center gap-2 mt-6">
         <Input
           type="text"
           value={descricao}
@@ -353,9 +363,9 @@ export default function EditarDespesaPage() {
           placeholder="Observação"
           className={"w-full"}
         />
-      </div>
+      </CardContent>
 
-      <div className="flex flex-row gap-4 justify-center items-center mt-6">
+      <CardContent className="flex flex-row gap-4 justify-center items-center mt-6">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
             className={`${"w-full"} sm:h-10 w-10`}
@@ -375,7 +385,7 @@ export default function EditarDespesaPage() {
         <Button onClick={atualizarDespesa}>
           {loading ? <MiniLoading /> : "Atualizar"}
         </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

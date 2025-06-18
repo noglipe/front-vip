@@ -2,6 +2,7 @@
 
 import { SelectVip } from "@/components/form/selectVip";
 import { Button } from "@/components/UI/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { Input } from "@/components/UI/input";
 import { TIPO_ARQUIVO_QUERY } from "@/graphql/query";
 import { converterImagemParaPdf } from "@/lib/conversorImagemPdf";
@@ -69,17 +70,20 @@ export default function SelectArquivo({
   };
 
   return (
-    <div className="flex flex-col gap-4 mt-4 border border-white rounded-xl p-8">
-      <h4 className="flex items-center gap-2">
-        <File /> Adicionar Arquivo{" "}
-        {tipoSelecionado?.nome && `- ${tipoSelecionado.nome}`}
-      </h4>
+    <Card className="flex flex-col gap-4 border border-white rounded-sm p-4">
+      <CardHeader>
+        <CardTitle>
+          <h4 className="flex items-center gap-2">
+            <File /> ADICIONAR ARQUIVO{" "}
+            {tipoSelecionado?.nome && `- ${tipoSelecionado.nome}`}
+          </h4>
+        </CardTitle>
+      </CardHeader>
 
-      <div className="flex flex-row gap-2">
+      <CardContent className="flex flex-col sm:flex-row gap-2">
         <Input
           type="file"
           ref={fileInputRef}
-          placeholder="Selecionar Arquivo"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) handleArquivoSelecionado(file);
@@ -93,52 +97,66 @@ export default function SelectArquivo({
           query={TIPO_ARQUIVO_QUERY}
           dataKey="tipoArquivo"
           titulo="Tipo de Arquivo"
-          className="w-44"
+          className="sm:w-44 w-full"
         />
 
         <Button
           type="button"
           onClick={adicionarArquivo}
-          className="bg-green-600 text-white px-4 py-2 rounded"
+          className="bg-green-600 text-white px-4 rounded"
         >
           Adicionar Arquivo
         </Button>
-      </div>
+      </CardContent>
 
       {listaArquivos.length > 0 && (
-        <div className="mt-6 space-y-2">
-          <h3 className="text-lg font-semibold">Arquivos Adicionados</h3>
-          <div className="flex flex-col gap-2">
+        <Card className="mt-6 space-y-2">
+          <CardHeader>
+            <CardTitle>
+              <h4 className="font-semibold">ARQUIVOS ADICIONADOS</h4>
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent className="flex flex-col gap-4">
             {listaArquivos.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between border p-2 rounded hover:bg-gray-700"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between border rounded-lg p-4 w-full gap-4"
               >
-                <div className="flex items-center gap-2">
-                  <File size={16} />
-                  <a
-                    href={URL.createObjectURL(item.arquivo)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-400 underline hover:text-blue-200"
+                <div className="flex items-center gap-2 justify-between w-full">
+                  <div className="flex flex-row items-center gap-2">
+                    <File size={24} />
+                    <div className="flex flex-col">
+                      <a
+                        href={URL.createObjectURL(item.arquivo)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className=" hover:text-blue-400 font-medium"
+                      >
+                        Arquivo {index + 1}
+                      </a>
+                      <span className="text-sm text-gray-500">
+                        ({item.tipo.nome})
+                      </span>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => removerArquivo(index)}
+                    className="
+                  text-red-600 hover:text-white hover:bg-red-700 w-8 h-8 p-0 
+                  flex items-center justify-center rounded
+                  "
+                    variant="ghost"
                   >
-                    {item.arquivo.name}
-                  </a>
-                  <span className="text-sm text-gray-400">
-                    ({item.tipo.nome})
-                  </span>
+                    <X size={18} />
+                  </Button>
                 </div>
-                <Button
-                  onClick={() => removerArquivo(index)}
-                  className="text-red-500 hover:text-white hover:bg-red-800"
-                >
-                  <X size={18} />
-                </Button>
               </div>
             ))}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
-    </div>
+    </Card>
   );
 }

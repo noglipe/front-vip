@@ -6,6 +6,7 @@ import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { MiniLoading } from "@/components/loading";
 import { Card } from "@/components/UI/card";
 import { ApiNovo } from "@/lib/api";
+import { Button } from "@/components/UI/button";
 
 export function FornecedorCadastro() {
   const [loading, setLoading] = useState(false);
@@ -59,12 +60,12 @@ export function FornecedorCadastro() {
             setNovoFornecedor({ ...novoFornecedor, documento: valor })
           }
         />
-        <button
-          className="flex gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition"
+        <Button
+          className="flex gap-2 font-semibold rounded-sm shadow-md transition"
           onClick={adicionarFornecedor}
         >
           {loading ? <MiniLoading /> : ""} Cadastrar
-        </button>
+        </Button>
       </div>
     </Card>
   );

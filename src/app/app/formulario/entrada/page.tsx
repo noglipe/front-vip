@@ -24,6 +24,12 @@ import { CheckCircle, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import Validar from "./_compnente/validar";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/UI/card";
 
 type Arquivo = {
   id: number;
@@ -83,47 +89,56 @@ export default function Page() {
   if (error) return <div>Erro: {error}</div>;
 
   return (
-    <div style={{ padding: "1rem", fontFamily: "Arial, sans-serif" }}>
-      <h1>Entradas Registradas no Formulário</h1>
+    <Card className="p-4">
+      <CardTitle>
+        <h1>Formulário Entradas</h1>
+        <CardDescription>Entradas Registradas no Formulário</CardDescription>
+      </CardTitle>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Data</TableHead>
-            <TableHead>Descrição</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>Dinheiro</TableHead>
-            <TableHead>Pix</TableHead>
-            <TableHead>Cartão</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {dados.map((item, index) => (
+      <CardContent>
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell>
-                <Link key={index} href={`/app/formulario/entrada/${item.id}/`}>
-                  {item.validado ? (
-                    <CheckCircle className="text-green-500 inline-block " />
-                  ) : (
-                    <XCircle className="text-red-500 inline-block " />
-                  )}{" "}
-                  {formatData(item.data)}
-                </Link>
-              </TableCell>
-              <TableCell>{item.descricao}</TableCell>
-              <TableCell>{item.categoria}</TableCell>
-              <TableCell>{formatReal(item.dinheiro)}</TableCell>
-              <TableCell>{formatReal(item.pix)}</TableCell>
-              <TableCell>{formatReal(item.cartao)}</TableCell>
-
-              <TableCell>
-                <Validar item={item} onValidated={() => setReload(true)} />
-              </TableCell>
+              <TableHead>Data</TableHead>
+              <TableHead>Descrição</TableHead>
+              <TableHead>Categoria</TableHead>
+              <TableHead>Dinheiro</TableHead>
+              <TableHead>Pix</TableHead>
+              <TableHead>Cartão</TableHead>
+              <TableHead></TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {dados.map((item, index) => (
+              <TableRow>
+                <TableCell>
+                  <Link
+                    key={index}
+                    href={`/app/formulario/entrada/${item.id}/`}
+                  >
+                    {item.validado ? (
+                      <CheckCircle className="text-green-500 inline-block " />
+                    ) : (
+                      <XCircle className="text-red-500 inline-block " />
+                    )}{" "}
+                    {formatData(item.data)}
+                  </Link>
+                </TableCell>
+                <TableCell>{item.descricao}</TableCell>
+                <TableCell>{item.categoria}</TableCell>
+                <TableCell>{formatReal(item.dinheiro)}</TableCell>
+                <TableCell>{formatReal(item.pix)}</TableCell>
+                <TableCell>{formatReal(item.cartao)}</TableCell>
+                {!item.validado && (
+                  <TableCell>
+                    <Validar item={item} onValidated={() => setReload(true)} />
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   );
 }

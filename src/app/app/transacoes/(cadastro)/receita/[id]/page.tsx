@@ -52,6 +52,7 @@ import { CALSS_INPUTS } from "@/lib/constantes";
 import { useQuery } from "@apollo/client";
 import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 
 export default function EditarReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<any>();
@@ -183,8 +184,13 @@ export default function EditarReceitaPage() {
   };
 
   return (
-    <div className="container mx-auto p-6  rounded-lg shadow-md">
-      <h2 className="text-xl font-bold  mb-4">Editar</h2>
+    <Card className="container mx-auto p-6  rounded-lg shadow-md">
+      <CardHeader>
+        <CardTitle>
+<h2 className="text-xl font-bold  mb-2">EDITAR RECEITA {id}</h2>
+        </CardTitle>
+      </CardHeader>
+      
 
       {Object.entries(errors).map(([key, message]) => (
         <p key={key} className="text-red-500">
@@ -192,7 +198,7 @@ export default function EditarReceitaPage() {
         </p>
       ))}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <DatePickerForm setFunc={setDate} date={date} className="w-full" />
         <div className="flex items-center gap-2">
           <Label htmlFor="valor">R$</Label>
@@ -241,9 +247,9 @@ export default function EditarReceitaPage() {
           titulo="Fornecedores"
           className={"w-full"}
         />
-      </div>
+      </CardContent>
 
-      <div className="flex flex-col gap-2 mt-4">
+      <CardContent className="flex flex-col gap-2 mt-4">
         <Input
           type="text"
           value={descricao}
@@ -257,9 +263,9 @@ export default function EditarReceitaPage() {
           placeholder="Observação"
           className={"w-full"}
         />
-      </div>
+      </CardContent>
 
-      <div className="flex justify-center gap-4 mt-12">
+      <CardContent className="flex justify-center gap-4 mt-12">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
             className={` sm:h-10 w-10`}
@@ -275,7 +281,7 @@ export default function EditarReceitaPage() {
         >
           {loading ? <MiniLoading /> : ""} Salvar Alterações
         </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

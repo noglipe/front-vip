@@ -2,7 +2,12 @@
 
 import { useQuery } from "@apollo/client";
 import { DETALHES_TRANSACAO_QUERY } from "@/graphql/query";
-import { Card, CardContent } from "@/components/UI/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardTitle,
+} from "@/components/UI/card";
 import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
@@ -13,6 +18,12 @@ import {
   Trash2,
   ArchiveRestore,
   File,
+  Infinity,
+  BookDashed,
+  BookA,
+  Info,
+  PiggyBankIcon,
+  Landmark,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
@@ -21,6 +32,7 @@ import { IfConcluidoCircle, IfConcluidoText } from "../_components/ifConcluido";
 import BtnRecibo from "../_components/tbnRecibo";
 import { BtnEditar } from "../_components/tbnEditar";
 import { ApiNovo } from "@/lib/api";
+import Link from "next/link";
 
 interface Transacao {
   id: string;
@@ -74,6 +86,9 @@ export default function DetalhesTransacao() {
       client,
     }
   );
+
+  const classTitleSession =
+    "text-xl font-bold border-b pb-2 flex gap-2 items-center";
 
   useEffect(() => {
     const buscarArquivos = async () => {
@@ -144,27 +159,19 @@ export default function DetalhesTransacao() {
   return (
     <div className="container mx-auto p-6">
       <Card className="p-6">
-        <h2 className="text-2xl font-bold mb-4">Detalhes da Transação</h2>
-        <CardContent className="flex flex-row flex-wrap-reverse sm:flex-col">
-          {/* Botões de ação */}
-          {!transacao.excluida && (
-            <div className="flex justify-end gap-4 mb-4 sm:flex-row flex-col">
-              <BtnEditar receita={transacao.receita} id={transacao.id} />
-              <BtnRecibo id={transacao.id} />
-              <Button
-                onClick={() => alterarTransacao(transacao.id, true)}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-sm cursor-pointer hover:bg-red-400"
-              >
-                <Trash2 size={18} /> Deletar
-              </Button>
-              {transacao.rastreioParcelas ? (
-                <TransacaoRelacionadas id={transacao?.rastreioParcelas.id} />
-              ) : (
-                ""
-              )}
-            </div>
-          )}
+        <CardTitle className="flex justify-between">
+          <div>
+            <h1>Transação #{id}</h1>
+            <CardDescription>Detalhamendo de Transição</CardDescription>
+          </div>
+          {/* Status */}
+          <div className="flex items-center gap-3 mb-6">
+            <IfConcluidoCircle concluido={transacao.transacaoConcluido} />
+            <IfConcluidoText concluido={transacao.transacaoConcluido} />
+          </div>
+        </CardTitle>
 
+        <CardContent className="flex flex-row flex-wrap-reverse sm:flex-col">
           {/* Seções de Dados */}
           <div className="space-y-8">
             {/* Aviso de Transação Excluída */}
@@ -189,101 +196,103 @@ export default function DetalhesTransacao() {
               </div>
             )}
 
-            {/* Status */}
-            <div className="flex items-center gap-3 mb-6">
-              <IfConcluidoCircle concluido={transacao.transacaoConcluido} />
-              <IfConcluidoText concluido={transacao.transacaoConcluido} />
-            </div>
-
             {/* Dados da Compra */}
-            <div>
-              <h3 className="text-xl font-bold mb-3 border-b pb-2">
-                Dados da Compra
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-4">
+              <CardTitle className={classTitleSession}>
+                <Info /> INFORMAÇÕES
+              </CardTitle>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                  <p className="text-gray-600">Data da Transação</p>
-                  <p className="text-lg font-semibold">
-                    {formatData(transacao.data)}
-                  </p>
+                  <h3 className="scroll-m-20 font-semibold">
+                    DATA DA TRANSAÇÃO
+                  </h3>
+                  <p className="font-semibold">{formatData(transacao.data)}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Data da Compra</p>
-                  <p className="text-lg font-semibold">
-                    {formatData(transacao.data)}
-                  </p>
+                  <h3 className="scroll-m-20 font-semibold">DATA DA COMPRA</h3>
+                  <p className="font-semibold">{formatData(transacao.data)}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Descrição</p>
-                  <p className="text-lg font-semibold">{transacao.descricao}</p>
+                  <h3 className="scroll-m-20 font-semibold">DESCRIÇÃO</h3>
+                  <p className="font-semibold">{transacao.descricao}</p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Categoria</p>
-                  <p className="text-lg font-semibold">
-                    {transacao.categoria.nome}
-                  </p>
+                  <h3 className="scroll-m-20 font-semibold">CATEGORIA</h3>
+                  <p className="font-semibold">{transacao.categoria.nome}</p>
                 </div>
                 {transacao.fornecedor && (
                   <div>
-                    <p className="text-gray-600">Fornecedor</p>
-                    <p className="text-lg font-semibold">
-                      {transacao.fornecedor.nome}
-                    </p>
+                    <h3 className="scroll-m-20 font-semibold">FORNECEDOR</h3>
+                    <p className="">{transacao.fornecedor.nome}</p>
                   </div>
                 )}
-              </div>
+              </CardContent>
 
-              {dadosArquivos && (
-                <div className="mt-8 mb-4">
-                  <h3 className="text-xl font-bold mb-3 border-b pb-2">
-                    Arquivos
-                  </h3>
-                  <ul>
-                    {dadosArquivos.map((arquivo: any, index: number) => (
-                      <li key={arquivo.id} className="mb-2">
-                        <a
-                          href={arquivo.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline flex flex-row gap-1 items-center"
-                        >
-                          <File size={14} />[{arquivo.tipo}] - {index + 1}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {dadosArquivos.length > 0 && (
+                <Card className="p-4">
+                  <CardTitle className={classTitleSession}>
+                    <File /> Arquivos
+                  </CardTitle>
+                  <CardContent>
+                    <ul>
+                      {dadosArquivos.map((arquivo: any, index: number) => (
+                        <li key={arquivo.id} className="mb-2">
+                          <a
+                            href={arquivo.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline flex flex-row gap-1 items-center"
+                          >
+                            <File size={14} />[{arquivo.tipo}] - {index + 1}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
               )}
-            </div>
+            </Card>
 
             {/* Informações Bancárias */}
-            <div>
-              <h3 className="text-xl font-bold mb-3 border-b pb-2">
-                Informações Bancárias
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-4">
+              <CardTitle className="flex gap-2 text-xl font-bold border-b pb-2 justify-between">
+                <div className="flex gap-2 items-center">
+                  <Landmark /> INFORMAÇÕES BANCÁRIAS
+                </div>
+
+                {transacao.numeroDeParcelas && (
+                  <div>
+                    <div className="text-lg font-semibold flex justify-end">
+                      Parcelas {transacao.parcelaAtual} /{" "}
+                      {transacao.numeroDeParcelas}
+                    </div>
+                  </div>
+                )}
+              </CardTitle>
+
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-gray-600">Meio de Pagamento</p>
-                  <p className="text-lg font-semibold">
+                  <h4 className="">MEIO DE PAGAMENTO</h4>
+                  <p className="font-semibold">
                     {transacao.meioDeTransacao.nome}
                   </p>
                 </div>
                 {transacao.cartaoUtilizado !== null && (
                   <div>
-                    <p className="text-gray-600">Cartão</p>
-                    <p className="text-lg font-semibold">
+                    <p className="">CARTÃO</p>
+                    <p className=" font-semibold">
                       {transacao.cartaoUtilizado.nome}
                     </p>
                   </div>
                 )}
                 <div>
-                  <p className="text-gray-600">Instituição Financeira</p>
-                  <p className="text-lg font-semibold">
+                  <p className="">INSTITUIÇÃO FINANCEIRA</p>
+                  <p className="font-semibold">
                     {transacao.instituicaoFinanceira?.nome || "N/A"}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-600">Valor</p>
+                  <p className="">VALOR</p>
                   <div
                     className={`text-lg font-semibold ${
                       transacao.receita ? "text-green-600" : "text-red-600"
@@ -293,8 +302,8 @@ export default function DetalhesTransacao() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-gray-600">Situação Fiscal</p>
-                  <p className="flex items-center text-lg font-semibold">
+                  <p className="">NOTA FISCAL</p>
+                  <p className="flex items-center font-semibold">
                     {transacao.situacaoFiscal ? (
                       <CircleCheckBig className="text-green-600" size={32} />
                     ) : (
@@ -302,22 +311,36 @@ export default function DetalhesTransacao() {
                     )}
                   </p>
                 </div>
-              </div>
-            </div>
-
-            {/* Parcelamento e Transações Relacionadas */}
-            {transacao.numeroDeParcelas && (
-              <div>
-                <h3 className="text-xl font-bold mb-3 border-b pb-2">
-                  Parcelamento
-                </h3>
-                <p className="text-lg font-semibold">
-                  {transacao.parcelaAtual} / {transacao.numeroDeParcelas}
-                </p>
-              </div>
-            )}
+                <div>
+                  {transacao.rastreioParcelas ? (
+                    <TransacaoRelacionadas
+                      id={transacao?.rastreioParcelas.id}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </CardContent>
+        <Card>
+          <CardContent>
+            {/* Botões de ação */}
+            {!transacao.excluida && (
+              <div className="flex justify-end gap-4 mb-4 sm:flex-row flex-col">
+                <BtnEditar receita={transacao.receita} id={transacao.id} />
+                <BtnRecibo id={transacao.id} />
+                <Button
+                  onClick={() => alterarTransacao(transacao.id, true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-sm cursor-pointer hover:bg-red-400"
+                >
+                  <Trash2 size={18} /> Deletar
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </Card>
     </div>
   );

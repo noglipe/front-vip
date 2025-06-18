@@ -7,7 +7,8 @@ import client from "../../../../lib/apollo-client";
 
 import { ListFilter, PenLine, Search } from "lucide-react";
 import { Loading } from "@/components/loading";
-import { Card } from "@/components/UI/card";
+import { Card, CardHeader, CardTitle } from "@/components/UI/card";
+import { Button } from "@/components/UI/button";
 
 interface Fornecedor {
   id: number;
@@ -50,12 +51,14 @@ export function FornecedorLista({ setView, onRefetchReady }: PropsList) {
 
   return (
     <Card className="flex-2  shadow-lg rounded-xl p-6">
-      <h2 className="text-xl font-semibold mb-4 text-center">
-        Lista de Fornecedores
-      </h2>
+      <CardHeader>
+        <CardTitle>
+          <h2>LISTA DE FORNECEDORES</h2>
+        </CardTitle>
+      </CardHeader>
 
       {/* Campo de Busca */}
-      <div className="flex items-center mb-4 border rounded-lg p-2 ">
+      <div className="flex items-center mb-4 border rounded-lg p-2 bg-black ">
         <Search size={18} className=" mr-2" />
         <input
           type="text"
@@ -71,7 +74,7 @@ export function FornecedorLista({ setView, onRefetchReady }: PropsList) {
           filteredFornecedores.map((fornecedor) => (
             <div
               key={fornecedor.id}
-              className="flex justify-between items-center p-4 rounded-lg shadow-sm border-b-amber-200 border"
+              className="flex justify-between items-center p-4 rounded-lg shadow-sm border"
             >
               <div className="">
                 <p className="text-lg font-medium">{fornecedor.nome}</p>
@@ -81,22 +84,22 @@ export function FornecedorLista({ setView, onRefetchReady }: PropsList) {
               </div>
               <div className="flex gap-2">
                 {/* Botão de edição redireciona para a página de edição */}
-                <button
-                  className="flex items-center gap-2 bg-blue-500 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm"
+                <Button
+                  className="flex items-center gap-2  rounded-sm text-sm cursor-pointer"
                   onClick={() =>
                     router.push(`/app/fornecedores/edit/${fornecedor.id}`)
                   }
                 >
                   <PenLine size={16} /> Editar
-                </button>
+                </Button>
 
                 {/* Botão de transações */}
-                <button
+                <Button
                   onClick={() => setView(fornecedor.id)}
-                  className="flex items-center gap-2 bg-green-500 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm"
+                  className="flex items-center gap-2 rounded-sm text-sm cursor-pointer"
                 >
                   <ListFilter size={16} /> Transações
-                </button>
+                </Button>
               </div>
             </div>
           ))

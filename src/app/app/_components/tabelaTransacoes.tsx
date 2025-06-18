@@ -55,7 +55,7 @@ export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
   return (
     <Card className="p-4">
       <CardContent>
-        <CardTitle className="mb-4">Transações</CardTitle>
+        <CardTitle className="mb-4">FILTROS</CardTitle>
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />

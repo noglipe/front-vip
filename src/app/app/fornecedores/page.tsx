@@ -16,10 +16,8 @@ export default function FornecedoresPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-6 ">
-        Gerenciamento de Fornecedores
-      </h1>
+
+    
       <div className="flex flex-col gap-4">
         <FornecedorCadastro />
         <div className="flex flex-1 w-full gap-4">
@@ -36,6 +34,6 @@ export default function FornecedoresPage() {
           />
         </div>
       </div>
-    </div>
+ 
   );
 }

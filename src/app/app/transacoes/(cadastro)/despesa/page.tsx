@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DatePickerForm } from "../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
@@ -21,8 +21,9 @@ import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
 import SelectArquivo from "../../_components/SelectArquivo";
-import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import { NotebookTabs } from "lucide-react";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
@@ -223,8 +224,27 @@ export default function CadastroDespesaPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 rounded-lg shadow-md ">
-      <h2 className="text-xl font-bold  mb-2">Despesa</h2>
+    <Card className="w-full p-4 shadow-md ">
+      <CardHeader>
+        <CardTitle className="flex flex-row justify-between items-center">
+          <h1 className="flex flex-row items-center">
+            <NotebookTabs />
+            CADASTRO DE DESPESA
+          </h1>
+
+          <div className="flex gap-4">
+            <Label>
+              {compra_parcelada ? "DESPESA PARCELADA" : "DESPESA SIMPLES"}
+            </Label>
+            <Switch
+              className=""
+              checked={compra_parcelada}
+              onCheckedChange={setTipoDespesa}
+            />
+          </div>
+        </CardTitle>
+      </CardHeader>
+
       <div>
         {Object.entries(errors).map(([key, message]) => (
           <p key={key} className="text-red-500">
@@ -233,16 +253,7 @@ export default function CadastroDespesaPage() {
         ))}
       </div>
 
-      <div className="flex gap-4 mb-4">
-        <Label>Despesa Simples</Label>
-        <Switch
-          className=""
-          checked={compra_parcelada}
-          onCheckedChange={setTipoDespesa}
-        />
-        <Label>Despesa Parcelada</Label>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <CardContent className="grid sm:grid-cols-3 grid-cols-1 gap-4">
         <DatePickerForm
           descricao={compra_parcelada ? "Data de pagamento" : null}
           setFunc={setDate}
@@ -333,8 +344,8 @@ export default function CadastroDespesaPage() {
         ) : (
           ""
         )}
-      </div>
-      <div className="flex flex-col items-center gap-2 mt-6">
+      </CardContent>
+      <CardContent className="flex flex-col items-center gap-2 ">
         <Input
           type="text"
           value={descricao}
@@ -349,14 +360,14 @@ export default function CadastroDespesaPage() {
           placeholder="Observação"
           className={"w-full"}
         />
-      </div>
+      </CardContent>
 
       <SelectArquivo
         setListaArquivos={setListaArquivos}
         listaArquivos={listaArquivos}
       />
 
-      <div className="flex flex-row gap-4 justify-center items-center mt-6">
+      <CardContent className="flex flex-row gap-4 justify-center items-center">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
             className={` sm:h-10 w-10`}
@@ -378,7 +389,7 @@ export default function CadastroDespesaPage() {
         <Button className="" onClick={cadastrarDespesa}>
           {loading ? <MiniLoading /> : "Cadastrar"}
         </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

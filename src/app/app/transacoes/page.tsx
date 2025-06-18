@@ -1,12 +1,19 @@
 "use client";
 
-import { Card, CardDescription } from "@/components/UI/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/UI/card";
 import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
 import PainelValor from "./_components/painelValor";
 import TabelaTransacoes from "../_components/tabelaTransacoes";
-import { url } from "@/lib/apollo-client";
 import { ApiNovo } from "@/lib/api";
+import { Tickets } from "lucide-react";
 
 export default function Page() {
   const [dados, setDados] = useState<TransacoesPropsApi | null>(null);
@@ -41,10 +48,15 @@ export default function Page() {
   return (
     <>
       {dados ? (
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="flex flex-col gap-4">
           {/* Totais Financeiros */}
-          <Card className="container p-4 rounded-xl">
-            <div className=" grid grid-cols-1 md:grid-cols-3 gap-2">
+          <Card className="container p-4 rounded-sm ">
+            <CardHeader>
+              <CardTitle className=" flex gap-2 items-center">
+                <Tickets /> TRANSAÇÕES
+              </CardTitle>
+            </CardHeader>
+            <CardContent className=" grid grid-cols-1 md:grid-cols-3 gap-2">
               <PainelValor
                 valor={dados?.total_receitas || 0}
                 title="Total de Receitas"
@@ -54,10 +66,10 @@ export default function Page() {
                 title="Total de Despesas"
               />
               <PainelValor valor={diferenca} title=" Diferença" />
-            </div>
-            <CardDescription className="text-end font-bold">
+            </CardContent>
+            <CardFooter className="justify-end text-gray-400">
               *Dados referente ao mês vigente
-            </CardDescription>
+            </CardFooter>
           </Card>
 
           {/* Tabela de Transações */}

@@ -20,31 +20,24 @@ export default function Layout({
   }
 
   return (
-    <div className="flex flex-row  p-4 w-full">
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Cadastro</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-8">
-          {children}
-          <div className="w-full">
-            {isDespesa && (
-              <TransacoesRecentes
-                receita={false}
-                query={DESPESA_LIST_QUERY}
-                dataKey="despesas"
-              />
-            )}
-            {isReceita && (
-              <TransacoesRecentes
-                dataKey="receitas"
-                receita={true}
-                query={RECEITA_LIST_QUERY}
-              />
-            )}
-          </div>
-        </CardContent>
-      </Card>
+    <div className="flex flex-col gap-2 w-full">
+      {children}
+      <div className="">
+        {isDespesa && (
+          <TransacoesRecentes
+            receita={false}
+            query={DESPESA_LIST_QUERY}
+            dataKey="despesas"
+          />
+        )}
+        {isReceita && (
+          <TransacoesRecentes
+            dataKey="receitas"
+            receita={true}
+            query={RECEITA_LIST_QUERY}
+          />
+        )}
+      </div>
     </div>
   );
 }

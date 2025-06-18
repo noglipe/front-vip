@@ -1,20 +1,17 @@
 import { Card, CardContent } from "@/components/UI/card";
 import { formatReal } from "@/lib/utils";
 import clsx from "clsx";
+import { LucideBanknote, Wallet  } from "lucide-react";
 
 export function CardSaldos(ObjList: CardSaldosProps) {
   return (
-    <Card
+    <div
       key={ObjList.id}
       className={clsx("p-4 cursor-default hover:bg-secondary", {
-        "border-red-300": ObjList.saldo <= 0,
-        "border-green-100": ObjList.saldo > 0,
-        "border-green-200": ObjList.saldo > 100,
-        "border-green-300": ObjList.saldo > 1000,
       })}
     >
       <CardContent>
-        <h2 className="text-lg font-bold">{ObjList.nome}</h2>
+        <h2 className="text-lg font-bold"><LucideBanknote />{ObjList.nome}</h2>
         {ObjList.saldo > 0 ? (
           <p className="text-2xl font-semibold">{formatReal(ObjList.saldo)}</p>
         ) : (
@@ -23,7 +20,7 @@ export function CardSaldos(ObjList: CardSaldosProps) {
           </p>
         )}
       </CardContent>
-    </Card>
+    </div>
   );
 }
 
@@ -35,11 +32,11 @@ export const PainelSaldos = ({
   objetos: CardSaldosProps[];
 }) => {
   return (
-    <section className="flex flex-wrap gap-4 justify-between items-center ">
-      <h2 className="text-2xl uppercase font-bold text-muted-foreground">
-        {titulo}
+    <section className="flex flex-col gap-4">
+      <h2 className="flex flex-row gap-1 text-2xl uppercase font-bold items-center">
+        <Wallet />{titulo}
       </h2>
-      <div className="flex flex-row flex-wrap items-end gap-2">
+      <div className="flex flex-row flex-wrap items-end gap-2 bg-black rounded-md border-white">
         {objetos?.map((obj: CardSaldosProps) => (
           <CardSaldos key={obj.id} {...obj} />
         ))}

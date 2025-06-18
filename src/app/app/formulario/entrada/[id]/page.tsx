@@ -134,9 +134,11 @@ export default function VisualizarEntradaPage() {
           ) : (
             <p>Nenhum arquivo relacionado.</p>
           )}
-          <div className="flex justify-end">
-            <Validar item={dados} onValidated={() => setReload(true)} />
-          </div>
+          {!dados.validado && (
+            <div className="flex justify-end">
+              <Validar item={dados} onValidated={() => setReload(true)} />
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

@@ -19,8 +19,9 @@ import { Textarea } from "@/components/UI/textarea";
 import { z } from "zod";
 import { MiniLoading } from "@/components/loading";
 import { DatePickerForm } from "@/components/form/datePickerForm";
-import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import { NotebookTabs } from "lucide-react";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<
@@ -102,8 +103,16 @@ export default function CadastroReceitaPage() {
     }
   };
   return (
-    <div className="w-full p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-bold  mb-2">Receita</h2>
+    <Card className="w-full p-4 shadow-md">
+      <CardHeader>
+        <CardTitle>
+          <h1 className="flex flex-row items-center">
+            <NotebookTabs />
+            CADASTRO DE RECEITA
+          </h1>
+        </CardTitle>
+      </CardHeader>
+
       <div>
         {Object.entries(errors).map(([key, message]) => (
           <p key={key} className="text-red-500">
@@ -111,7 +120,8 @@ export default function CadastroReceitaPage() {
           </p>
         ))}
       </div>
-      <div className="grid grid-cols-3 gap-6">
+
+      <CardContent className="grid sm:grid-cols-3 grid-cols-1 gap-4">
         <DatePickerForm
           setFunc={setDate}
           date={date}
@@ -164,8 +174,9 @@ export default function CadastroReceitaPage() {
           className={"w-full bg-transparent"}
           value={fornecedores}
         />
-      </div>
-      <div className="flex flex-col gap-2 mt-4">
+      </CardContent>
+
+      <CardContent className="flex flex-col gap-2 ">
         <Input
           type="text"
           value={descricao}
@@ -180,9 +191,9 @@ export default function CadastroReceitaPage() {
           placeholder="Observação"
           className={"w-full"}
         />
-      </div>
+      </CardContent>
 
-      <div className="flex justify-center gap-4 mt-12">
+      <CardContent className="flex justify-center gap-4 ">
         <div className="flex items-center gap-2 h-full">
           <Checkbox
             className={`sm:h-10 w-10`}
@@ -198,7 +209,7 @@ export default function CadastroReceitaPage() {
         >
           {loading ? <MiniLoading /> : ""} Cadastrar
         </Button>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

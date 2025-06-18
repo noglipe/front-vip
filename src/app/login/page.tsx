@@ -18,9 +18,10 @@ import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
 import { Eye, EyeOff } from "lucide-react";
 import { MiniLoading } from "@/components/loading";
+import { Logo64 } from "@/components/logo";
 
 const TEXTS = {
-  title: "Login",
+  title: "Vip",
   description: "Entre com suas credenciais para acessar sua conta",
   userLabel: "Usuário",
   userPlaceholder: "usuario",
@@ -48,7 +49,7 @@ export default function LoginPage() {
       if (result) {
         const url = localStorage.getItem("RefreshLocal");
         localStorage.removeItem("RefreshLocal");
-        url ? router.push(url): router.push("/app");
+        url ? router.push(url) : router.push("/app");
       } else {
         router.push("/app");
       }
@@ -58,15 +59,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-800">
+    <div className="flex min-h-screen items-center justify-center p-4 ">
       <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">{TEXTS.title}</CardTitle>
-          <CardDescription>{TEXTS.description}</CardDescription>
+        <CardHeader className="flex flex-row gap-2 space-y-1">
+          <Logo64 />
+          <div>
+            <CardTitle className="text-2xl font-bold">{TEXTS.title}</CardTitle>
+            <CardDescription>{TEXTS.description}</CardDescription>
+          </div>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-2">
             <div className="space-y-2">
               <Label htmlFor="user">{TEXTS.userLabel}</Label>
               <Input

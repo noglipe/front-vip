@@ -19,6 +19,8 @@ import { formatData, formatReal } from "../../../../lib/utils";
 import { useRouter } from "next/navigation";
 import { IfConcluidoCircle } from "./ifConcluido";
 import { MiniBtnEditar } from "./tbnEditar";
+import { Card, CardHeader, CardTitle } from "@/components/UI/card";
+import { Receipt, ReceiptText } from "lucide-react";
 
 interface DadosType {
   id: string;
@@ -61,13 +63,20 @@ export default function TransacoesRecentes({
   if (error) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div className="grid grid-cols-1 p-6  rounded-lg w-full ">
-      <h2 className="text-xl font-bold  mb-6 ">
-        {receita ? " Receitas Recentes" : " Despesas Recentes"}
-      </h2>
-      <div className="grid grid-cols-1 gap-2 flex-1">
+    <Card className="grid grid-cols-1rounded-lg w-full p-4 ">
+      <CardHeader>
+        <CardTitle>
+          <h2 className="flex flex-row items-center font-bold">
+            <ReceiptText />
+            {receita ? "RECEITAS RECENTES" : " DESPESAS RECENTES"}
+          </h2>
+        </CardTitle>
+      </CardHeader>
+
+      <Card className="grid grid-cols-1 gap-2 flex-1">
         <Table>
-          <TableCaption>Uma lista das transações mais recentes.</TableCaption>
+          
+          <TableCaption>Lista das transações mais recentes.</TableCaption>
           <TableHeader>
             <tr>
               <TableHead className="w-[50px]"> </TableHead>
@@ -102,7 +111,7 @@ export default function TransacoesRecentes({
             ))}
           </TableBody>
         </Table>
-      </div>
-    </div>
+      </Card>
+    </Card>
   );
 }
