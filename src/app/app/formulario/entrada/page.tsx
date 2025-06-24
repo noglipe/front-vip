@@ -30,12 +30,26 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/UI/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/UI/pagination";
 
 type Arquivo = {
   id: number;
   link: string;
   tipo: string;
 };
+
+type Categoria ={
+  id: number,
+  nome: string
+}
 
 type Item = {
   id: number;
@@ -50,8 +64,16 @@ type Item = {
   arquivos?: Arquivo[];
 };
 
+interface Obj {
+  count: number;
+  page_size: number;
+  page: number;
+  registros: Item[];
+  total_pages: number;
+}
+
 export default function Page() {
-  const [dados, setDados] = useState<Item[]>([]);
+  const [dados, setDados] = useState<Obj | null>(null);
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,8 +87,7 @@ export default function Page() {
         throw new Error("Erro ao buscar dados");
       }
       const json = await response.json();
-      console.log(json);
-      setDados(json.items);
+      setDados(json);
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -87,6 +108,31 @@ export default function Page() {
 
   if (loading) return <LogoCarregando />;
   if (error) return <div>Erro: {error}</div>;
+
+  const handlePageChange = async (page: number) => {
+    if (!dados) return;
+
+    setLoading(true);
+    try {
+      const response = await ApiNovo(
+        `financeiro/formulario/formulario-entrada/?page=${
+          page
+        }&page_size=10`
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar dados");
+      }
+
+      const json = await response.json();
+      console.log(json)
+      setDados(json);
+    } catch (err: any) {
+      setError(err.message || "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Card className="p-4">
@@ -109,35 +155,67 @@ export default function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {dados.map((item, index) => (
-              <TableRow>
-                <TableCell>
-                  <Link
-                    key={index}
-                    href={`/app/formulario/entrada/${item.id}/`}
-                  >
-                    {item.validado ? (
-                      <CheckCircle className="text-green-500 inline-block " />
-                    ) : (
-                      <XCircle className="text-red-500 inline-block " />
-                    )}{" "}
-                    {formatData(item.data)}
-                  </Link>
-                </TableCell>
-                <TableCell>{item.descricao}</TableCell>
-                <TableCell>{item.categoria}</TableCell>
-                <TableCell>{formatReal(item.dinheiro)}</TableCell>
-                <TableCell>{formatReal(item.pix)}</TableCell>
-                <TableCell>{formatReal(item.cartao)}</TableCell>
-                {!item.validado && (
+            {dados?.registros &&
+              dados.registros.map((item, index) => (
+                <TableRow key={index}>
                   <TableCell>
-                    <Validar item={item} onValidated={() => setReload(true)} />
+                    <Link
+                      key={index}
+                      href={`/app/formulario/entrada/${item.id}/`}
+                    >
+                      {item.validado ? (
+                        <CheckCircle className="text-green-500 inline-block " />
+                      ) : (
+                        <XCircle className="text-red-500 inline-block " />
+                      )}{" "}
+                      {formatData(item.data)}
+                    </Link>
                   </TableCell>
-                )}
-              </TableRow>
-            ))}
+                  <TableCell>{item.descricao}</TableCell>
+                  <TableCell>{item.categoria}</TableCell>
+                  <TableCell>{formatReal(item.dinheiro)}</TableCell>
+                  <TableCell>{formatReal(item.pix)}</TableCell>
+                  <TableCell>{formatReal(item.cartao)}</TableCell>
+                  {!item.validado && (
+                    <TableCell>
+                      <Validar
+                        item={item}
+                        onValidated={() => setReload(true)}
+                      />
+                    </TableCell>
+                  )}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
+        <Pagination>
+          <PaginationContent>
+            {dados && dados.page > 1 && (
+              <PaginationItem>
+                <PaginationPrevious onClick={()=>handlePageChange(dados.page-1)} />
+              </PaginationItem>
+            )}
+            {[...Array(dados?.total_pages)].map((_, idx) => (
+              <PaginationItem key={idx}>
+                <PaginationLink
+                  href="#"
+                  onClick={() => handlePageChange(idx + 1)}
+                  className={dados?.page === idx + 1 ? "active " : ""}
+                >
+                  {idx + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            {dados && dados.page < dados.total_pages && (
+              <PaginationItem>
+                <PaginationNext onClick={()=>handlePageChange(dados.page+1)} />
+              </PaginationItem>
+            )}
+          </PaginationContent>
+        </Pagination>
       </CardContent>
     </Card>
   );

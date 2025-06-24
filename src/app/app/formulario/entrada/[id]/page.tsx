@@ -8,16 +8,7 @@ import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { Badge } from "@/components/UI/badge";
 import { formatData, formatReal } from "@/lib/utils";
-import { LogoCarregando, MiniLoading } from "@/components/loading";
-import { Button } from "@/components/UI/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/UI/dialog";
-import { DialogTitle } from "@radix-ui/react-dialog";
+import { LogoCarregando } from "@/components/loading";
 import Validar from "../_compnente/validar";
 
 type Arquivo = {
@@ -83,6 +74,12 @@ export default function VisualizarEntradaPage() {
         <CardContent className="space-y-2 pt-4">
           <div>
             <strong>Data:</strong> {formatData(dados.data)}
+          </div>
+          <div>
+            <strong>Total:</strong>{" "}
+            {formatReal(
+              Number(dados.dinheiro) + Number(dados.pix) + Number(dados.cartao)
+            )}
           </div>
           <div>
             <strong>Categoria:</strong> {dados.categoria}

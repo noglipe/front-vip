@@ -229,7 +229,7 @@ export default function Page() {
         <PaginationContent>
           {dados && dados.page > 1 && (
             <PaginationItem>
-              <PaginationNext onClick={handlePreviousPage} />
+              <PaginationPrevious onClick={handlePreviousPage} />
             </PaginationItem>
           )}
           {[...Array(dados?.total_pages)].map((_, idx) => (
