@@ -1,4 +1,6 @@
-import {encryptData } from '../lib/crip'
+"use client "
+
+import { encryptData } from '../lib/crip'
 
 export async function login(username: string, password: string) {
     const formData = new FormData();
@@ -7,7 +9,7 @@ export async function login(username: string, password: string) {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}auth/login`, {
         method: "POST",
-        credentials: "include", // ESSENCIAL para enviar/receber cookies
+        credentials: "include", 
         body: formData,
     });
 
@@ -18,6 +20,7 @@ export async function login(username: string, password: string) {
     const data = await response.json();
 
     localStorage.setItem("data", encryptData(data));
+    
 
     return data;
 }

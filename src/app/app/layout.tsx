@@ -8,13 +8,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-br" suppressHydrationWarning>
-      <body className="w-full">
-        <VerificarLogin />
-        <SidebarProvider>
-          <ClientLayout>{children}</ClientLayout>
-        </SidebarProvider>
-      </body>
-    </html>
+    <div className="w-full">
+      <VerificarLogin />
+      <SidebarProvider>
+        <ClientLayout>{children}</ClientLayout>
+      </SidebarProvider>
+    </div>
   );
 }

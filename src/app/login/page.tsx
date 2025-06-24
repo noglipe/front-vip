@@ -55,6 +55,7 @@ export default function LoginPage() {
       }
     } catch (err) {
       setErro("Usuário ou Senha Inválidos.");
+      setLoading(false);
     }
   };
 

@@ -382,7 +382,7 @@ export default function FormularioCompra() {
           </div>
 
           <div className="col-span-2">
-            <Label>Nota Fiscal:</Label>
+            <Label className="mb-4">Nota Fiscal:</Label>
             <SelectArquivo
               setListaArquivos={setListaArquivos}
               listaArquivos={listaArquivos}

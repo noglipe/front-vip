@@ -165,8 +165,7 @@ export default function EditarReceitaPage() {
       )
 
       alert("Receita atualizada com sucesso");
-      router.push("/app/transacoes/receita/");
-      window.location.reload();
+      router.push(`/app/transacoes/${id}`);
     } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors(

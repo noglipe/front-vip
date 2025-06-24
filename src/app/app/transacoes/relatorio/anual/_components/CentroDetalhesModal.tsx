@@ -110,21 +110,21 @@ export function CentroDetalhesModal({ open, onClose, nomeCentro, ano }: Props) {
                   </Table>
                 </div>
                 <div className="flex flex-row gap-4 w-full mt-4">
-                  <Button className="flex flex-col text-left ">
+                  <div className="flex flex-col text-left ">
                     Receita:
                     <br />
                     {formatReal(item.totalReceita)}
-                  </Button>
-                  <Button className="flex flex-col text-left">
+                  </div>
+                  <div>
                     Despesa:
                     <br />
                     {formatReal(item.totalDespesa)}
-                  </Button>
-                  <Button className="flex flex-col text-left">
+                  </div>
+                  <div className="flex flex-col text-left">
                     Total:
                     <br />
                     {formatReal(item.total)}
-                  </Button>
+                  </div>
                 </div>
               </div>
             ))}

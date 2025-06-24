@@ -5,6 +5,7 @@ export async function ApiNovo(
   method: string = "GET",
   dados: any = null
 ) {
+
   const token = await decryptData(localStorage.getItem("data"))?.access;
 
   const headers: HeadersInit = {};
@@ -30,6 +31,11 @@ export async function ApiNovo(
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}${url}`, options);
 
+  if (response.status === 401) {
+    localStorage.setItem("RefreshLocal", window.location.pathname);
+    window.location.href = "/login";
+    return response
+  }
   if (!response.ok) {
 
     throw new Error(`Erro na Requisição! status: ${response.status}`);

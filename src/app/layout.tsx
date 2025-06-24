@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import VerificarLogin from "@/components/verificarLogin";
 
 export const metadata: Metadata = {
   title: "Familia Vida e Paz",
@@ -13,8 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br">
-      <VerificarLogin />
+    <html lang="pt-br" suppressHydrationWarning>
       <body className={` antialiased bg-background`}>{children}</body>
     </html>
   );

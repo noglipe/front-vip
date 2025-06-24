@@ -1,9 +1,8 @@
 "use client";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
-import { Card } from "@/components/UI/card";
+import { Card, CardContent } from "@/components/UI/card";
 import { CATEGORIAS_FORM_QUERY } from "@/graphql/query";
-import { FilterIcon } from "lucide-react";
 import { useState } from "react";
 import { Loading } from "@/components/loading";
 import PainelValor from "../../_components/painelValor";
@@ -44,21 +43,24 @@ export default function Page() {
   };
 
   return (
-    <div className="container p-4">
-      <Card className="p-4">
-        <div className="flex flex-row items-center gap-2">
-          <FilterIcon className="h-4 w-4" />
+    <div>
+      <Card className="flex">
+        <CardContent className="flex flex-col gap-2">
           <SelectBaseBusca
             setFunc={setCategoria}
             query={CATEGORIAS_FORM_QUERY}
             dataKey="categorias"
-            minutos={1}
+            minutos={60}
             titulo="Categorias"
-            className="  w-2/3"
+            className="w-full"
             value={categoria}
           />
-          <Button onClick={handleBuscar}>Buscar</Button>
-        </div>
+          <div className="flex justify-end">
+            <Button onClick={handleBuscar} className="sm:w-16 w-full">
+              Buscar
+            </Button>
+          </div>
+        </CardContent>
       </Card>
 
       <Card className="mt-4 p-4">

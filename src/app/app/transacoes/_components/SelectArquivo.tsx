@@ -70,7 +70,7 @@ export default function SelectArquivo({
   };
 
   return (
-    <Card className="flex flex-col gap-4 border border-white rounded-sm p-4">
+    <Card className="flex flex-col gap-4 border border-white rounded-sm p-4 w-full">
       <CardHeader>
         <CardTitle>
           <h4 className="flex items-center gap-2">

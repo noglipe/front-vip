@@ -211,8 +211,7 @@ export default function EditarDespesaPage() {
       );
 
       alert("Despesa atualizada com sucesso");
-      router.push("/app/transacoes/despesa/");
-      window.location.reload();
+      router.push(`/app/transacoes/${id}`);
     } catch (error) {
       console.error("Erro ao atualizar despesa:", error);
 

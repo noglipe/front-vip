@@ -25,8 +25,6 @@ import GraficoCaixas from "./_components/graficosCaixas";
 import GraficoMeses from "./_components/graficoMeses";
 import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 import { Button } from "@/components/UI/button";
-import { TabelaModal } from "./_components/TabelaModal";
-import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
 
 type Custos = {
@@ -129,8 +127,8 @@ export default function Page() {
   }
 
   return (
-    <div>
-      <div className="flex sm:flex-row flex-col sm:justify-between items-center">
+    <Card className="p-4">
+      <CardHeader className="flex sm:flex-row flex-col sm:justify-between items-center">
         <div className="flex flex-col">
           <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
             Relatório Financeiro {mes && `- ${meses[parseInt(mes) - 1]} de`}{" "}
@@ -144,7 +142,7 @@ export default function Page() {
           <DialogAno ano={ano} setAno={setAno} />
           <SelectMes setMes={setMes} mes={mes} ativo={selctAtivo} />
         </div>
-      </div>
+      </CardHeader>
 
       <div className="container mt-4">
         {loading ? (
@@ -233,8 +231,12 @@ export default function Page() {
 
               {/* Chart de Caixa */}
               <Card className="mt-4 shadow-md rounded-xl border border-gray-200">
+                <CardHeader>
+                  <CardTitle>
+                    <h2 className="font-semibold">CAIXAS</h2>
+                  </CardTitle>
+                </CardHeader>
                 <CardContent className="p-4">
-                  <h2 className="text-xl font-semibold mb-4">Caixa</h2>
                   <div className="grid gap-2 md:grid-cols-4">
                     {dados?.custosPorCaixas.map((caixa) => (
                       <div key={caixa.nome}>
@@ -315,6 +317,6 @@ export default function Page() {
           )
         )}
       </div>
-    </div>
+    </Card>
   );
 }
