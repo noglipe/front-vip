@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { ENDERECO_IGREJA, NOME_IGREJA, LOCAL_IGREJA } from "@/lib/constantes";
-import { Input } from "@/components/UI/tempInput";
+import { Input } from "@/components/UI/input";
 import { Textarea } from "@/components/UI/textarea";
 import { Label } from "@/components/UI/label";
 import { formatData, numeroExtenso } from "@/lib/utils";

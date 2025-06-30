@@ -35,7 +35,7 @@ interface Transacao {
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { DatePickerForm } from "../../../../../../components/form/datePickerForm";
-import { Input } from "@/components/UI/tempInput";
+import { Input } from "@/components/UI/input";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {

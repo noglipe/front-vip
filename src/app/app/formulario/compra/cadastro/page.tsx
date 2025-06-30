@@ -6,7 +6,7 @@ import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
-import { Input } from "@/components/UI/tempInput";
+import { Input } from "@/components/UI/input";
 import { Label } from "@/components/UI/label";
 import {
   Select,

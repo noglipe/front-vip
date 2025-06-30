@@ -8,7 +8,7 @@ import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../UI/calendar";
-import { Input } from "../UI/tempInput";
+import { Input } from "../UI/input";
 
 interface Props {
   setFunc: (date: any) => void;

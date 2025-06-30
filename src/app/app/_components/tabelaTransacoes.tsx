@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/components/UI/tempInput";
+import { Input } from "@/components/UI/input";
 import {
   Select,
   SelectContent,

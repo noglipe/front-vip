@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "../../components/UI/card";
 
-import { Input } from "../../components/UI/tempInput";
+import { Input } from "../../components/UI/input";
 import { Label } from "../../components/UI/label";
 import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
