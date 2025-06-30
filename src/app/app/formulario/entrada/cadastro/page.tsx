@@ -4,7 +4,7 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { Label } from "@/components/UI/label";
 import { Textarea } from "@/components/UI/textarea";
 import { CATEGORIAS_FORM_ENTRADA_QUERY } from "@/graphql/query";
@@ -36,8 +36,6 @@ export default function EntradaPage() {
     cartao: 0,
     observacao: "",
   });
-
-
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { ENDERECO_IGREJA, NOME_IGREJA, LOCAL_IGREJA } from "@/lib/constantes";
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { Textarea } from "@/components/UI/textarea";
 import { Label } from "@/components/UI/label";
 import { formatData, numeroExtenso } from "@/lib/utils";
@@ -36,9 +36,8 @@ export default function TermoDoacaoPage() {
         {/* Dados da Igreja */}
         <div className="text-center text-sm mb-4 print:text-xs">
           <h3 className="font-semibold">{NOME_IGREJA}</h3>
-  
-            <ENDERECO_IGREJA />
-     
+
+          <ENDERECO_IGREJA />
         </div>
 
         <hr className="my-4 border-gray-300 print:border-gray-200" />

@@ -30,7 +30,7 @@ interface Transacao {
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { DatePickerForm } from "../../../../../../components/form/datePickerForm";
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import client from "../../../../../../lib/apollo-client";
@@ -162,7 +162,7 @@ export default function EditarReceitaPage() {
         `financeiro/transacao/${id}/receita`,
         "PUT",
         receitaInput
-      )
+      );
 
       alert("Receita atualizada com sucesso");
       router.push(`/app/transacoes/${id}`);
@@ -186,10 +186,9 @@ export default function EditarReceitaPage() {
     <Card className="container mx-auto p-6  rounded-lg shadow-md">
       <CardHeader>
         <CardTitle>
-<h2 className="text-xl font-bold  mb-2">EDITAR RECEITA {id}</h2>
+          <h2 className="text-xl font-bold  mb-2">EDITAR RECEITA {id}</h2>
         </CardTitle>
       </CardHeader>
-      
 
       {Object.entries(errors).map(([key, message]) => (
         <p key={key} className="text-red-500">

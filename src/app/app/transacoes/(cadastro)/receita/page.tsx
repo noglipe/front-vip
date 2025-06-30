@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {

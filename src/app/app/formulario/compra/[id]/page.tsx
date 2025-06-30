@@ -3,22 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BadgeCheck, CreditCard, FileText } from "lucide-react";
-import Link from "next/link";
 import { ApiNovo } from "@/lib/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
-import { Badge } from "@/components/UI/badge";
-import { formatData, formatReal } from "@/lib/utils";
-import { LogoCarregando, MiniLoading } from "@/components/loading";
-import { Button } from "@/components/UI/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/UI/dialog";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import Validar from "../../entrada/_compnente/validar";
+import {  formatReal } from "@/lib/utils";
+import { LogoCarregando } from "@/components/loading";
+
 
 export interface Item {
   id: number;

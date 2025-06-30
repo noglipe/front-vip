@@ -1,15 +1,6 @@
 "use client";
 
-import { LogoCarregando, MiniLoading } from "@/components/loading";
-import { Button } from "@/components/UI/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/UI/dropdown-menu";
+import { LogoCarregando } from "@/components/loading";
 import {
   Table,
   TableBody,

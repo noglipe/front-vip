@@ -3,7 +3,7 @@
 import { SelectVip } from "@/components/form/selectVip";
 import { Button } from "@/components/UI/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { TIPO_ARQUIVO_QUERY } from "@/graphql/query";
 import { converterImagemParaPdf } from "@/lib/conversorImagemPdf";
 import { File, X } from "lucide-react";

@@ -2,7 +2,7 @@ import InputVip from "@/app/app/_components/inputVip";
 import { DatePickerForm } from "@/components/form/datePickerForm";
 import { SelectBase } from "@/components/form/selectBase";
 import { Card, CardContent } from "@/components/UI/card";
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import { MEIO_TRANSACAO_FORM_QUERY } from "@/graphql/query";
 import { useState } from "react";
 

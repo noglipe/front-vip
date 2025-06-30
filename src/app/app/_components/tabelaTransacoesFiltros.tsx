@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/components/UI/input";
+import { Input } from "@/components/UI/tempInput";
 import {
   Select,
   SelectContent,
@@ -118,7 +118,6 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
         !fornecedor ||
         fornecedor === "todos" ||
         transacao?.fornecedor?.id.toString() === fornecedor;
-
 
       return (
         matchBusca &&
