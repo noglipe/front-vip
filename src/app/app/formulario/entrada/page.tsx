@@ -68,6 +68,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(0)
 
   async function getDados() {
     try {
@@ -108,7 +109,7 @@ export default function Page() {
       const response = await ApiNovo(
         `financeiro/formulario/formulario-entrada/?page=${
           page
-        }&page_size=10`
+        }`
       );
 
       if (!response.ok) {
@@ -118,6 +119,7 @@ export default function Page() {
       const json = await response.json();
       console.log(json)
       setDados(json);
+      setPage(page)
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -191,9 +193,9 @@ export default function Page() {
                 <PaginationLink
                   href="#"
                   onClick={() => handlePageChange(idx + 1)}
-                  className={dados?.page === idx + 1 ? "active " : ""}
+                  className={dados?.page === idx + 1 ? " " : "active"}
                 >
-                  {idx + 1}
+                  [{idx + 1}]
                 </PaginationLink>
               </PaginationItem>
             ))}

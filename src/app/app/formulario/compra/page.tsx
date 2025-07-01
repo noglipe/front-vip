@@ -69,6 +69,7 @@ export default function Page() {
   const [dados, setDados] = useState<Obj | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     async function getDados() {
@@ -97,61 +98,15 @@ export default function Page() {
   const handlePageChange = async (page: number) => {
     try {
       const response = await ApiNovo(
-        `financeiro/formulario/formulario-compra/?page=${page}&page_size=10`
+        `financeiro/formulario/formulario-compra/?page=${page}`
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar dados");
       }
       const json = await response.json();
       setDados(json);
-    } catch (err: any) {
-      setError(err.message || "Erro desconhecido");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleNextPage = async () => {
-    if (!dados) return;
-
-    setLoading(true);
-    try {
-      const response = await ApiNovo(
-        `financeiro/formulario/formulario-compra/?page=${
-          dados.page + 1
-        }&page_size=10`
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados");
-      }
-
-      const json = await response.json();
-      setDados(json);
-    } catch (err: any) {
-      setError(err.message || "Erro desconhecido");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePreviousPage = async () => {
-    if (!dados) return;
-
-    setLoading(true);
-    try {
-      const response = await ApiNovo(
-        `financeiro/formulario/formulario-compra/?page=${
-          dados.page - 1
-        }&page_size=10`
-      );
-
-      if (!response.ok) {
-        throw new Error("Erro ao buscar dados");
-      }
-
-      const json = await response.json();
-      setDados(json);
+      console.log(json);
+      setPage(page);
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -229,26 +184,108 @@ export default function Page() {
         <PaginationContent>
           {dados && dados.page > 1 && (
             <PaginationItem>
-              <PaginationPrevious onClick={handlePreviousPage} />
+              <PaginationPrevious
+                onClick={() => handlePageChange(dados.page - 1)}
+              />
             </PaginationItem>
           )}
-          {[...Array(dados?.total_pages)].map((_, idx) => (
-            <PaginationItem key={idx}>
-              <PaginationLink
-                href="#"
-                onClick={() => handlePageChange(idx + 1)}
-                className={dados?.page === idx + 1 ? "active " : ""}
-              >
-                {idx + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
+
+          {dados && dados.total_pages <= 5 ? (
+            // CASO COM POUCAS PÁGINAS (todas visíveis)
+            [...Array(dados.total_pages)].map((_, idx) => (
+              <PaginationItem key={idx}>
+                <PaginationLink
+                  href="#"
+                  onClick={() => handlePageChange(idx + 1)}
+                  className={
+                    dados.page === idx + 1
+                      ? "bg-gray-800 border border-gray-700 rounded-sm"
+                      : ""
+                  }
+                >
+                  {idx + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))
+          ) : (
+            // CASO COM MUITAS PÁGINAS
+            <>
+              {/* Primeira página sempre visível */}
+              <PaginationItem>
+                <PaginationLink
+                  href="#"
+                  onClick={() => handlePageChange(1)}
+                  className={
+                    dados?.page === 1
+                      ? "bg-gray-800 border border-gray-700 rounded-sm"
+                      : ""
+                  }
+                >
+                  1
+                </PaginationLink>
+              </PaginationItem>
+
+              {/* Ellipsis se a página atual for depois da terceira */}
+              {dados && dados.page > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {/* Páginas ao redor da atual */}
+              {dados &&
+                [dados.page - 1, dados.page, dados.page + 1].map((p) => {
+                  if (p > 1 && p < dados.total_pages) {
+                    return (
+                      <PaginationItem key={p}>
+                        <PaginationLink
+                          href="#"
+                          onClick={() => handlePageChange(p)}
+                          className={
+                            dados.page === p
+                              ? "bg-gray-800 border border-gray-700 rounded-sm"
+                              : ""
+                          }
+                        >
+                          {p}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  }
+                  return null;
+                })}
+
+              {/* Ellipsis antes da última página */}
+              {dados && dados.page < dados.total_pages - 2 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+
+              {/* Última página sempre visível */}
+              {dados && (
+                <PaginationItem>
+                  <PaginationLink
+                    href="#"
+                    onClick={() => handlePageChange(dados.total_pages)}
+                    className={
+                      dados.page === dados.total_pages
+                        ? "bg-gray-800 border border-gray-700 rounded-sm"
+                        : ""
+                    }
+                  >
+                    {dados.total_pages}
+                  </PaginationLink>
+                </PaginationItem>
+              )}
+            </>
+          )}
+
           {dados && dados.page < dados.total_pages && (
             <PaginationItem>
-              <PaginationNext onClick={handleNextPage} />
+              <PaginationNext
+                onClick={() => handlePageChange(dados.page + 1)}
+              />
             </PaginationItem>
           )}
         </PaginationContent>
