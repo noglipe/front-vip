@@ -115,7 +115,7 @@ export default function Page() {
       }
 
       const json = await response.json();
-      console.log(json);
+
       setDados(json);
       setPage(page);
     } catch (err: any) {

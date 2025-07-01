@@ -81,7 +81,6 @@ export default function Page() {
           throw new Error("Erro ao buscar dados");
         }
         const json = await response.json();
-        console.log(json);
         setDados(json);
       } catch (err: any) {
         setError(err.message || "Erro desconhecido");
@@ -105,7 +104,6 @@ export default function Page() {
       }
       const json = await response.json();
       setDados(json);
-      console.log(json);
       setPage(page);
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");

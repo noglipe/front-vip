@@ -47,9 +47,6 @@ export default function FormularioCompra() {
     notaFiscal: null as File | null,
   });
 
-  useEffect(() => {
-    console.log(listaArquivos);
-  }, [listaArquivos]);
 
   const handleChange = (
     e: React.ChangeEvent<
