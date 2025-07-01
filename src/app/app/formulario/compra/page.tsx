@@ -27,7 +27,7 @@ import {
 } from "@/components/UI/table";
 import { ApiNovo } from "@/lib/api";
 import { formatData, formatReal } from "@/lib/utils";
-import { CheckCircle, File, Pencil, Table2, XCircle } from "lucide-react";
+import { CheckCircle, File, Table2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -69,7 +69,7 @@ export default function Page() {
   const [dados, setDados] = useState<Obj | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
+  
 
   useEffect(() => {
     async function getDados() {
@@ -88,7 +88,10 @@ export default function Page() {
         setLoading(false);
       }
     }
+
     getDados();
+
+
   }, []);
 
   if (loading) return <div>Carregando dados...</div>;
@@ -104,7 +107,6 @@ export default function Page() {
       }
       const json = await response.json();
       setDados(json);
-      setPage(page);
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -172,6 +174,7 @@ export default function Page() {
                     </DropdownMenu>
                   )}
                 </TableCell>
+
                 <TableCell className="">
                   {item.validado ? (
                     <CheckCircle className="text-green-500 inline-block " />

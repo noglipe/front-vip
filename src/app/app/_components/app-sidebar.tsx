@@ -76,7 +76,7 @@ export function AppSidebar() {
       setId(await decryptData(dadosCriptografados)?.idUser);
       setPerfil(await decryptData(dadosCriptografados)?.perfil);
     };
-    obterDados()
+    obterDados();
   }, []);
 
   return (
@@ -99,119 +99,137 @@ export function AppSidebar() {
       <SidebarHeader />
       <SidebarContent>
         <div className="p-2 w-full space-y-1">
+          {/* Menu Home e Termo de Doação sempre visíveis */}
           <Link href="/app/" className={CLASS_SIDEBAR + " flex flex-row gap-2"}>
             <HomeIcon /> Home
           </Link>
 
-          <Link
-            href="/app/termo-doacao"
-            className={CLASS_SIDEBAR + " flex flex-row gap-2"}
-          >
-            <Handshake /> Termo de Doação
-          </Link>
-
-          {/* Formulário */}
-          <Collapsible
-            open={isOpenFormulario}
-            onOpenChange={setIsOpenFormulario}
-          >
-            <CollapsibleTrigger
-              className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+          {perfil === "Administrador" && (
+            <Link
+              href="/app/termo-doacao"
+              className={CLASS_SIDEBAR + " flex flex-row gap-2"}
             >
-              <div className="flex flex-row gap-2">
-                <FormInput /> Formulários
-              </div>
-              {isOpenFormulario ? (
-                <CircleChevronDown size={20} className="mr-2" />
-              ) : (
-                <CircleChevronRight size={20} className="mr-2" />
-              )}
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 ml-5">
-              <div className="flex flex-col w-full">
-                {menuFormulario.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.link}
-                    className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
-                  >
-                    {item.nome}
-                  </Link>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+              <Handshake /> Termo de Doação
+            </Link>
+          )}
 
-          {/* Financeiro */}
-          <Collapsible
-            open={isOpenFinanceiro}
-            onOpenChange={setIsOpenFinanceiro}
-          >
-            <CollapsibleTrigger
-              className={CLASS_SIDEBAR + " flex flex-row justify-between"}
-            >
-              <div className="flex flex-row gap-2">
-                <Banknote /> Financeiro
-              </div>
-              {isOpenFinanceiro ? (
-                <CircleChevronDown size={20} className="mr-2" />
-              ) : (
-                <CircleChevronRight size={20} className="mr-2" />
-              )}
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 ml-5">
-              <div className="flex flex-col w-full">
-                {menuLista.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.link}
-                    className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
-                  >
-                    {item.nome}
-                  </Link>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+          {/* Condicional: Exibe todos os menus se for admin, ou apenas o de Formulários se for 'formulario' */}
+          {perfil === "Administrador" && (
+            <>
+              {/* Financeiro */}
+              <Collapsible
+                open={isOpenFinanceiro}
+                onOpenChange={setIsOpenFinanceiro}
+              >
+                <CollapsibleTrigger
+                  className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+                >
+                  <div className="flex flex-row gap-2">
+                    <Banknote /> Financeiro
+                  </div>
+                  {isOpenFinanceiro ? (
+                    <CircleChevronDown size={20} className="mr-2" />
+                  ) : (
+                    <CircleChevronRight size={20} className="mr-2" />
+                  )}
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2 ml-5">
+                  <div className="flex flex-col w-full">
+                    {menuLista.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.link}
+                        className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
+                      >
+                        {item.nome}
+                      </Link>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
 
-          {/* Relatórios */}
-          <Collapsible open={isOpenRelatorio} onOpenChange={setIsOpenRelatorio}>
-            <CollapsibleTrigger
-              className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+              {/* Relatórios */}
+              <Collapsible
+                open={isOpenRelatorio}
+                onOpenChange={setIsOpenRelatorio}
+              >
+                <CollapsibleTrigger
+                  className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+                >
+                  <div className="flex flex-row gap-2">
+                    <NotepadText /> Relatórios
+                  </div>
+                  {isOpenRelatorio ? (
+                    <CircleChevronDown size={20} className="mr-2" />
+                  ) : (
+                    <CircleChevronRight size={20} className="mr-2" />
+                  )}
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2 ml-5">
+                  <div className="flex flex-col w-full">
+                    {menuRelatorio.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.link}
+                        className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
+                      >
+                        {item.nome}
+                      </Link>
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </>
+          )}
+
+          {perfil !== "Administrador" && perfil !== "Formulário" && (
+            <p>Sem permissão para acessar essas áreas.</p>
+          )}
+
+          {/* Apenas exibe o Formulário se for o perfil 'formulario' */}
+          {perfil === "Formulário" && (
+            <Collapsible
+              open={isOpenFormulario}
+              onOpenChange={setIsOpenFormulario}
             >
-              <div className="flex flex-row gap-2">
-                <NotepadText /> Relatórios
-              </div>
-              {isOpenRelatorio ? (
-                <CircleChevronDown size={20} className="mr-2" />
-              ) : (
-                <CircleChevronRight size={20} className="mr-2" />
-              )}
-            </CollapsibleTrigger>
-            <CollapsibleContent className="mt-2 ml-5">
-              <div className="flex flex-col w-full">
-                {menuRelatorio.map((item, index) => (
-                  <Link
-                    key={index}
-                    href={item.link}
-                    className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
-                  >
-                    {item.nome}
-                  </Link>
-                ))}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
+              <CollapsibleTrigger
+                className={CLASS_SIDEBAR + " flex flex-row justify-between"}
+              >
+                <div className="flex flex-row gap-2">
+                  <FormInput /> Formulários
+                </div>
+                {isOpenFormulario ? (
+                  <CircleChevronDown size={20} className="mr-2" />
+                ) : (
+                  <CircleChevronRight size={20} className="mr-2" />
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 ml-5">
+                <div className="flex flex-col w-full">
+                  {menuFormulario.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={item.link}
+                      className={CLASS_SIDEBAR_HOVER + " w-full p-4"}
+                    >
+                      {item.nome}
+                    </Link>
+                  ))}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          )}
         </div>
       </SidebarContent>
 
       <SidebarFooter className="text-red-200">
         <SidebarMenu>
-          <Button 
-          className="flex items-center gap-2 cursor-pointer p-2 hover:bg-red-600 rounded"
-          onClick={()=>{localStorage.removeItem("data")
-            router.push('/')
-          }}
+          <Button
+            className="flex items-center gap-2 cursor-pointer p-2 hover:bg-red-600 rounded"
+            onClick={() => {
+              localStorage.removeItem("data");
+              router.push("/");
+            }}
           >
             <LogOut size={20} />
             <span>Sair</span>

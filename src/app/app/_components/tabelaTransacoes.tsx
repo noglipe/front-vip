@@ -18,11 +18,11 @@ import {
 } from "@/components/UI/table";
 import { FilterIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
-import { IfConcluidoCircle } from "../transacoes/_components/ifConcluido";
+import { IfConcluidoCircle } from "../(admin)/transacoes/_components/ifConcluido";
 import { formatData, formatReal } from "@/lib/utils";
-import BtnVisualizar from "../transacoes/_components/btnVisualizar";
-import { BtnEditar } from "../transacoes/_components/tbnEditar";
-import BtnRecibo from "../transacoes/_components/tbnRecibo";
+import BtnVisualizar from "../(admin)/transacoes/_components/btnVisualizar";
+import { BtnEditar } from "../(admin)/transacoes/_components/tbnEditar";
+import BtnRecibo from "../(admin)/transacoes/_components/tbnRecibo";
 import { Card, CardContent, CardTitle } from "@/components/UI/card";
 
 export default function TabelaTransacoes({ dados }: TransacoesListAPi) {

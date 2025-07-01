@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import InputVip from "../../../_components/inputVip";
+import InputVip from "../../../../_components/inputVip";
 import { X } from "lucide-react";
 import { useQuery } from "@apollo/client";
 
-import client from "../../../../../lib/apollo-client";
+import client from "../../../../../../lib/apollo-client";
 import { FORNECEDOR_QUERY } from "@/graphql/query";
 import { ApiNovo } from "@/lib/api";
 

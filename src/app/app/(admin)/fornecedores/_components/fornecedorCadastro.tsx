@@ -1,7 +1,7 @@
 import { useState } from "react";
-import client from "../../../../lib/apollo-client";
+import client from "../../../../../lib/apollo-client";
 
-import InputVip from "../../_components/inputVip";
+import InputVip from "../../../_components/inputVip";
 import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { MiniLoading } from "@/components/loading";
 import { Card } from "@/components/UI/card";
@@ -28,7 +28,7 @@ export function FornecedorCadastro() {
         "financeiro/fornecedor/",
         "POST",
         novoFornecedor
-      )
+      );
 
       const result = await response.json();
       alert(result.mensagem);

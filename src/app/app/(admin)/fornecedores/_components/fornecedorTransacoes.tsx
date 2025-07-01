@@ -3,7 +3,7 @@
 import { FORNECEDOR_TRANSACOES_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
 import { X } from "lucide-react";
-import client from "../../../../lib/apollo-client";
+import client from "../../../../../lib/apollo-client";
 import { useRouter } from "next/navigation";
 import { MiniLoading } from "@/components/loading";
 import { useEffect, useState } from "react";

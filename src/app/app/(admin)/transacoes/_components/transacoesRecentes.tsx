@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@apollo/client";
-import client from "../../../../lib/apollo-client";
+import client from "../../../../../lib/apollo-client";
 import { useEffect, useState } from "react";
 import { MiniLoading } from "@/components/loading";
 
@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/UI/table";
 
-import { formatData, formatReal } from "../../../../lib/utils";
+import { formatData, formatReal } from "../../../../../lib/utils";
 import { useRouter } from "next/navigation";
 import { IfConcluidoCircle } from "./ifConcluido";
 import { MiniBtnEditar } from "./tbnEditar";
@@ -75,7 +75,6 @@ export default function TransacoesRecentes({
 
       <Card className="grid grid-cols-1 gap-2 flex-1">
         <Table>
-          
           <TableCaption>Lista das transações mais recentes.</TableCaption>
           <TableHeader>
             <tr>

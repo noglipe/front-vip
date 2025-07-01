@@ -4,7 +4,7 @@ import { RECIBO_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import client from "../../../../../lib/apollo-client";
+import client from "../../../../../../lib/apollo-client";
 import { formatData, formatReal } from "@/lib/utils";
 import { ENDERECO_IGREJA, NOME_IGREJA } from "@/lib/constantes";
 import { EyeIcon } from "lucide-react";

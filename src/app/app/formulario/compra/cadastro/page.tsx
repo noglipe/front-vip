@@ -1,6 +1,6 @@
 "use client";
 
-import SelectArquivo from "@/app/app/transacoes/_components/SelectArquivo";
+import SelectArquivo from "@/app/app/(admin)/transacoes/_components/SelectArquivo";
 import { DatePickerForm } from "@/components/form/datePickerForm";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
@@ -46,7 +46,6 @@ export default function FormularioCompra() {
     observacao: "",
     notaFiscal: null as File | null,
   });
-
 
   const handleChange = (
     e: React.ChangeEvent<

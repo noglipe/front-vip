@@ -30,6 +30,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/UI/pagination";
+import { decryptData } from "@/lib/crip";
 
 type Arquivo = {
   id: number;
@@ -68,7 +69,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
+  const [perfil, setPerfil] = useState("");
 
   async function getDados() {
     try {
@@ -87,8 +88,14 @@ export default function Page() {
     }
   }
 
+  const obterPerfil = async () => {
+    const dadosCriptografados = localStorage.getItem("data");
+    setPerfil(await decryptData(dadosCriptografados)?.perfil);
+  };
+
   useEffect(() => {
     getDados();
+    obterPerfil();
   }, []);
 
   useEffect(() => {
@@ -117,7 +124,6 @@ export default function Page() {
       const json = await response.json();
 
       setDados(json);
-      setPage(page);
     } catch (err: any) {
       setError(err.message || "Erro desconhecido");
     } finally {
@@ -167,7 +173,7 @@ export default function Page() {
                   <TableCell>{formatReal(item.dinheiro)}</TableCell>
                   <TableCell>{formatReal(item.pix)}</TableCell>
                   <TableCell>{formatReal(item.cartao)}</TableCell>
-                  {!item.validado && (
+                  {perfil === "Administrador" && !item.validado && (
                     <TableCell>
                       <Validar
                         item={item}

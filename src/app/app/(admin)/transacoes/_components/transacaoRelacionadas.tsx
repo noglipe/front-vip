@@ -12,7 +12,7 @@ import { formatReal } from "@/lib/utils";
 import { CircleCheckBig, CircleEllipsis, TextQuote, X } from "lucide-react";
 import { TRANSACAO_RELACIONADA_QUERY } from "@/graphql/query";
 import { useQuery } from "@apollo/client";
-import client from "../../../../lib/apollo-client";
+import client from "../../../../../lib/apollo-client";
 import { MiniLoading } from "@/components/loading";
 import Link from "next/link";
 import { Button } from "@/components/UI/button";
@@ -81,23 +81,26 @@ export default function TransacaoRelacionadas({
                   .slice()
                   .reverse()
                   .map((parcela, index) => (
-                    <Link href={`/app/transacoes/${parseInt(parcela.id)}`} key={index}>
-                    <div
-                      
-                      className="flex gap-2 p-2 w-full items-center"
+                    <Link
+                      href={`/app/transacoes/${parseInt(parcela.id)}`}
+                      key={index}
                     >
-                      {parcela.transacaoConcluido ? (
-                        <CircleCheckBig className="text-green-600" size={32} />
-                      ) : (
-                        <CircleEllipsis className="text-gray-500" size={32} />
-                      )}
-                      <span>#{parcela.id}</span> -
-                      <span>Parcela {parcela.parcelaAtual}</span> -
-                      <span>
-                        {new Date(parcela.data).toLocaleDateString("pt-BR")}
-                      </span>
-                      - <span> {formatReal(parcela.valor)}</span>
-                    </div>
+                      <div className="flex gap-2 p-2 w-full items-center">
+                        {parcela.transacaoConcluido ? (
+                          <CircleCheckBig
+                            className="text-green-600"
+                            size={32}
+                          />
+                        ) : (
+                          <CircleEllipsis className="text-gray-500" size={32} />
+                        )}
+                        <span>#{parcela.id}</span> -
+                        <span>Parcela {parcela.parcelaAtual}</span> -
+                        <span>
+                          {new Date(parcela.data).toLocaleDateString("pt-BR")}
+                        </span>
+                        - <span> {formatReal(parcela.valor)}</span>
+                      </div>
                     </Link>
                   ))}
             </div>

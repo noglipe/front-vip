@@ -34,7 +34,7 @@ interface Transacao {
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { DatePickerForm } from "../../../../../../components/form/datePickerForm";
+import { DatePickerForm } from "../../../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
 import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
@@ -55,7 +55,7 @@ import { Loading, MiniLoading } from "@/components/loading";
 import { Switch } from "@/components/UI/switch";
 
 import { useQuery } from "@apollo/client";
-import client from "../../../../../../lib/apollo-client";
+import client from "../../../../../../../lib/apollo-client";
 
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";

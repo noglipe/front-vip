@@ -11,7 +11,7 @@ import {
 import { Loading } from "@/components/loading";
 import { formatData, formatReal } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
-import client from "../../../../lib/apollo-client";
+import client from "../../../../../lib/apollo-client";
 import {
   CircleCheckBig,
   CircleEllipsis,

@@ -11,7 +11,7 @@ import {
 import { Loading } from "@/components/loading";
 import { useEffect, useState } from "react";
 import PainelValor from "./_components/painelValor";
-import TabelaTransacoes from "../_components/tabelaTransacoes";
+import TabelaTransacoes from "../../_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
 import { Tickets } from "lucide-react";
 
