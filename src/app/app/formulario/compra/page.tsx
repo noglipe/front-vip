@@ -27,7 +27,7 @@ import {
 } from "@/components/UI/table";
 import { ApiNovo } from "@/lib/api";
 import { formatData, formatReal } from "@/lib/utils";
-import { CheckCircle, File, XCircle } from "lucide-react";
+import { CheckCircle, File, Pencil, Table2, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -136,7 +136,12 @@ export default function Page() {
           {dados &&
             dados.registros.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{formatData(item.data)}</TableCell>
+                <TableCell className="flex gap-1">
+                  <Link href={`/app/formulario/compra/${item.id}/`}>
+                    <Table2 />
+                  </Link>
+                  {formatData(item.data)}
+                </TableCell>
                 <TableCell>{item.descricao.toUpperCase()}</TableCell>
                 <TableCell>{item.tipo.toUpperCase()}</TableCell>
                 <TableCell>{item.categoria?.nome}</TableCell>
