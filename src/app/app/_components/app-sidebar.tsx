@@ -28,8 +28,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../../../components/UI/collapsible";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CLASS_SIDEBAR, CLASS_SIDEBAR_HOVER } from "@/lib/constantes";
+import { decryptData } from "@/lib/crip";
+import { Button } from "@/components/UI/button";
+import { useRouter } from "next/navigation";
 
 const menuLista = [
   { nome: "Receita", link: "/app/transacoes/receita" },
@@ -61,6 +64,20 @@ export function AppSidebar() {
   const [isOpenFinanceiro, setIsOpenFinanceiro] = useState(false);
   const [isOpenRelatorio, setIsOpenRelatorio] = useState(false);
   const [isOpenFormulario, setIsOpenFormulario] = useState(false);
+  const [nome, setNome] = useState("");
+  const [id, setId] = useState(0);
+  const [perfil, setPerfil] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const obterDados = async () => {
+      const dadosCriptografados = localStorage.getItem("data");
+      setNome(await decryptData(dadosCriptografados)?.nome);
+      setId(await decryptData(dadosCriptografados)?.idUser);
+      setPerfil(await decryptData(dadosCriptografados)?.perfil);
+    };
+    obterDados()
+  }, []);
 
   return (
     <Sidebar className="print:hidden">
@@ -74,8 +91,8 @@ export function AppSidebar() {
         />
         <div className="flex flex-col space-y-0">
           <p className="font-bold p-0 text-md">Família Vida e Paz</p>
-          <p className="text-sm">Usuário:</p>
-          <p className="text-sm">Email:</p>
+          <p className="text-[14px]">{nome}</p>
+          <p className="text-[10px] font-bold">{perfil}</p>
         </div>
       </div>
 
@@ -190,10 +207,15 @@ export function AppSidebar() {
 
       <SidebarFooter className="text-red-200">
         <SidebarMenu>
-          <div className="flex items-center gap-2 cursor-pointer p-2 hover:bg-red-600 rounded">
+          <Button 
+          className="flex items-center gap-2 cursor-pointer p-2 hover:bg-red-600 rounded"
+          onClick={()=>{localStorage.removeItem("data")
+            router.push('/')
+          }}
+          >
             <LogOut size={20} />
             <span>Sair</span>
-          </div>
+          </Button>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
