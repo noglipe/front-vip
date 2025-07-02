@@ -3,14 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { decryptData } from "./crip";
 
-// Verifica o hostname (localhost ou IP de rede)
-const host =
-  typeof window !== "undefined" ? window.location.hostname : "localhost";
-
-export const url =
-  host === "localhost"
-    ? process.env.NEXT_PUBLIC_BACKEND_URL
-    : process.env.NEXT_PUBLIC_BACKEND_URL2;
+export const url = process.env.NEXT_PUBLIC_BACKEND_URL
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
