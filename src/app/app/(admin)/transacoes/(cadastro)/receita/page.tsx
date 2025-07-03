@@ -48,8 +48,8 @@ export default function CadastroReceitaPage() {
       .number()
       .min(1, "A instituição financeira é obrigatória."),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedores: z.number().nullable(),
-    observacao: z.string().nullable(),
+    fornecedores: z.number().nullable().optional(),
+    observacao: z.string().nullable().optional(),
     transacao_concluido: z.boolean(),
   });
 
