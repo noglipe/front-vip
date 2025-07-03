@@ -13,8 +13,11 @@ const BtnVisualizar: React.FC<BtnProps> = ({ id }) => {
     <Button
       className="flex flex-col items-center gap-0 px-4 py-2 bg-blue-900 text-white rounded-sm cursor-pointer hover:bg-blue-500"
       onClick={() => router.push(`/app/transacoes/${id}`)}
+      asChild
     >
-      <EyeIcon className="" size={16} />
+      <a>
+        <EyeIcon className="" size={16} />
+      </a>
     </Button>
   );
 };

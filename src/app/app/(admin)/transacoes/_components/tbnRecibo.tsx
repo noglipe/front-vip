@@ -13,8 +13,11 @@ const BtnRecibo: React.FC<BtnReciboProps> = ({ id }) => {
     <Button
       className="flex flex-row items-center gap-0  py-4 bg-gray-700 text-white rounded-sm cursor-pointer hover:bg-gray-500"
       onClick={() => router.push(`/app/transacoes/recibo/${id}`)}
+      asChild
     >
-      <Printer className="" size={16} />
+      <a>
+        <Printer className="" size={16} />
+      </a>
     </Button>
   );
 };

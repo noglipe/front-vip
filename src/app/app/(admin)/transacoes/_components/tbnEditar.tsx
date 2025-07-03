@@ -16,8 +16,11 @@ export const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
     <Button
       className="flex flex-row items-center gap-0 py-2 bg-yellow-700 text-white rounded-sm cursor-pointer hover:bg-yellow-500"
       onClick={() => router.push(`/app/transacoes/${link}/${id}`)}
+      asChild
     >
-      <Edit className="" size={16} />
+      <a>
+        <Edit className="" size={16} />
+      </a>
     </Button>
   );
 };
