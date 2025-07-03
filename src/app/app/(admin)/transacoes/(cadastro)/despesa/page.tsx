@@ -161,7 +161,7 @@ export default function CadastroDespesaPage() {
         cartao_utilizado: cartao_utilizado ? parseInt(cartao_utilizado) : null,
         instituicao_financeira: parseInt(instituicao_financeira),
         descricao,
-        fornecedor: fornecedor ? parseInt(fornecedor) : null,
+        fornecedor: parseInt(fornecedor),
         observacao: observacao ? observacao : null,
         situacao_fiscal,
         compra_parcelada,
@@ -181,13 +181,15 @@ export default function CadastroDespesaPage() {
         cartao_utilizado,
         instituicao_financeira,
         descricao,
-        fornecedor,
+        fornecedor: fornecedor,
         observacao,
         situacao_fiscal,
         compra_parcelada,
         transacao_concluido,
         receita: false,
       };
+
+      console.log(despesaInput)
 
       const response = await ApiNovo(
         `financeiro/transacao/despesa/`,
