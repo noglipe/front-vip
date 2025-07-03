@@ -79,8 +79,6 @@ export function AppSidebar() {
     obterDados();
   }, []);
 
-  useEffect(()=>{console.log(perfil)},[perfil])
-
   return (
     <Sidebar className="print:hidden">
       <div className="flex flex-row gap-2 p-4 items-center border-b-2">
