@@ -102,6 +102,7 @@ export function SelectBaseBusca<T extends SelectApi>({
           role="combobox"
           aria-expanded={open}
           className={"flex justify-between overflow-hidden bg-black w-full"}
+          onClick={()=>refetch()}
         >
           {value
             ? objetos.find((obj) => obj.nome === value)?.nome
