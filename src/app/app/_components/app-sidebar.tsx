@@ -28,7 +28,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../../../components/UI/collapsible";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { CLASS_SIDEBAR, CLASS_SIDEBAR_HOVER } from "@/lib/constantes";
 import { decryptData } from "@/lib/crip";
 import { Button } from "@/components/UI/button";
@@ -78,6 +78,8 @@ export function AppSidebar() {
     };
     obterDados();
   }, []);
+
+  useEffect(()=>{console.log(perfil)},[perfil])
 
   return (
     <Sidebar className="print:hidden">
