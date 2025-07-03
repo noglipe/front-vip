@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/admin",
-        destination: "https://vipapp-production.up.railway.app/admin",
+        destination: "https://backvipapp-production.up.railway.app/admin",
         permanent: false, // use true se quiser um redirecionamento 301
       },
     ];
