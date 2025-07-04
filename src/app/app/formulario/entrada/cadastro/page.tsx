@@ -16,7 +16,7 @@ interface Categoria {
   nome: string;
 }
 export default function EntradaPage() {
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | any>(new Date());
   const [formData, setFormData] = useState<{
     dataEntrada: string;
     referencia: string | number;

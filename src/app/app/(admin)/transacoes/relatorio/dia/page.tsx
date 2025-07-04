@@ -13,7 +13,7 @@ import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
 
 export default function Page() {
-  const [data, setData] = useState();
+  const [data, setData] = useState<any>();
   const [dados, setDados] = useState<TransacoesPropsApi>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

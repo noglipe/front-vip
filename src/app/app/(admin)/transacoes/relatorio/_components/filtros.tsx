@@ -7,7 +7,7 @@ import { MEIO_TRANSACAO_FORM_QUERY } from "@/graphql/query";
 import { useState } from "react";
 
 export default function FiltrosTransacoes() {
-  const [dia, setDia] = useState();
+  const [dia, setDia] = useState<any>();
   const [descricao, setDescricao] = useState<string>("");
   const [valor, setValor] = useState<string | null>();
   const [meio_de_transacao, setMeioTransacao] = useState<number | any>();

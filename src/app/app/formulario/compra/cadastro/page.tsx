@@ -27,9 +27,10 @@ import { useEffect, useState } from "react";
 
 export default function FormularioCompra() {
   const [parcelada, setParcelada] = useState(false);
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState<Date | any>(new Date());
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
   const router = useRouter();
+  const [cartao_utilizado, setCartao] = useState<number | any>();
 
   const [formData, setFormData] = useState({
     tipoCompra: "",
@@ -282,20 +283,15 @@ export default function FormularioCompra() {
 
           <div>
             <Label>Cartão Utilizado:</Label>
-            <SelectBase
-              setFunc={(valor: { id: number; nome: string } | string) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  cartao: typeof valor === "object" ? valor.id : Number(valor),
-                }))
-              }
-              query={CARTOES_FORM_QUERY}
-              dataKey="cartoesDeCredito"
-              minutos={60}
-              titulo="Cartão Utilizado"
-              className={"w-full"}
-              value={formData.cartao}
-            />
+              <SelectBase
+                        setFunc={setCartao}
+                        query={CARTOES_FORM_QUERY}
+                        dataKey="cartoesDeCredito"
+                        minutos={60}
+                        titulo="Cartão Utilizado"
+                        className={"w-full"}
+                        value={cartao_utilizado}
+                      />
           </div>
 
           <div className="flex flex-row w-full items-center gap-1">
