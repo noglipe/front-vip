@@ -1,5 +1,6 @@
 import { Button } from "@/components/UI/button";
 import { Edit } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface BtnEditarProps {
@@ -13,15 +14,13 @@ export const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
   const link = receita ? "receita" : "despesa";
 
   return (
-    <Button
+    <Link
       className="flex flex-row items-center gap-0 py-2 bg-yellow-700 text-white rounded-sm cursor-pointer hover:bg-yellow-500"
-      onClick={() => router.push(`/app/transacoes/${link}/${id}`)}
-      asChild
+      href= {`/app/transacoes/${link}/${id}`}
     >
-      <a>
         <Edit className="" size={16} />
-      </a>
-    </Button>
+
+    </Link>
   );
 };
 
