@@ -122,75 +122,103 @@ export default function CadastroReceitaPage() {
       </div>
 
       <CardContent className="grid sm:grid-cols-3 grid-cols-1 gap-4">
-        <DatePickerForm
-          setFunc={setDate}
-          date={date}
-          className="w-full bg-transparent"
-        />
-
-        <div className="flex items-center gap-2">
-          <Label htmlFor="valor">R$</Label>
-          <Input
-            id="valor"
-            type="number"
-            placeholder="Valor"
-            className={"w-full"}
-            onChange={(e) => setValor(parseFloat(e.target.value))}
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Data:</Label>
+          <DatePickerForm
+            setFunc={setDate}
+            date={date}
+            className="w-full bg-transparent"
           />
         </div>
-        <SelectBase
-          setFunc={setMeioTransacao}
-          value={meio_de_transacao}
-          query={MEIO_TRANSACAO_FORM_QUERY}
-          dataKey="meiosDeTransacao"
-          minutos={60}
-          titulo="Meios de Transações"
-          className={"w-full"}
-        />
-        <SelectBase
-          setFunc={setinstituicaoFinanceira}
-          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-          dataKey="instituicoesFinanceiras"
-          minutos={60}
-          titulo="Instituições Financeiras"
-          className={"w-full"}
-          value={instituicao_financeira}
-        />
-        <SelectBaseBusca
-          setFunc={setCategoria}
-          query={CATEGORIAS_FORM_QUERY}
-          dataKey="categorias"
-          minutos={1}
-          titulo="Categorias"
-          className={"w-full bg-transparent"}
-          value={categoria}
-        />
-        <SelectBaseBusca
-          setFunc={setFornecedores}
-          query={FORNECEDORES_QUERY}
-          dataKey="fornecedores"
-          minutos={1}
-          titulo="Fornecedores"
-          className={"w-full bg-transparent"}
-          value={fornecedores}
-        />
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Valor:</Label>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="valor">R$</Label>
+            <Input
+              id="valor"
+              type="number"
+              placeholder="Valor"
+              className={"w-full"}
+              onChange={(e) => setValor(parseFloat(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Meios de Transações:</Label>
+          <SelectBase
+            setFunc={setMeioTransacao}
+            value={meio_de_transacao}
+            query={MEIO_TRANSACAO_FORM_QUERY}
+            dataKey="meiosDeTransacao"
+            minutos={60}
+            titulo="Meios de Transações"
+            className={"w-full"}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Instituições Financeiras:</Label>
+          <SelectBase
+            setFunc={setinstituicaoFinanceira}
+            query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+            dataKey="instituicoesFinanceiras"
+            minutos={60}
+            titulo="Instituições Financeiras"
+            className={"w-full"}
+            value={instituicao_financeira}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Categorias:</Label>
+          <SelectBaseBusca
+            setFunc={setCategoria}
+            query={CATEGORIAS_FORM_QUERY}
+            dataKey="categorias"
+            minutos={1}
+            titulo="Categorias"
+            className={"w-full bg-transparent"}
+            value={categoria}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Fornecedores:</Label>
+          <SelectBaseBusca
+            setFunc={setFornecedores}
+            query={FORNECEDORES_QUERY}
+            dataKey="fornecedores"
+            minutos={1}
+            titulo="Fornecedores"
+            className={"w-full bg-transparent"}
+            value={fornecedores}
+          />
+        </div>
       </CardContent>
 
       <CardContent className="flex flex-col gap-2 ">
-        <Input
-          type="text"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          placeholder="Descrição"
-          className={"w-full "}
-        />
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Descrição:</Label>
+          <Input
+            type="text"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            placeholder="Descrição"
+            className={"w-full"}
+          />
+        </div>
 
-        <Textarea
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          placeholder="Observação"
-          className={"w-full"}
-        />
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Observação:</Label>
+          <Textarea
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            placeholder="Observação"
+            className={"w-full"}
+          />
+        </div>
       </CardContent>
 
       <CardContent className="flex justify-center gap-4 ">

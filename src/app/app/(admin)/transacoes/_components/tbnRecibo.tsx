@@ -15,9 +15,7 @@ const BtnRecibo: React.FC<BtnReciboProps> = ({ id }) => {
       className="flex flex-row items-center gap-0  py-4 bg-gray-700 text-white rounded-sm cursor-pointer hover:bg-gray-500"
       href={`/app/transacoes/recibo/${id}`}
     >
-      <a>
-        <Printer className="" size={16} />
-      </a>
+      <Printer className="" size={16} />
     </Link>
   );
 };

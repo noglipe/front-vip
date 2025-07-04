@@ -65,7 +65,7 @@ export default function Page() {
         </div>
       </Card>
 
-      {dados ? (
+      {dados && (
         <div className="container mx-auto mt-2 space-y-6">
           {/* Totais Financeiros */}
           <Card className="container p-4  rounded-xl">
@@ -91,8 +91,6 @@ export default function Page() {
           {/* Tabela de Transações */}
           {dados && <TabelaTransacoesFiltros dados={dados.transacao} />}
         </div>
-      ) : (
-        ""
       )}
     </div>
   );

@@ -50,8 +50,6 @@ export default function CadastroDespesaPage() {
 
   const router = useRouter();
 
-  
-
   const enviarArquivoParaBackend = async (
     arquivo: File,
     tipo: any,
@@ -191,7 +189,7 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
-      console.log(despesaInput)
+      console.log(despesaInput);
 
       const response = await ApiNovo(
         `financeiro/transacao/despesa/`,
@@ -258,110 +256,149 @@ export default function CadastroDespesaPage() {
       </div>
 
       <CardContent className="grid sm:grid-cols-3 grid-cols-1 gap-4">
-        <DatePickerForm
-          descricao={compra_parcelada ? "Data de pagamento" : null}
-          setFunc={setDate}
-          className={"w-full"}
-          date={date}
-        />
-        {compra_parcelada ? (
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Data Pagamento:</Label>
           <DatePickerForm
-            setFunc={setDate_compra}
+            descricao={compra_parcelada ? "Data de pagamento" : null}
+            setFunc={setDate}
             className={"w-full"}
-            descricao="Data da Compra"
-            date={date_compra}
-          />
-        ) : (
-          ""
-        )}
-
-        <div className="flex items-center gap-2">
-          <Label htmlFor="valor">R$</Label>
-          <Input
-            id="valor"
-            type="number"
-            placeholder="Valor"
-            className={"w-full"}
-            onChange={(e) => setValor(parseFloat(e.target.value))}
+            date={date}
           />
         </div>
-        <SelectBase
-          setFunc={setMeioTransacao}
-          query={MEIO_TRANSACAO_FORM_QUERY}
-          dataKey="meiosDeTransacao"
-          minutos={60}
-          titulo="Meios de Transações"
-          className={"w-full"}
-          value={meio_de_transacao}
-        />
-        <SelectBase
-          setFunc={setInstituicaoFinanceira}
-          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-          dataKey="instituicoesFinanceiras"
-          minutos={60}
-          titulo="Instituições Financeiras"
-          className={"w-full"}
-          value={instituicao_financeira}
-        />
-        <SelectBaseBusca
-          setFunc={setCategoria}
-          query={CATEGORIAS_FORM_QUERY}
-          dataKey="categorias"
-          minutos={60}
-          titulo="Categorias"
-          className={"w-full"}
-          value={categoria}
-        />
-        <SelectBaseBusca
-          setFunc={setFornecedores}
-          query={FORNECEDORES_QUERY}
-          dataKey="fornecedores"
-          minutos={1}
-          titulo="Fornecedores"
-          className={"w-full"}
-          value={fornecedor}
-        />
-        <SelectBase
-          setFunc={setCartao}
-          query={CARTOES_FORM_QUERY}
-          dataKey="cartoesDeCredito"
-          minutos={60}
-          titulo="Cartão Utilizado"
-          className={"w-full"}
-          value={cartao_utilizado}
-        />
+        {compra_parcelada && (
+          <div className="flex flex-col gap-1">
+            <Label className="pr-2">Data da Compra:</Label>
+            <DatePickerForm
+              setFunc={setDate_compra}
+              className={"w-full"}
+              descricao="Data da Compra"
+              date={date_compra}
+            />
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Valor:</Label>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="valor">R$</Label>
+            <Input
+              id="valor"
+              type="number"
+              placeholder="Valor"
+              className={"w-full"}
+              onChange={(e) => setValor(parseFloat(e.target.value))}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Meios de Transações:</Label>
+          <SelectBase
+            setFunc={setMeioTransacao}
+            query={MEIO_TRANSACAO_FORM_QUERY}
+            dataKey="meiosDeTransacao"
+            minutos={60}
+            titulo="Meios de Transações"
+            className={"w-full"}
+            value={meio_de_transacao}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Instituições Financeiras:</Label>
+          <SelectBase
+            setFunc={setInstituicaoFinanceira}
+            query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+            dataKey="instituicoesFinanceiras"
+            minutos={60}
+            titulo="Instituições Financeiras"
+            className={"w-full"}
+            value={instituicao_financeira}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Categorias:</Label>
+          <SelectBaseBusca
+            setFunc={setCategoria}
+            query={CATEGORIAS_FORM_QUERY}
+            dataKey="categorias"
+            minutos={60}
+            titulo="Categorias"
+            className={"w-full"}
+            value={categoria}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Fornecedores:</Label>
+          <SelectBaseBusca
+            setFunc={setFornecedores}
+            query={FORNECEDORES_QUERY}
+            dataKey="fornecedores"
+            minutos={1}
+            titulo="Fornecedores"
+            className={"w-full"}
+            value={fornecedor}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Cartão Utilizado:</Label>
+          <SelectBase
+            setFunc={setCartao}
+            query={CARTOES_FORM_QUERY}
+            dataKey="cartoesDeCredito"
+            minutos={60}
+            titulo="Cartão Utilizado"
+            className={"w-full"}
+            value={cartao_utilizado}
+          />
+        </div>
+
         {compra_parcelada && (
           <>
-            <Input
-              type="number"
-              placeholder="Parcela Atual"
-              onChange={(e) => setParcelas(parseInt(e.target.value))}
-              className={"w-full"}
-            />
-            <Input
-              type="number"
-              placeholder="Número de Parcelas"
-              onChange={(e) => setNumParcelas(parseInt(e.target.value))}
-              className={"w-full"}
-            />
+            <div className="flex flex-col gap-1">
+              <Label className="pr-2">Parcela Atual:</Label>
+              <Input
+                type="number"
+                placeholder="Parcela Atual"
+                onChange={(e) => setParcelas(parseInt(e.target.value))}
+                className={"w-full"}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Label className="pr-2">Número de Parcelas:</Label>
+              <Input
+                type="number"
+                placeholder="Número de Parcelas"
+                onChange={(e) => setNumParcelas(parseInt(e.target.value))}
+                className={"w-full"}
+              />
+            </div>
           </>
         )}
       </CardContent>
       <CardContent className="flex flex-col items-center gap-2 ">
-        <Input
-          type="text"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          placeholder="Descrição"
-          className={"w-full"}
-        />
-
-        <Textarea
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          placeholder="Observação"
-          className={"w-full"}
-        />
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Descrição:</Label>
+          <Input
+            type="text"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            placeholder="Descrição"
+            className={"w-full"}
+          />
+        </div>
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Observação:</Label>
+          <Textarea
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            placeholder="Observação"
+            className={"w-full"}
+          />
+        </div>
       </CardContent>
 
       <SelectArquivo
