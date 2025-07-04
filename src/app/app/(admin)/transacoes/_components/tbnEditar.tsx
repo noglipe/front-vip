@@ -1,4 +1,3 @@
-import { Button } from "@/components/UI/button";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -29,11 +28,11 @@ export const MiniBtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
   const link = receita ? "receita" : "despesa";
 
   return (
-    <Button
+    <Link
       className="flex text-center bg-transparent text-yellow-600 rounded-full cursor-pointer hover:bg-gray-300"
-      onClick={() => router.push(`/app/transacoes/${link}/${id}`)}
+      href={`/app/transacoes/${link}/${id}`}
     >
       <Edit className="" size={14} />
-    </Button>
+    </Link>
   );
 };
