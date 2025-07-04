@@ -18,11 +18,7 @@ import {
   Trash2,
   ArchiveRestore,
   File,
-  Infinity,
-  BookDashed,
-  BookA,
   Info,
-  PiggyBankIcon,
   Landmark,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -114,6 +110,7 @@ export default function DetalhesTransacao() {
 
   useEffect(() => {
     if (data?.transacao) {
+      console.log(data)
       setDados(data.transacao);
     }
   }, [data]);

@@ -13,7 +13,7 @@ import {
 import { MiniLoading } from "../loading";
 
 interface Props<T extends SelectApi> {
-  setFunc: (id: string) => void;
+  setFunc: (id: number) => void;
   query: any;
   minutos?: number;
   dataKey: string;
@@ -73,7 +73,7 @@ export function SelectBase<T extends SelectApi>({
 
   return (
     <Select
-      onValueChange={(e) => setFunc(e)}
+      onValueChange={(e) => setFunc(parseInt(e))}
       value={typeof value === "string" ? value : value?.id}
     >
       <SelectTrigger className={`${className} bg-black text-white`}>

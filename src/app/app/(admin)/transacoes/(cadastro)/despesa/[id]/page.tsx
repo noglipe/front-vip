@@ -88,6 +88,11 @@ export default function EditarDespesaPage() {
     TRANSACAO_DESPESA_QUERY,
     { variables: { id }, client }
   );
+
+  useEffect(() => {
+    console.log(typeof cartao_utilizado);
+  }, [cartao_utilizado]);
+
   //Busca de Dados
   useEffect(() => {
     if (data?.transacao) {
@@ -157,7 +162,7 @@ export default function EditarDespesaPage() {
           typeof meio_de_transacao !== "string"
             ? parseInt(meio_de_transacao.id)
             : parseInt(meio_de_transacao),
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
+        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado),
         instituicao_financeira:
           typeof instituicao_financeira !== "string"
             ? parseInt(instituicao_financeira.id)
@@ -189,7 +194,7 @@ export default function EditarDespesaPage() {
           typeof meio_de_transacao !== "string"
             ? meio_de_transacao.id
             : meio_de_transacao,
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
+        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado),
         instituicao_financeira:
           typeof instituicao_financeira !== "string"
             ? instituicao_financeira.id

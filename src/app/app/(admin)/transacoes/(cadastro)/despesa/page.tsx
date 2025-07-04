@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { DatePickerForm } from "../../../../../../components/form/datePickerForm";
 import { Input } from "@/components/UI/input";
@@ -49,6 +49,8 @@ export default function CadastroDespesaPage() {
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
 
   const router = useRouter();
+
+  
 
   const enviarArquivoParaBackend = async (
     arquivo: File,
@@ -328,7 +330,7 @@ export default function CadastroDespesaPage() {
           className={"w-full"}
           value={cartao_utilizado}
         />
-        {compra_parcelada ? (
+        {compra_parcelada && (
           <>
             <Input
               type="number"
@@ -343,8 +345,6 @@ export default function CadastroDespesaPage() {
               className={"w-full"}
             />
           </>
-        ) : (
-          ""
         )}
       </CardContent>
       <CardContent className="flex flex-col items-center gap-2 ">
