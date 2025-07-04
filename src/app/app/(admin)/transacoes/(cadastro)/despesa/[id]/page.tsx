@@ -13,10 +13,10 @@ interface Transacao {
     id: string;
     nome: string;
   };
-  cartaoUtilizado:{
+  cartaoUtilizado: {
     id: string;
     nome: string;
-  }
+  };
   categoria: {
     id: string;
     nome: string;
@@ -63,6 +63,7 @@ import client from "../../../../../../../lib/apollo-client";
 
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import { parseISO } from "date-fns";
 
 export default function EditarDespesaPage() {
   const router = useRouter();
@@ -93,16 +94,21 @@ export default function EditarDespesaPage() {
     { variables: { id }, client }
   );
 
-  useEffect(() => {
-    console.log(typeof cartao_utilizado);
-  }, [cartao_utilizado]);
-
   //Busca de Dados
   useEffect(() => {
-    console.log(data)
+ 
     if (data?.transacao) {
-      setDate(data.transacao.data);
-      setDateCompra(data.transacao.dataCompra);
+      const t = data.transacao;
+
+      // Converte strings ISO para objetos Date
+      const parsedData = t.data ? parseISO(t.data) : undefined;
+      const parsedDataCompra = t.dataCompra
+        ? parseISO(t.dataCompra)
+        : undefined;
+
+      setDate(parsedData);
+      setDateCompra(parsedDataCompra);
+
       setCompraParcelada(data.transacao.compraParcelada);
       setValor(data.transacao.valor);
       setCategoria(data.transacao.categoria);

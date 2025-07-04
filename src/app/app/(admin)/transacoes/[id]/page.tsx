@@ -110,7 +110,6 @@ export default function DetalhesTransacao() {
 
   useEffect(() => {
     if (data?.transacao) {
-      console.log(data)
       setDados(data.transacao);
     }
   }, [data]);
@@ -207,7 +206,7 @@ export default function DetalhesTransacao() {
                 </div>
                 <div>
                   <h3 className="scroll-m-20 font-semibold">DATA DA COMPRA</h3>
-                  <p className="font-semibold">{formatData(transacao.data)}</p>
+                  <p className="font-semibold">{formatData(transacao?.dataCompra)}</p>
                 </div>
                 <div>
                   <h3 className="scroll-m-20 font-semibold">DESCRIÇÃO</h3>
