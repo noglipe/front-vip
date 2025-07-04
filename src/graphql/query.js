@@ -312,6 +312,10 @@ export const TRANSACAO_DESPESA_QUERY = gql`
         id
         nome
       }
+      cartaoUtilizado {
+        id
+        nome
+      }
       observacao
       situacaoFiscal
       transacaoConcluido

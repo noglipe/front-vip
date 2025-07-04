@@ -13,6 +13,10 @@ interface Transacao {
     id: string;
     nome: string;
   };
+  cartaoUtilizado:{
+    id: string;
+    nome: string;
+  }
   categoria: {
     id: string;
     nome: string;
@@ -68,7 +72,7 @@ export default function EditarDespesaPage() {
   const [compra_parcelada, setCompraParcelada] = useState(false);
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<any>();
   const [categoria, setCategoria] = useState<any>();
-  const [cartao_utilizado, setCartao] = useState<number | any>();
+  const [cartao_utilizado, setCartao] = useState<any>();
   const [meio_de_transacao, setMeioTransacao] = useState<any>();
   const [date, setDate] = React.useState<any>();
   const [date_compra, setDateCompra] = React.useState<any>();
@@ -95,6 +99,7 @@ export default function EditarDespesaPage() {
 
   //Busca de Dados
   useEffect(() => {
+    console.log(data)
     if (data?.transacao) {
       setDate(data.transacao.data);
       setDateCompra(data.transacao.dataCompra);
@@ -103,6 +108,7 @@ export default function EditarDespesaPage() {
       setCategoria(data.transacao.categoria);
       setMeioTransacao(data.transacao.meioDeTransacao);
       setinstituicaoFinanceira(data.transacao.instituicaoFinanceira);
+      setCartao(data.transacao.cartaoUtilizado);
       setDescricao(data.transacao.descricao);
       setObservacao(data.transacao.observacao || "");
       setFornecedores(data.transacao.fornecedor);
@@ -162,7 +168,7 @@ export default function EditarDespesaPage() {
           typeof meio_de_transacao !== "string"
             ? parseInt(meio_de_transacao.id)
             : parseInt(meio_de_transacao),
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado),
+        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
         instituicao_financeira:
           typeof instituicao_financeira !== "string"
             ? parseInt(instituicao_financeira.id)
@@ -194,7 +200,7 @@ export default function EditarDespesaPage() {
           typeof meio_de_transacao !== "string"
             ? meio_de_transacao.id
             : meio_de_transacao,
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado),
+        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
         instituicao_financeira:
           typeof instituicao_financeira !== "string"
             ? instituicao_financeira.id
@@ -261,112 +267,153 @@ export default function EditarDespesaPage() {
       </div>
 
       <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <DatePickerForm
-          descricao={compra_parcelada ? "Data de pagamento" : null}
-          setFunc={setDate}
-          date={date}
-          className={"w-full"}
-        />
-        {compra_parcelada && (
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Data Pagamento:</Label>
           <DatePickerForm
-            setFunc={setDateCompra}
+            descricao={compra_parcelada ? "Data de pagamento" : null}
+            setFunc={setDate}
+            date={date}
             className={"w-full"}
-            descricao="Data da Compra"
-            date={date_compra}
           />
+        </div>
+        {compra_parcelada && (
+          <div className="flex flex-col gap-1">
+            <Label className="pr-2">Data da Compra:</Label>
+            <DatePickerForm
+              setFunc={setDateCompra}
+              className={"w-full"}
+              descricao="Data da Compra"
+              date={date_compra}
+            />
+          </div>
         )}
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Valor:</Label>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="valor">R$</Label>
+            <Input
+              id="valor"
+              type="number"
+              placeholder="Valor"
+              className={"w-full"}
+              value={valor}
+              onChange={(e) => setValor(parseFloat(e.target.value))}
+            />
+          </div>
+        </div>
 
-        <div className="flex items-center gap-2">
-          <Label htmlFor="valor">R$</Label>
-          <Input
-            id="valor"
-            type="number"
-            placeholder="Valor"
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Meios de Transações:</Label>
+          <SelectBase
+            setFunc={setMeioTransacao}
+            query={MEIO_TRANSACAO_FORM_QUERY}
+            dataKey="meiosDeTransacao"
+            minutos={60}
+            titulo="Meios de Transações"
             className={"w-full"}
-            value={valor}
-            onChange={(e) => setValor(parseFloat(e.target.value))}
+            value={meio_de_transacao}
           />
         </div>
 
-        <SelectBase
-          setFunc={setMeioTransacao}
-          query={MEIO_TRANSACAO_FORM_QUERY}
-          dataKey="meiosDeTransacao"
-          minutos={60}
-          titulo="Meios de Transações"
-          className={"w-full"}
-          value={meio_de_transacao}
-        />
-        <SelectBase
-          setFunc={setinstituicaoFinanceira}
-          query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
-          dataKey="instituicoesFinanceiras"
-          minutos={60}
-          titulo="Instituições Financeiras"
-          className={"w-full"}
-          value={instituicao_financeira}
-        />
-        <SelectBaseBusca
-          setFunc={setCategoria}
-          query={CATEGORIAS_FORM_QUERY}
-          dataKey="categorias"
-          minutos={60}
-          titulo="Categorias"
-          className={"w-full"}
-          value={categoria}
-        />
-        <SelectBaseBusca
-          setFunc={setFornecedores}
-          query={FORNECEDORES_QUERY}
-          dataKey="fornecedores"
-          minutos={1}
-          titulo="Fornecedores"
-          className={"w-full"}
-          value={fornecedor}
-        />
-        <SelectBase
-          setFunc={setCartao}
-          query={CARTOES_FORM_QUERY}
-          dataKey="cartoesDeCredito"
-          minutos={60}
-          titulo="Cartão Utilizado"
-          className={"w-full"}
-          value={cartao_utilizado}
-        />
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Instituições Financeiras:</Label>
+          <SelectBase
+            setFunc={setinstituicaoFinanceira}
+            query={INSTITUICAO_FINANCEIRA_FORM_QUERY}
+            dataKey="instituicoesFinanceiras"
+            minutos={60}
+            titulo="Instituições Financeiras"
+            className={"w-full"}
+            value={instituicao_financeira}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Categorias:</Label>
+          <SelectBaseBusca
+            setFunc={setCategoria}
+            query={CATEGORIAS_FORM_QUERY}
+            dataKey="categorias"
+            minutos={60}
+            titulo="Categorias"
+            className={"w-full"}
+            value={categoria}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Fornecedores:</Label>
+          <SelectBaseBusca
+            setFunc={setFornecedores}
+            query={FORNECEDORES_QUERY}
+            dataKey="fornecedores"
+            minutos={1}
+            titulo="Fornecedores"
+            className={"w-full"}
+            value={fornecedor}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Label className="pr-2">Cartão Utilizado:</Label>
+          <SelectBase
+            setFunc={setCartao}
+            query={CARTOES_FORM_QUERY}
+            dataKey="cartoesDeCredito"
+            minutos={60}
+            titulo="Cartão Utilizado"
+            className={"w-full"}
+            value={cartao_utilizado}
+          />
+        </div>
         {compra_parcelada && (
           <>
-            <Input
-              type="number"
-              placeholder="Parcela Atual"
-              value={parcela_atual}
-              onChange={(e) => setParcelasAtual(parseInt(e.target.value))}
-              className={"w-full"}
-            />
-            <Input
-              type="number"
-              placeholder="Número de Parcelas"
-              value={numero_de_parcelas}
-              onChange={(e) => setNumParcelas(parseInt(e.target.value))}
-              className={"w-full"}
-            />
+            <div className="flex flex-col gap-1">
+              <Label className="pr-2">Parcela Atual:</Label>
+              <Input
+                type="number"
+                placeholder="Parcela Atual"
+                value={parcela_atual}
+                onChange={(e) => setParcelasAtual(parseInt(e.target.value))}
+                className={"w-full"}
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Label className="pr-2">Número de Parcelas:</Label>
+              <Input
+                type="number"
+                placeholder="Número de Parcelas"
+                value={numero_de_parcelas}
+                onChange={(e) => setNumParcelas(parseInt(e.target.value))}
+                className={"w-full"}
+              />
+            </div>
           </>
         )}
       </CardContent>
 
       <CardContent className="flex flex-col items-center gap-2 mt-6">
-        <Input
-          type="text"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          placeholder="Descrição"
-          className={"w-full"}
-        />
-        <Textarea
-          value={observacao}
-          onChange={(e) => setObservacao(e.target.value)}
-          placeholder="Observação"
-          className={"w-full"}
-        />
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Descrição:</Label>
+          <Input
+            type="text"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            placeholder="Descrição"
+            className={"w-full"}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1 w-full">
+          <Label className="pr-2">Observação:</Label>
+          <Textarea
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            placeholder="Observação"
+            className={"w-full"}
+          />
+        </div>
       </CardContent>
 
       <CardContent className="flex flex-row gap-4 justify-center items-center mt-6">
