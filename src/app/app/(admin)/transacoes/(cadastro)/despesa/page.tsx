@@ -189,7 +189,6 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
-      console.log(despesaInput);
 
       const response = await ApiNovo(
         `financeiro/transacao/despesa/`,

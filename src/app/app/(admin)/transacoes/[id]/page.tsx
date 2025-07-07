@@ -29,6 +29,7 @@ import BtnRecibo from "../_components/tbnRecibo";
 import { BtnEditar } from "../_components/tbnEditar";
 import { ApiNovo } from "@/lib/api";
 import Link from "next/link";
+import { decryptData } from "@/lib/crip";
 
 interface Transacao {
   id: string;
@@ -132,9 +133,15 @@ export default function DetalhesTransacao() {
     const mtd = del ? "DELETE" : "PUT";
     const msg = del ? "excluída" : "restaurada";
 
+    const token = await decryptData(localStorage.getItem("data"))?.access
+
     try {
       const response = await fetch(url_api, {
         method: mtd,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {
@@ -176,13 +183,13 @@ export default function DetalhesTransacao() {
                 <div className="flex gap-2">
                   <Trash2 className="text-red-600" size={28} />
                   <span className="text-red-700 text-lg font-semibold">
-                    Esta transação foi excluída.
+                    Transação Excluída.
                   </span>
                 </div>
 
                 <Button
                   onClick={() => alterarTransacao(transacao.id, false)}
-                  className="flex gap-2"
+                  className="flex gap-2 hover:cursor-pointer hover:bg-green-300"
                 >
                   <ArchiveRestore className="text-green-600" size={28} />
                   <span className="text-green-700 text-lg font-semibold">
@@ -206,7 +213,9 @@ export default function DetalhesTransacao() {
                 </div>
                 <div>
                   <h3 className="scroll-m-20 font-semibold">DATA DA COMPRA</h3>
-                  <p className="font-semibold">{formatData(transacao?.dataCompra)}</p>
+                  <p className="font-semibold">
+                    {formatData(transacao?.dataCompra)}
+                  </p>
                 </div>
                 <div>
                   <h3 className="scroll-m-20 font-semibold">DESCRIÇÃO</h3>
@@ -325,8 +334,12 @@ export default function DetalhesTransacao() {
             {/* Botões de ação */}
             {!transacao.excluida && (
               <div className="flex justify-end gap-4 mb-4 sm:flex-row flex-col">
-                <BtnEditar receita={transacao.receita} id={transacao.id} />
-                <BtnRecibo id={transacao.id} />
+                <div className="w-20">
+                  <BtnEditar receita={transacao.receita} id={transacao.id} />
+                </div>
+                <div className="w-20">
+                  <BtnRecibo id={transacao.id} />
+                </div>
                 <Button
                   onClick={() => alterarTransacao(transacao.id, true)}
                   className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-sm cursor-pointer hover:bg-red-400"
