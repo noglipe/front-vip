@@ -59,7 +59,6 @@ export default function CadastroDespesaPage() {
   ) => {
     const formData = new FormData();
     formData.append("file", arquivo);
-
     try {
       const response = await ApiNovo(
         "financeiro/arquivo/upload/",
@@ -207,7 +206,6 @@ export default function CadastroDespesaPage() {
       alert("Despesa cadastrada");
       setLoading(false);
       router.push("/app/transacoes/despesa/");
-      window.location.reload();
     } catch (error) {
       setLoading(false);
       console.error("Erro na validação ou requisição:", error);
