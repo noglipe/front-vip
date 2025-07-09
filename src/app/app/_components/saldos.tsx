@@ -32,6 +32,7 @@ export default function Saldos() {
 
   return (
     <div className="p-4 rounded-xl space-y-6">
+      
       <PainelSaldos titulo="Caixas" objetos={dados?.caixas ?? []} />
       <Separator />
      {/*  <PainelSaldos
