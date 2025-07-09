@@ -104,10 +104,10 @@ export default function EntradaPage() {
   };
 
   return (
-    <Card className="p-4 flex justify-center items-start">
+    <Card className="p-4 flex justify-center items-start max-w-2xl m-auto">
       <form
         onSubmit={handleSubmit}
-        className=" shadow-md rounded-xl p-6 w-full space-y-4"
+        className="shadow-md rounded-xl p-6 w-full space-y-4 "
       >
         <h1 className="text-2xl font-bold text-center mb-4">
           Formulário de Entrada

@@ -188,7 +188,7 @@ export default function FormularioCompra() {
   };
 
   return (
-    <Card className="p-4 flex justify-center items-start">
+    <Card className="p-4 flex justify-center items-start max-w-3xl m-auto">
       <form
         onSubmit={handleSubmit}
         className="shadow-md rounded-xl p-6 w-full space-y-4"
