@@ -4,6 +4,16 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/UI/dialog";
 import { Input } from "@/components/UI/input";
 import { Label } from "@/components/UI/label";
 import { Textarea } from "@/components/UI/textarea";
@@ -19,6 +29,8 @@ interface Categoria {
 export default function EntradaPage() {
   const [date, setDate] = useState<Date | any>(new Date());
   const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+  const [idRegistro, setIdeRegistro] = useState("");
   const [formData, setFormData] = useState<{
     dataEntrada: string;
     referencia: string | number;
@@ -83,9 +95,9 @@ export default function EntradaPage() {
         payload
       );
       const data = await res.json();
-      alert("Entrada salva com sucesso!");
+       setIdeRegistro(data?.id);
+      setOpen(true);
 
-      // Limpa o formulário após salvar (opcional)
       setFormData({
         dataEntrada: "",
         referencia: "",
@@ -97,140 +109,172 @@ export default function EntradaPage() {
         observacao: "",
       });
       setDate(new Date());
+      // window.location.reload();
     } catch (err) {
       console.error("Erro na requisição:", err);
       alert("Erro na requisição ao salvar entrada.");
     }
   };
 
+  const dilogFunc = async () =>{
+    setOpen(false)
+    window.location.reload()
+  }
   return (
-    <Card className="p-4 flex justify-center items-start max-w-2xl m-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="shadow-md rounded-xl p-6 w-full space-y-4 "
-      >
-        <h1 className="text-2xl font-bold text-center mb-4">
-          Formulário de Entrada
-        </h1>
+    <>
+      <Dialog open={open}  >
+        <DialogContent className="sm:max-w-md" accessKey="" >
+          <DialogHeader>
+            <DialogTitle>Registrado com Sucesso</DialogTitle>
+            <DialogDescription>
+              Entrada Registrada com Sucesso
+            </DialogDescription>
+          </DialogHeader>
 
-         <div
-          className={
-            isMobile
-              ? "flex flex-col gap-2"
-              : "grid grid-cols-1 md:grid-cols-2 gap-4"
-          }
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                dilogFunc()
+              }}
+            >
+              Fechar
+            </Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
+
+      <Card className="p-4 flex justify-center items-start max-w-2xl m-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="shadow-md rounded-xl p-6 w-full space-y-4 "
         >
-          <div>
-            <Label className="block font-medium mb-1">Data da Entrada:</Label>
-            <DatePickerForm
-              setFunc={setDate}
-              date={date}
-              className="w-full bg-transparent"
-            />
-          </div>
+          <h1 className="text-2xl font-bold text-center mb-4">
+            Formulário de Entrada
+          </h1>
 
-          <div>
-            <Label className="block font-medium mb-1">
-              Entrada Referente a:
-            </Label>
-            <SelectBaseBusca
-              setFunc={(valor: { id: number; nome: string } | string) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  referencia: typeof valor === "object" ? valor.id : valor,
-                }))
-              }
-              query={CATEGORIAS_FORM_ENTRADA_QUERY}
-              dataKey="categoriasFormEntrada"
-              minutos={1}
-              titulo="Categorias"
-              className={"w-full bg-transparent"}
-              value={formData.referencia}
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label className="block font-medium mb-1">Descrição:</Label>
-          <Input
-            type="text"
-            name="descricao"
-            value={formData.descricao}
-            onChange={handleChange}
-            className="w-full border rounded-md px-3 py-2"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
-            <Label className="block font-medium mb-1">Valor em Dinheiro:</Label>
-            <Input
-              type="number"
-              step="0.01"
-              name="dinheiro"
-              value={formData.dinheiro}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <Label className="block font-medium mb-1">Valor em Pix:</Label>
-            <Input
-              type="number"
-              step="0.01"
-              name="pix"
-              value={formData.pix}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <Label className="block font-medium mb-1">Valor em PicPay:</Label>
-            <Input
-              type="number"
-              step="0.01"
-              name="picpay"
-              value={formData.picpay}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2"
-            />
-          </div>
-
-          <div>
-            <Label className="block font-medium mb-1">Valor em Cartão:</Label>
-            <Input
-              type="number"
-              step="0.01"
-              name="cartao"
-              value={formData.cartao}
-              onChange={handleChange}
-              className="w-full border rounded-md px-3 py-2"
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label className="block font-medium mb-1">Observação:</Label>
-          <Textarea
-            name="observacao"
-            value={formData.observacao}
-            onChange={handleChange}
-            rows={3}
-            className="w-full border rounded-md px-3 py-2"
-          />
-        </div>
-
-        <div className="text-center">
-          <Button
-            type="submit"
-            className="bg-blue-600 font-semibold py-2 px-6 w-full hover:bg-blue-700 transition text-white"
+          <div
+            className={
+              isMobile
+                ? "flex flex-col gap-2"
+                : "grid grid-cols-1 md:grid-cols-2 gap-4"
+            }
           >
-            Salvar Entrada
-          </Button>
-        </div>
-      </form>
-    </Card>
+            <div>
+              <Label className="block font-medium mb-1">Data da Entrada:</Label>
+              <DatePickerForm
+                setFunc={setDate}
+                date={date}
+                className="w-full bg-transparent"
+              />
+            </div>
+
+            <div>
+              <Label className="block font-medium mb-1">
+                Entrada Referente a:
+              </Label>
+              <SelectBaseBusca
+                setFunc={(valor: { id: number; nome: string } | string) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    referencia: typeof valor === "object" ? valor.id : valor,
+                  }))
+                }
+                query={CATEGORIAS_FORM_ENTRADA_QUERY}
+                dataKey="categoriasFormEntrada"
+                minutos={1}
+                titulo="Categorias"
+                className={"w-full bg-transparent"}
+                value={formData.referencia}
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label className="block font-medium mb-1">Descrição:</Label>
+            <Input
+              type="text"
+              name="descricao"
+              value={formData.descricao}
+              onChange={handleChange}
+              className="w-full border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <Label className="block font-medium mb-1">
+                Valor em Dinheiro:
+              </Label>
+              <Input
+                type="number"
+                step="0.01"
+                name="dinheiro"
+                value={formData.dinheiro}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <Label className="block font-medium mb-1">Valor em Pix:</Label>
+              <Input
+                type="number"
+                step="0.01"
+                name="pix"
+                value={formData.pix}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <Label className="block font-medium mb-1">Valor em PicPay:</Label>
+              <Input
+                type="number"
+                step="0.01"
+                name="picpay"
+                value={formData.picpay}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+
+            <div>
+              <Label className="block font-medium mb-1">Valor em Cartão:</Label>
+              <Input
+                type="number"
+                step="0.01"
+                name="cartao"
+                value={formData.cartao}
+                onChange={handleChange}
+                className="w-full border rounded-md px-3 py-2"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label className="block font-medium mb-1">Observação:</Label>
+            <Textarea
+              name="observacao"
+              value={formData.observacao}
+              onChange={handleChange}
+              rows={3}
+              className="w-full border rounded-md px-3 py-2"
+            />
+          </div>
+
+          <div className="text-center">
+            <Button
+              type="submit"
+              className="bg-blue-600 font-semibold py-2 px-6 w-full hover:bg-blue-700 transition text-white"
+            >
+              Salvar Entrada
+            </Button>
+          </div>
+        </form>
+      </Card>
+    </>
   );
 }
