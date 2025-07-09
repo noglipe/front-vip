@@ -18,11 +18,11 @@ import { useRouter } from "next/navigation";
 import { login } from "@/lib/auth";
 import { Eye, EyeOff } from "lucide-react";
 import { MiniLoading } from "@/components/loading";
-import { Logo64 } from "@/components/logo";
+import { Logo64, LogoMedida } from "@/components/logo";
 
 const TEXTS = {
-  title: "Vip",
-  description: "Entre com suas credenciais para acessar sua conta",
+  title: "Aministrativo Vida e Paz",
+  description: "Entre com suas credenciais",
   userLabel: "Usuário",
   userPlaceholder: "usuario",
   passwordLabel: "Senha",
@@ -60,14 +60,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 ">
+    <div className="flex min-h-screen items-center justify-center ">
       <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-row gap-2 space-y-1">
-          <Logo64 />
-          <div>
-            <CardTitle className="text-2xl font-bold">{TEXTS.title}</CardTitle>
+        <CardHeader className="flex flex-col justify-center items-center">
+          <LogoMedida tamanho={110} />
             <CardDescription>{TEXTS.description}</CardDescription>
-          </div>
         </CardHeader>
 
         <CardContent>

@@ -2,7 +2,7 @@ import { StepBack } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import logoImg from "../../public/logos/logo.png";
+import logoImg from "../../public/logos/logo25.png";
 
 export default function NotFound() {
   return (

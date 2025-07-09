@@ -19,7 +19,7 @@ import {
   NotepadText,
 } from "lucide-react";
 
-import logoImagem from "../../../../public/logos/logo.png";
+import logoImagem from "../../../../public/logos/logo25.png";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -80,8 +80,8 @@ export function AppSidebar() {
   }, []);
 
   return (
-    <Sidebar className="print:hidden">
-      <div className="flex flex-row gap-2 p-4 items-center border-b-2">
+    <Sidebar className="print:hidden border-none">
+      <div className="flex flex-row gap-2 p-4 items-center ">
         <Image
           src={logoImagem}
           alt="Logo Marca"
@@ -89,9 +89,9 @@ export function AppSidebar() {
           quality={100}
           priority
         />
-        <div className="flex flex-col space-y-0">
-          <p className="font-bold p-0 text-md">Família Vida e Paz</p>
-          <p className="text-[14px]">{nome}</p>
+        <div className="flex flex-col gap-0">
+          <p className="font-bold [14px]">Vida e Paz</p>
+          <p className="text-[12px] text-sm">{nome}</p>
           <p className="text-[10px] font-bold">{perfil}</p>
         </div>
       </div>

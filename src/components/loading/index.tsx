@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 
-import Logo64 from "../../../public/logos/logo.png";
+import Logo64 from "../../../public/logos/logo25.png";
 import miniLogoImg from "../../../public/logos/logo_64.png";
 import Image from "next/image";
 
