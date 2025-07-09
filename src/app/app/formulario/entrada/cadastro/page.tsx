@@ -4,23 +4,14 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/UI/dialog";
 import { Input } from "@/components/UI/input";
 import { Label } from "@/components/UI/label";
 import { Textarea } from "@/components/UI/textarea";
 import { CATEGORIAS_FORM_ENTRADA_QUERY } from "@/graphql/query";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ApiNovo } from "@/lib/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface Categoria {
   id: number;
@@ -29,8 +20,6 @@ interface Categoria {
 export default function EntradaPage() {
   const [date, setDate] = useState<Date | any>(new Date());
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
-  const [idRegistro, setIdeRegistro] = useState("");
   const [formData, setFormData] = useState<{
     dataEntrada: string;
     referencia: string | number;
@@ -73,7 +62,13 @@ export default function EntradaPage() {
     const dataFormatada = date?.toISOString().split("T")[0];
 
     if (!formData.descricao) {
-      alert("Favor Inserir uma Descrição");
+      toast.warning("Favor Inserir uma Descrição", {
+        description: "O campo 'Descrição' não pode estar vazio!",
+        action: {
+          label: "Fechar",
+          onClick: () => {},
+        },
+      });
       return "";
     }
 
@@ -95,8 +90,6 @@ export default function EntradaPage() {
         payload
       );
       const data = await res.json();
-       setIdeRegistro(data?.id);
-      setOpen(true);
 
       setFormData({
         dataEntrada: "",
@@ -109,42 +102,31 @@ export default function EntradaPage() {
         observacao: "",
       });
       setDate(new Date());
-      // window.location.reload();
+
+      toast.success("Registrado com Sucesso", {
+        description: "Entrada Registrada com Sucesso",
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
     } catch (err) {
-      console.error("Erro na requisição:", err);
-      alert("Erro na requisição ao salvar entrada.");
+      toast.error("Erro na requisição:", {
+        description: `Erro na requisição ao salvar entrada. ${err}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
     }
   };
 
-  const dilogFunc = async () =>{
-    setOpen(false)
-    window.location.reload()
-  }
   return (
     <>
-      <Dialog open={open}  >
-        <DialogContent className="sm:max-w-md" accessKey="" >
-          <DialogHeader>
-            <DialogTitle>Registrado com Sucesso</DialogTitle>
-            <DialogDescription>
-              Entrada Registrada com Sucesso
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                dilogFunc()
-              }}
-            >
-              Fechar
-            </Button>
-          </DialogClose>
-        </DialogContent>
-      </Dialog>
-
       <Card className="p-4 flex justify-center items-start max-w-2xl m-auto">
         <form
           onSubmit={handleSubmit}
@@ -268,7 +250,9 @@ export default function EntradaPage() {
           <div className="text-center">
             <Button
               type="submit"
-              className="bg-blue-600 font-semibold py-2 px-6 w-full hover:bg-blue-700 transition text-white"
+              className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+                isMobile && "w-full"
+              }`}
             >
               Salvar Entrada
             </Button>

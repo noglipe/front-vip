@@ -6,14 +6,6 @@ import { SelectBase } from "@/components/form/selectBase";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import { Button } from "@/components/UI/button";
 import { Card } from "@/components/UI/card";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/UI/dialog";
 import { Input } from "@/components/UI/input";
 import { Label } from "@/components/UI/label";
 import {
@@ -32,16 +24,15 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ApiNovo } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function FormularioCompra() {
   const [parcelada, setParcelada] = useState(false);
   const [date, setDate] = useState<Date | any>(new Date());
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
-  const router = useRouter();
   const [cartao_utilizado, setCartao] = useState<number | any>();
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     tipoCompra: "",
@@ -119,11 +110,30 @@ export default function FormularioCompra() {
         const salvarData = await salvarResponse.json();
 
         if (!salvarResponse.ok) {
-          console.error("Erro ao salvar arquivo no banco", salvarData);
+                toast.error("Erro ao salvar arquivo no banco", {
+        description: `${salvarData}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
+
         }
       }
     } catch (error) {
-      console.error("Erro de conexão", error);
+
+             toast.error("Erro de conexão", {
+        description: `${error}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
+
     }
   };
 
@@ -142,7 +152,16 @@ export default function FormularioCompra() {
     };
 
     if (!formData.descricao || !formData.autorizadaPor) {
-      alert("Favor Inserir Dados Faltantes (Descrição ou Autorização)");
+        toast.warning("Favor Inserir Dados Faltantes", {
+        description: `Descrição ou Autorização`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+    
+          },
+        },
+      });
+
       return "";
     }
 
@@ -182,47 +201,41 @@ export default function FormularioCompra() {
       }
 
       if (res.ok) {
-        setOpen(true);
+        toast.success("Registrado com Sucesso", {
+          description: "Compra Registrada com Sucesso",
+          action: {
+            label: "Fechar",
+            onClick: () => {
+              window.location.reload();
+            },
+          },
+        });
       } else {
-        console.error("Erro ao salvar entrada:", data);
-        alert("Erro ao salvar a entrada.");
+        toast.error("Erro ao salvar entrada:", {
+          description: `${data}`,
+          action: {
+            label: "Fechar",
+            onClick: () => {
+              window.location.reload();
+            },
+          },
+        });
       }
     } catch (err) {
-      console.error("Erro na requisição:", err);
-      alert("Erro na requisição ao salvar entrada.");
+      toast.error("Erro na requisição:", {
+        description: `Erro na requisição ao salvar entrada. ${err}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
     }
-  };
-
-  const dilogFunc = async () => {
-    setOpen(false);
-    window.location.reload();
   };
 
   return (
     <>
-      <Dialog open={open}>
-        <DialogContent className="sm:max-w-md" accessKey="">
-          <DialogHeader>
-            <DialogTitle>Compra Registrada</DialogTitle>
-            <DialogDescription>
-              Compra Registrada com Sucesso
-            </DialogDescription>
-          </DialogHeader>
-
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => {
-                dilogFunc();
-              }}
-            >
-              Fechar
-            </Button>
-          </DialogClose>
-        </DialogContent>
-      </Dialog>
-
       <Card className="p-4 flex justify-center items-start max-w-3xl m-auto">
         <form
           onSubmit={handleSubmit}
