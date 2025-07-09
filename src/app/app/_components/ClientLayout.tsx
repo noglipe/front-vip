@@ -22,7 +22,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
           ${isMobile && "p-6 w-full bg-black mb-1"}
         `}
         />
-        <div className="flex h-full">{children}</div>
+        <div className="h-full">{children}</div>
       </main>
     </>
   );

@@ -21,6 +21,7 @@ import {
   CATEGORIAS_FORM_ENTRADA_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
 } from "@/graphql/query";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ApiNovo } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -31,6 +32,7 @@ export default function FormularioCompra() {
   const [listaArquivos, setListaArquivos] = useState<ArquivoApi[]>([]);
   const router = useRouter();
   const [cartao_utilizado, setCartao] = useState<number | any>();
+  const isMobile = useIsMobile();
 
   const [formData, setFormData] = useState({
     tipoCompra: "",
@@ -195,9 +197,15 @@ export default function FormularioCompra() {
           Formulário de Compra
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label>Data da Entrada:</Label>
+        <div
+          className={
+            isMobile
+              ? "flex flex-col gap-2"
+              : "grid grid-cols-1 md:grid-cols-2 gap-4"
+          }
+        >
+          <div className="flex-row">
+            <Label className="pb-2">Data da Entrada:</Label>
             <DatePickerForm
               setFunc={setDate}
               date={date}
@@ -205,8 +213,8 @@ export default function FormularioCompra() {
             />
           </div>
 
-          <div>
-            <Label>Tipo de Compra:</Label>
+          <div className="flex-row">
+            <Label className="pb-2">Tipo de Compra:</Label>
             <Select
               value={formData.tipoCompra}
               onValueChange={(value) =>
@@ -224,7 +232,7 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Categoria:</Label>
+            <Label className="pb-2">Categoria:</Label>
             <SelectBaseBusca
               setFunc={(valor: { id: number; nome: string } | string) =>
                 setFormData((prev) => ({
@@ -243,7 +251,7 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Descrição:</Label>
+            <Label className="pb-2">Descrição:</Label>
             <Input
               name="descricao"
               value={formData.descricao}
@@ -253,7 +261,7 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Autorizada por:</Label>
+            <Label className="pb-2">Autorizada por:</Label>
             <Input
               name="autorizadaPor"
               value={formData.autorizadaPor}
@@ -263,7 +271,7 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Meio de Pagamento:</Label>
+            <Label className="pb-2">Meio de Pagamento:</Label>
             <SelectBaseBusca
               setFunc={(valor: { id: number; nome: string } | string) =>
                 setFormData((prev) => ({
@@ -282,16 +290,16 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Cartão Utilizado:</Label>
-              <SelectBase
-                        setFunc={setCartao}
-                        query={CARTOES_FORM_QUERY}
-                        dataKey="cartoesDeCredito"
-                        minutos={60}
-                        titulo="Cartão Utilizado"
-                        className={"w-full"}
-                        value={cartao_utilizado}
-                      />
+            <Label className="pb-2">Cartão Utilizado:</Label>
+            <SelectBase
+              setFunc={setCartao}
+              query={CARTOES_FORM_QUERY}
+              dataKey="cartoesDeCredito"
+              minutos={60}
+              titulo="Cartão Utilizado"
+              className={"w-full"}
+              value={cartao_utilizado}
+            />
           </div>
 
           <div className="flex flex-row w-full items-center gap-1">
@@ -312,7 +320,7 @@ export default function FormularioCompra() {
           </div>
 
           <div>
-            <Label>Valor:</Label>
+            <Label className="pb-2">Valor:</Label>
             <Input
               type="number"
               step="0.01"
@@ -326,7 +334,7 @@ export default function FormularioCompra() {
           {parcelada && (
             <>
               <div>
-                <Label>Valor da Parcela:</Label>
+                <Label className="pb-2">Valor da Parcela:</Label>
                 <Input
                   type="number"
                   step="0.01"
@@ -338,7 +346,7 @@ export default function FormularioCompra() {
               </div>
 
               <div>
-                <Label>Quantidade de Parcelas:</Label>
+                <Label className="pb-2">Quantidade de Parcelas:</Label>
                 <Input
                   type="number"
                   name="quantidadeParcela"
@@ -351,7 +359,7 @@ export default function FormularioCompra() {
           )}
 
           <div>
-            <Label>Valor Frete (caso se aplique):</Label>
+            <Label className="pb-2">Valor Frete (caso se aplique):</Label>
             <Input
               type="number"
               step="0.01"
@@ -363,7 +371,7 @@ export default function FormularioCompra() {
           </div>
 
           <div className="col-span-2">
-            <Label>Observação:</Label>
+            <Label className="pb-2">Observação:</Label>
             <Textarea
               name="observacao"
               value={formData.observacao}
@@ -381,10 +389,11 @@ export default function FormularioCompra() {
             />
           </div>
 
-          <div className="col-span-2">
+          <div className="col-span-2 w-full">
             <Button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className={`bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 ${
+                isMobile && "w-full"}`}
             >
               Enviar
             </Button>

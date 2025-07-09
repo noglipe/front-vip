@@ -70,7 +70,7 @@ export default function SelectArquivo({
   };
 
   return (
-    <Card className="flex flex-col gap-4 border border-white rounded-sm p-4 w-full">
+    <Card className="flex flex-col gap-4 border border-white rounded-sm mt-4 mb-4 w-full">
       <CardHeader>
         <CardTitle>
           <h4 className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export default function SelectArquivo({
       </CardContent>
 
       {listaArquivos.length > 0 && (
-        <Card className="mt-6 space-y-2">
+        <Card className="mt-6 space-y-1">
           <CardHeader>
             <CardTitle>
               <h4 className="font-semibold">ARQUIVOS ADICIONADOS</h4>

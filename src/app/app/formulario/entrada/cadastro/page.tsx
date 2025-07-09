@@ -8,6 +8,7 @@ import { Input } from "@/components/UI/input";
 import { Label } from "@/components/UI/label";
 import { Textarea } from "@/components/UI/textarea";
 import { CATEGORIAS_FORM_ENTRADA_QUERY } from "@/graphql/query";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { ApiNovo } from "@/lib/api";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,7 @@ interface Categoria {
 }
 export default function EntradaPage() {
   const [date, setDate] = useState<Date | any>(new Date());
+  const isMobile = useIsMobile();
   const [formData, setFormData] = useState<{
     dataEntrada: string;
     referencia: string | number;
@@ -111,7 +113,13 @@ export default function EntradaPage() {
           Formulário de Entrada
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+         <div
+          className={
+            isMobile
+              ? "flex flex-col gap-2"
+              : "grid grid-cols-1 md:grid-cols-2 gap-4"
+          }
+        >
           <div>
             <Label className="block font-medium mb-1">Data da Entrada:</Label>
             <DatePickerForm
@@ -217,7 +225,7 @@ export default function EntradaPage() {
         <div className="text-center">
           <Button
             type="submit"
-            className="bg-blue-600 font-semibold py-2 px-6 rounded-lg hover:bg-blue-700 transition text-white"
+            className="bg-blue-600 font-semibold py-2 px-6 w-full hover:bg-blue-700 transition text-white"
           >
             Salvar Entrada
           </Button>
