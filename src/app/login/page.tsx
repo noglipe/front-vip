@@ -19,6 +19,7 @@ import { login } from "@/lib/auth";
 import { Eye, EyeOff } from "lucide-react";
 import { MiniLoading } from "@/components/loading";
 import { Logo64, LogoMedida } from "@/components/logo";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TEXTS = {
   title: "Aministrativo Vida e Paz",
@@ -37,6 +38,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -61,7 +63,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center ">
-      <Card className="w-full max-w-md">
+      <Card className={`w-full max-w-md ${
+        isMobile && "border-none rounded-none"
+        }`}>
         <CardHeader className="flex flex-col justify-center items-center">
           <LogoMedida tamanho={110} />
             <CardDescription>{TEXTS.description}</CardDescription>
