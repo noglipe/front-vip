@@ -187,7 +187,7 @@ export function AppSidebar() {
           )}
 
           {/* Apenas exibe o Formulário se for o perfil 'formulario' */}
-          {perfil === "Formulário" && (
+          {(perfil === "Formulário" || perfil === "Administrador") && (
             <Collapsible
               open={isOpenFormulario}
               onOpenChange={setIsOpenFormulario}
