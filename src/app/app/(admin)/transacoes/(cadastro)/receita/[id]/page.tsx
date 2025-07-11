@@ -53,6 +53,7 @@ import { useQuery } from "@apollo/client";
 import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
+import { toast } from "sonner";
 
 export default function EditarReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<any>();
@@ -107,7 +108,7 @@ export default function EditarReceitaPage() {
       .number()
       .min(1, "A instituição financeira é obrigatória."),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedores: z.number().nullable(),
+    fornecedores: z.number().nullable().optional(),
     observacao: z.string().nullable(),
     transacao_concluido: z.boolean(),
   });
@@ -130,10 +131,11 @@ export default function EditarReceitaPage() {
             ? parseInt(instituicao_financeira.id)
             : parseInt(instituicao_financeira),
         descricao,
-        fornecedores:
-          typeof fornecedores !== "string"
+        fornecedores: fornecedores
+          ? typeof fornecedores !== "string"
             ? parseInt(fornecedores.id)
-            : parseInt(fornecedores),
+            : parseInt(fornecedores)
+          : null,
         observacao,
         transacao_concluido,
       });
@@ -153,10 +155,15 @@ export default function EditarReceitaPage() {
         transacao_concluido,
         descricao,
         observacao,
-        fornecedor:
-          typeof fornecedores !== "string" ? fornecedores.id : fornecedores,
+        fornecedor: fornecedores
+          ? typeof fornecedores !== "string"
+            ? fornecedores.id
+            : fornecedores
+          : null,
         receita: true,
       };
+
+      console.log(receitaInput);
 
       const response = await ApiNovo(
         `financeiro/transacao/${id}/receita`,
@@ -164,8 +171,15 @@ export default function EditarReceitaPage() {
         receitaInput
       );
 
-      alert("Receita atualizada com sucesso");
-      router.push(`/app/transacoes/${id}`);
+      toast.success("Receita Atualizada", {
+        description: `Receta Atualizada Com Sucesso #${id}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            router.push(`/app/transacoes/${id}`);
+          },
+        },
+      });
     } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors(
@@ -175,8 +189,13 @@ export default function EditarReceitaPage() {
           )
         );
       } else {
-        alert("Erro ao atualizar receita");
-        console.log({ error });
+        toast.error("Erro", {
+          description: `Erro ao atualizar receita ${error}`,
+          action: {
+            label: "Fechar",
+            onClick: () => {},
+          },
+        });
       }
     } finally {
     }
