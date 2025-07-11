@@ -36,48 +36,51 @@ interface Transacao {
   receita: boolean;
 }
 
-import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { DatePickerForm } from "../../../../../../../components/form/datePickerForm";
-import { Input } from "@/components/UI/input";
-import { SelectBase } from "@/components/form/selectBase";
-import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
 import {
   CARTOES_FORM_QUERY,
   CATEGORIAS_FORM_QUERY,
+  FORNECEDORES_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
-  FORNECEDORES_QUERY,
   TRANSACAO_DESPESA_QUERY,
 } from "@/graphql/query";
-import { Checkbox } from "@/components/UI/checkbox";
-import { Label } from "@/components/UI/label";
-import { Button } from "@/components/UI/button";
-import { Textarea } from "@/components/UI/textarea";
-import { z } from "zod";
-import { Loading, MiniLoading } from "@/components/loading";
-import { Switch } from "@/components/UI/switch";
-
 import { useQuery } from "@apollo/client";
 import client from "../../../../../../../lib/apollo-client";
-
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { parseISO } from "date-fns";
+import { Loading, MiniLoading } from "@/components/loading";
+import { z } from "zod";
+import { toast } from "sonner";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
-import { parseISO } from "date-fns";
-import { toast } from "sonner";
+import { Label } from "@/components/UI/label";
+import { Switch } from "@/components/UI/switch";
+import { DatePickerForm } from "@/components/form/datePickerForm";
+import { Input } from "@/components/UI/input";
+import { SelectBase } from "@/components/form/selectBase";
+import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
+import { Textarea } from "@/components/UI/textarea";
+import { Checkbox } from "@/components/UI/checkbox";
+import { Button } from "@/components/UI/button";
 
-export default function EditarDespesaPage() {
+export default function page() {
   const router = useRouter();
   const params = useParams();
   const id = parseInt(params.id as string);
+
+  const { loading, error, data } = useQuery<{ transacao: Transacao }>(
+    TRANSACAO_DESPESA_QUERY,
+    { variables: { id }, client }
+  );
 
   const [compra_parcelada, setCompraParcelada] = useState(false);
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<any>();
   const [categoria, setCategoria] = useState<any>();
   const [cartao_utilizado, setCartao] = useState<any>();
   const [meio_de_transacao, setMeioTransacao] = useState<any>();
-  const [date, setDate] = React.useState<any>();
-  const [date_compra, setDateCompra] = React.useState<any>();
+  const [date, setDate] = useState<any>();
+  const [date_compra, setDateCompra] = useState<any>();
   const [transacao_concluido, setConcluida] = useState(true);
   const [fornecedor, setFornecedores] = useState<number | any>();
   const [descricao, setDescricao] = useState("");
@@ -90,12 +93,6 @@ export default function EditarDespesaPage() {
   const [excluido, setExcluido] = useState(true);
   const [receita, setReceita] = useState(true);
 
-  const { loading, error, data } = useQuery<{ transacao: Transacao }>(
-    TRANSACAO_DESPESA_QUERY,
-    { variables: { id }, client }
-  );
-
-  //Busca de Dados
   useEffect(() => {
     if (data?.transacao) {
       const t = data.transacao;
@@ -137,115 +134,82 @@ export default function EditarDespesaPage() {
 
   const despesaSchema = z.object({
     data: z.string().min(1, "A data é obrigatória."),
-    data_compra: z.string(),
+    data_compra: z.string().nullable().optional(),
     valor: z.number(),
     categoria: z.number(),
     numero_de_parcelas: z.number(),
     parcela_atual: z.number(),
-    meio_de_transacao: z.number(),
-    cartao_utilizado: z.number().optional(),
-    instituicao_financeira: z.number(),
+    meio_de_transacao: z.string(),
+    cartao_utilizado: z.string().nullable().optional(),
+    instituicao_financeira: z.string(),
     descricao: z.string().min(1, "A descrição é obrigatória."),
-    fornecedor: z.number().nullable(),
-    observacao: z.string().nullable(),
+    fornecedor: z.string().nullable(),
+    observacao: z.string().nullable().optional(),
     situacao_fiscal: z.boolean(),
     compra_parcelada: z.boolean(),
     transacao_concluido: z.boolean(),
-    excluida: z.boolean(),
-    receita: z.boolean(),
   });
 
   const atualizarDespesa = async () => {
     try {
-      despesaSchema.parse({
+      // Validação dos dados
+
+      const dadosValidados = despesaSchema.parse({
         data: date instanceof Date ? date.toISOString().split("T")[0] : date,
         data_compra:
           date_compra instanceof Date
             ? date_compra.toISOString().split("T")[0]
             : date_compra,
         valor: parseFloat(valor),
-        categoria:
-          typeof categoria !== "string"
-            ? parseInt(categoria.id)
-            : parseInt(categoria),
-        numero_de_parcelas,
-        parcela_atual,
-        meio_de_transacao:
-          typeof meio_de_transacao !== "string"
-            ? parseInt(meio_de_transacao.id)
-            : parseInt(meio_de_transacao),
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
+        categoria: categoria?.id ? parseInt(categoria.id) : Number(categoria),
+        numero_de_parcelas: Number(numero_de_parcelas),
+        parcela_atual: Number(parcela_atual),
+        meio_de_transacao: meio_de_transacao?.id || meio_de_transacao && (meio_de_transacao).toString() || null,
+        cartao_utilizado: cartao_utilizado?.id || cartao_utilizado && (cartao_utilizado).toString() || null,
         instituicao_financeira:
-          typeof instituicao_financeira !== "string"
-            ? parseInt(instituicao_financeira.id)
-            : parseInt(instituicao_financeira),
+          instituicao_financeira?.id || (instituicao_financeira).toString() || null,
         descricao,
-        fornecedor:
-          typeof fornecedor !== "string"
-            ? parseInt(fornecedor.id)
-            : parseInt(fornecedor),
+        fornecedor: fornecedor?.id || null,
         observacao,
         situacao_fiscal,
         compra_parcelada,
         transacao_concluido,
-        excluida: excluido,
-        receita,
       });
 
-      const despesaInput = {
-        data: date instanceof Date ? date.toISOString().split("T")[0] : date,
-        data_compra:
-          date_compra instanceof Date
-            ? date_compra.toISOString().split("T")[0]
-            : date_compra,
-        valor: parseFloat(valor),
-        categoria: typeof categoria !== "string" ? categoria.id : categoria,
-        numero_de_parcelas,
-        parcela_atual,
-        meio_de_transacao:
-          typeof meio_de_transacao !== "string"
-            ? meio_de_transacao.id
-            : meio_de_transacao,
-        cartao_utilizado: cartao_utilizado && parseInt(cartao_utilizado.id),
-        instituicao_financeira:
-          typeof instituicao_financeira !== "string"
-            ? instituicao_financeira.id
-            : instituicao_financeira,
-        descricao,
-        fornecedor: typeof fornecedor !== "string" ? fornecedor.id : fornecedor,
-        observacao,
-        situacao_fiscal,
-        compra_parcelada,
-        transacao_concluido,
-        excluida: excluido,
-        receita,
-      };
-
+      // Envio à API
       const response = await ApiNovo(
         `financeiro/transacao/${id}/despesa`,
         "PUT",
-        despesaInput
+        {
+          ...dadosValidados,
+          excluida: excluido,
+          receita,
+        }
       );
 
-      toast.success("DESPESA ATUALIZADA", {
-        description: `Despesa atualizada com sucesso #${id}`,
-        action: {
-          label: "Fechar",
-          onClick: () => {
-            router.push(`/app/transacoes/${id}`);
+      if (response.ok) {
+        toast.success("DESPESA ATUALIZADA", {
+          description: `Despesa atualizada com sucesso #${id}`,
+          action: {
+            label: "Fechar",
+            onClick: () => {
+              router.push(`/app/transacoes/${id}`);
+            },
           },
-        },
-      });
+        });
+      } else {
+        toast.error("ERRO", {
+          description: `Erro ao enviar dados: status ${response.status}`,
+        });
+      }
     } catch (error) {
-      toast.error("ERROR", {
-        description: `Erro ao atualizar despesa: ${error}`,
-        action: {
-          label: "Fechar",
-          onClick: () => {},
-        },
-      });
-
       if (error instanceof z.ZodError) {
+        const mensagens = error.issues
+          .map((e) => `${e.path[0]}: ${e.message}`)
+          .join(" | ");
+        toast.error("Erro de validação", {
+          description: mensagens,
+        });
         setErrors(
           error.issues.reduce(
             (acc, issue) => ({ ...acc, [issue.path[0]]: issue.message }),
@@ -253,12 +217,8 @@ export default function EditarDespesaPage() {
           )
         );
       } else {
-        toast.error("ERROR", {
-          description: `Erro ao atualizar despesa: ${error}`,
-          action: {
-            label: "Fechar",
-            onClick: () => {},
-          },
+        toast.error("Erro inesperado", {
+          description: String(error),
         });
       }
     }

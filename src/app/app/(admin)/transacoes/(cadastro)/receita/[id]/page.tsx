@@ -101,10 +101,8 @@ export default function EditarReceitaPage() {
     date: z.string().min(1, "A data é obrigatória."),
     valor: z.number(),
     categoria: z.number().min(1, "A categoria é obrigatória."),
-    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
-    instituicao_financeira: z
-      .number()
-      .min(1, "A instituição financeira é obrigatória."),
+    meio_de_transacao: z.string(),
+    instituicao_financeira: z.string(),
     descricao: z.string().min(1, "A descrição é obrigatória."),
     fornecedores: z.number().nullable().optional(),
     observacao: z.string().nullable(),
@@ -121,13 +119,10 @@ export default function EditarReceitaPage() {
             ? parseInt(categoria.id)
             : parseInt(categoria),
         meio_de_transacao:
-          typeof meio_de_transacao !== "string"
-            ? parseInt(meio_de_transacao.id)
-            : parseInt(meio_de_transacao),
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()),
         instituicao_financeira:
-          typeof instituicao_financeira !== "string"
-            ? parseInt(instituicao_financeira.id)
-            : parseInt(instituicao_financeira),
+          instituicao_financeira?.id || instituicao_financeira.toString(),
         descricao,
         fornecedores: fornecedores
           ? typeof fornecedores !== "string"
@@ -143,13 +138,10 @@ export default function EditarReceitaPage() {
         valor: parseFloat(valor),
         categoria: typeof categoria !== "string" ? categoria.id : categoria,
         meio_de_transacao:
-          typeof meio_de_transacao !== "string"
-            ? meio_de_transacao.id
-            : meio_de_transacao,
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()),
         instituicao_financeira:
-          typeof instituicao_financeira !== "string"
-            ? instituicao_financeira.id
-            : instituicao_financeira,
+          instituicao_financeira?.id || instituicao_financeira.toString(),
         transacao_concluido,
         descricao,
         observacao,
@@ -160,8 +152,6 @@ export default function EditarReceitaPage() {
           : null,
         receita: true,
       };
-
-      console.log(receitaInput);
 
       const response = await ApiNovo(
         `financeiro/transacao/${id}/receita`,

@@ -169,9 +169,18 @@ export default function CadastroDespesaPage() {
         categoria: parseInt(categoria),
         numero_de_parcelas: numero_de_parcelas ? numero_de_parcelas : 1,
         parcela_atual: parcela_atual ? parcela_atual : 1,
-        meio_de_transacao: String(meio_de_transacao),
-        cartao_utilizado: cartao_utilizado ? String(cartao_utilizado) : null,
-        instituicao_financeira: String(instituicao_financeira),
+        meio_de_transacao:
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()) ||
+          null,
+        cartao_utilizado:
+          cartao_utilizado?.id ||
+          (cartao_utilizado && cartao_utilizado.toString()) ||
+          null,
+        instituicao_financeira:
+          instituicao_financeira?.id ||
+          instituicao_financeira.toString() ||
+          null,
         descricao,
         fornecedor: String(fornecedor),
         observacao: observacao ? observacao : null,
@@ -189,9 +198,18 @@ export default function CadastroDespesaPage() {
         categoria,
         numero_de_parcelas,
         parcela_atual,
-        meio_de_transacao,
-        cartao_utilizado,
-        instituicao_financeira,
+        meio_de_transacao:
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()) ||
+          null,
+        cartao_utilizado:
+          cartao_utilizado?.id ||
+          (cartao_utilizado && cartao_utilizado.toString()) ||
+          null,
+        instituicao_financeira:
+          instituicao_financeira?.id ||
+          instituicao_financeira.toString() ||
+          null,
         descricao,
         fornecedor: String(fornecedor),
         observacao,

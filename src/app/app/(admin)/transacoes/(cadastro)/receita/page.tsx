@@ -44,10 +44,8 @@ export default function CadastroReceitaPage() {
     date: z.string().min(1, "A data é obrigatória."),
     valor: z.number(),
     categoria: z.number().min(1, "A categoria é obrigatória."),
-    meio_de_transacao: z.number().min(1, "O meio de transação é obrigatório."),
-    instituicao_financeira: z
-      .number()
-      .min(1, "A instituição financeira é obrigatória."),
+    meio_de_transacao: z.string(),
+    instituicao_financeira: z.string(),
     descricao: z.string().min(1, "A descrição é obrigatória."),
     fornecedores: z.number().nullable().optional(),
     observacao: z.string().nullable().optional(),
@@ -62,10 +60,14 @@ export default function CadastroReceitaPage() {
         date: date.toISOString().split("T")[0],
         valor,
         categoria: parseInt(categoria),
-        meio_de_transacao: parseInt(meio_de_transacao),
-        instituicao_financeira: parseInt(instituicao_financeira),
+        meio_de_transacao:
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()),
+        instituicao_financeira:
+          instituicao_financeira?.id ||
+          instituicao_financeira.toString(),
         descricao,
-        fornecedores: fornecedores ? parseInt(fornecedores): null,
+        fornecedores: fornecedores ? parseInt(fornecedores) : null,
         observacao,
         transacao_concluido,
       });
@@ -74,8 +76,14 @@ export default function CadastroReceitaPage() {
         data: date ? date.toISOString().split("T")[0] : "null",
         valor,
         categoria,
-        meio_de_transacao,
-        instituicao_financeira,
+        meio_de_transacao:
+          meio_de_transacao?.id ||
+          (meio_de_transacao && meio_de_transacao.toString()) ||
+          null,
+        instituicao_financeira:
+          instituicao_financeira?.id ||
+          instituicao_financeira.toString() ||
+          null,
         transacao_concluido,
         descricao,
         observacao,
