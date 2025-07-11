@@ -38,7 +38,6 @@ import {
   CATEGORIAS_FORM_QUERY,
   INSTITUICAO_FINANCEIRA_FORM_QUERY,
   MEIO_TRANSACAO_FORM_QUERY,
-  TIPO_ARQUIVO_QUERY,
   TRANSACAO_RECEITA_QUERY,
 } from "@/graphql/query";
 import { Checkbox } from "@/components/UI/checkbox";
@@ -46,11 +45,10 @@ import { FORNECEDORES_QUERY } from "@/graphql/query";
 import { Label } from "@/components/UI/label";
 import { Button } from "@/components/UI/button";
 import { Textarea } from "@/components/UI/textarea";
-import { number, string, z } from "zod";
+import { z } from "zod";
 import { Loading, MiniLoading } from "@/components/loading";
-import { CALSS_INPUTS } from "@/lib/constantes";
+
 import { useQuery } from "@apollo/client";
-import { decryptData } from "@/lib/crip";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { toast } from "sonner";

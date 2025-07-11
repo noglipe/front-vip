@@ -24,6 +24,7 @@ import SelectArquivo from "../../_components/SelectArquivo";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { NotebookTabs } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CadastroDespesaPage() {
   const [compra_parcelada, setTipoDespesa] = useState(false);
@@ -108,11 +109,23 @@ export default function CadastroDespesaPage() {
         const salvarData = await salvarResponse.json();
 
         if (!salvarResponse.ok) {
-          console.error("Erro ao salvar arquivo no banco", salvarData);
+          toast.error("Error", {
+            description: `Erro ao salvar arquivo no banco ${salvarData}`,
+            action: {
+              label: "Fechar",
+              onClick: () => {},
+            },
+          });
         }
       }
     } catch (error) {
-      console.error("Erro de conexão", error);
+      toast.error("Error", {
+        description: `Erro de conexão ${error}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {},
+        },
+      });
     }
   };
 
@@ -188,7 +201,6 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
-
       const response = await ApiNovo(
         `financeiro/transacao/despesa/`,
         "POST",
@@ -202,13 +214,26 @@ export default function CadastroDespesaPage() {
       } else {
         enviarArquivo(data.id);
       }
-
-      alert("Despesa cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/despesa/");
+      toast.success("DESPESA CADASTRADA", {
+        description: `Despesa Cadastrada com sucesso `,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
     } catch (error) {
       setLoading(false);
-      console.error("Erro na validação ou requisição:", error);
+      toast.error("ERRO", {
+        description: `Erro na validação ou requisição ${error} `,
+        action: {
+          label: "Fechar",
+          onClick: () => {},
+        },
+      });
+
       if (error instanceof z.ZodError) {
         setErrors(
           error.issues.reduce(
@@ -217,7 +242,13 @@ export default function CadastroDespesaPage() {
           )
         );
       } else {
-        alert(`Erro ao cadastrar despesa - ${error}`);
+        toast.error("ERRO", {
+          description: `Erro ao cadastrar despesa ${error} `,
+          action: {
+            label: "Fechar",
+            onClick: () => {},
+          },
+        });
       }
     }
   };

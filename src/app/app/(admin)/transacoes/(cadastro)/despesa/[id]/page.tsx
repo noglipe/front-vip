@@ -64,6 +64,7 @@ import client from "../../../../../../../lib/apollo-client";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { parseISO } from "date-fns";
+import { toast } from "sonner";
 
 export default function EditarDespesaPage() {
   const router = useRouter();
@@ -96,7 +97,6 @@ export default function EditarDespesaPage() {
 
   //Busca de Dados
   useEffect(() => {
- 
     if (data?.transacao) {
       const t = data.transacao;
 
@@ -227,10 +227,23 @@ export default function EditarDespesaPage() {
         despesaInput
       );
 
-      alert("Despesa atualizada com sucesso");
-      router.push(`/app/transacoes/${id}`);
+      toast.success("DESPESA ATUALIZADA", {
+        description: `Despesa atualizada com sucesso #${id}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            router.push(`/app/transacoes/${id}`);
+          },
+        },
+      });
     } catch (error) {
-      console.error("Erro ao atualizar despesa:", error);
+      toast.error("ERROR", {
+        description: `Erro ao atualizar despesa: ${error}`,
+        action: {
+          label: "Fechar",
+          onClick: () => {},
+        },
+      });
 
       if (error instanceof z.ZodError) {
         setErrors(
@@ -240,7 +253,13 @@ export default function EditarDespesaPage() {
           )
         );
       } else {
-        alert("Erro ao atualizar despesa");
+        toast.error("ERROR", {
+          description: `Erro ao atualizar despesa: ${error}`,
+          action: {
+            label: "Fechar",
+            onClick: () => {},
+          },
+        });
       }
     }
   };
