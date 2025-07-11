@@ -22,6 +22,7 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { ApiNovo } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/UI/card";
 import { NotebookTabs } from "lucide-react";
+import { toast } from "sonner";
 
 export default function CadastroReceitaPage() {
   const [instituicao_financeira, setinstituicaoFinanceira] = useState<
@@ -64,7 +65,7 @@ export default function CadastroReceitaPage() {
         meio_de_transacao: parseInt(meio_de_transacao),
         instituicao_financeira: parseInt(instituicao_financeira),
         descricao,
-        fornecedores: parseInt(fornecedores),
+        fornecedores: fornecedores ? parseInt(fornecedores): null,
         observacao,
         transacao_concluido,
       });
@@ -78,16 +79,22 @@ export default function CadastroReceitaPage() {
         transacao_concluido,
         descricao,
         observacao,
-        fornecedor: fornecedores,
+        fornecedor: fornecedores ? fornecedores : null,
         receita: true,
       };
 
       await ApiNovo(`financeiro/transacao/receita/`, "POST", receitaInput);
 
-      alert("Receita cadastrada");
       setLoading(false);
-      router.push("/app/transacoes/receita/");
-      window.location.reload();
+      toast.success("Receita cadastrada", {
+        description: `Receta Cadastrada Com Sucesso`,
+        action: {
+          label: "Fechar",
+          onClick: () => {
+            window.location.reload();
+          },
+        },
+      });
     } catch (error) {
       setLoading(false);
       if (error instanceof z.ZodError) {

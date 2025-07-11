@@ -110,21 +110,19 @@ export default function FormularioCompra() {
         const salvarData = await salvarResponse.json();
 
         if (!salvarResponse.ok) {
-                toast.error("Erro ao salvar arquivo no banco", {
-        description: `${salvarData}`,
-        action: {
-          label: "Fechar",
-          onClick: () => {
-            window.location.reload();
-          },
-        },
-      });
-
+          toast.error("Erro ao salvar arquivo no banco", {
+            description: `${salvarData}`,
+            action: {
+              label: "Fechar",
+              onClick: () => {
+                window.location.reload();
+              },
+            },
+          });
         }
       }
     } catch (error) {
-
-             toast.error("Erro de conexão", {
+      toast.error("Erro de conexão", {
         description: `${error}`,
         action: {
           label: "Fechar",
@@ -133,7 +131,6 @@ export default function FormularioCompra() {
           },
         },
       });
-
     }
   };
 
@@ -152,13 +149,11 @@ export default function FormularioCompra() {
     };
 
     if (!formData.descricao || !formData.autorizadaPor) {
-        toast.warning("Favor Inserir Dados Faltantes", {
+      toast.warning("Favor Inserir Dados Faltantes", {
         description: `Descrição ou Autorização`,
         action: {
           label: "Fechar",
-          onClick: () => {
-    
-          },
+          onClick: () => {},
         },
       });
 
