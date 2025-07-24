@@ -3,7 +3,6 @@
 import { Loading } from "@/components/loading";
 
 import { Card } from "@/components/UI/card";
-import { url } from "@/lib/apollo-client";
 import { useEffect, useState } from "react";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import Link from "next/link";

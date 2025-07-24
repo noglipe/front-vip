@@ -8,21 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/UI/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/UI/table";
 import { SearchIcon } from "lucide-react";
 import { useState } from "react";
-import { IfConcluidoCircle } from "../(admin)/transacoes/_components/ifConcluido";
-import { formatData, formatReal } from "@/lib/utils";
-import BtnVisualizar from "../(admin)/transacoes/_components/btnVisualizar";
-import { BtnEditar } from "../(admin)/transacoes/_components/tbnEditar";
-import BtnRecibo from "../(admin)/transacoes/_components/tbnRecibo";
 import { Card, CardContent, CardTitle } from "@/components/UI/card";
 import { SelectBase } from "@/components/form/selectBase";
 import {
@@ -34,6 +21,7 @@ import {
 } from "@/graphql/query";
 import { Label } from "@/components/UI/label";
 import { SelectBaseBusca } from "@/components/form/selectBaseBusca";
+import TabelaT from "./TabelaT";
 
 interface BoxFilterProps {
   label?: string;
@@ -62,76 +50,72 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
     number | any
   >();
 
-  const CLASS_RECEITA = "text-green-400 cursor-pointer hover:bg-green-900";
-  const CLASS_DESPESA = "text-red-400 cursor-pointer hover:bg-red-900";
 
-  function filtrarTransacoes() {
-    if (!dados) return [];
+const filtrarTransacoes = (): TransacoesAPI[] => {
+  if (!dados) return [];
 
-    const termo = termoDeBusca.toLowerCase();
+  const termo = termoDeBusca.toLowerCase();
 
-    return dados.filter((transacao) => {
-      const matchBusca =
-        transacao.descricao.toLowerCase().includes(termo) ||
-        transacao.categoria.nome.toLowerCase().includes(termo) ||
-        transacao.valor.toString().includes(termo);
+  return dados.filter((transacao) => {
+    const matchBusca =
+      transacao.descricao.toLowerCase().includes(termo) ||
+      transacao.categoria.nome.toLowerCase().includes(termo) ||
+      transacao.valor.toString().includes(termo);
 
-      const matchesType =
-        filterType === "todos" ||
-        (filterType === "receitas" && transacao.receita) ||
-        (filterType === "despesas" && !transacao.receita);
+    const matchesType =
+      filterType === "todos" ||
+      (filterType === "receitas" && transacao.receita) ||
+      (filterType === "despesas" && !transacao.receita);
 
-      const matchesType2 =
-        situacaoFiscal === "todos" ||
-        (situacaoFiscal === "Com Nota" && transacao.situacao_fiscal) ||
-        (situacaoFiscal === "Sem Nota" && !transacao.situacao_fiscal);
+    const matchesType2 =
+      situacaoFiscal === "todos" ||
+      (situacaoFiscal === "Com Nota" && transacao.situacao_fiscal) ||
+      (situacaoFiscal === "Sem Nota" && !transacao.situacao_fiscal);
 
-      const matchesConcluida =
-        concluida === "todos" ||
-        (concluida === "Transacoes Concluidas" &&
-          transacao.transacao_concluido) ||
-        (concluida === "Transacoes Pendentes" &&
-          !transacao.transacao_concluido);
+    const matchesConcluida =
+      concluida === "todos" ||
+      (concluida === "Transacoes Concluidas" && transacao.transacao_concluido) ||
+      (concluida === "Transacoes Pendentes" && !transacao.transacao_concluido);
 
-      const matchesMeio =
-        !meioTransacao ||
-        meioTransacao === "todos" ||
-        transacao.meio_de_transacao?.id.toString() === meioTransacao;
+    const matchesMeio =
+      !meioTransacao ||
+      meioTransacao === "todos" ||
+      transacao.meio_de_transacao?.id.toString() === meioTransacao;
 
-      const matchesInstituicao =
-        !instituicaoFinanceira ||
-        instituicaoFinanceira === "todos" ||
-        transacao.instituicao_financeira?.id.toString() ===
-          instituicaoFinanceira;
+    const matchesInstituicao =
+      !instituicaoFinanceira ||
+      instituicaoFinanceira === "todos" ||
+      transacao.instituicao_financeira?.id.toString() === instituicaoFinanceira;
 
-      const matchesCartao =
-        !cartao ||
-        cartao === "todos" ||
-        transacao?.cartao_utilizado?.id.toString() === cartao;
+    const matchesCartao =
+      !cartao ||
+      cartao === "todos" ||
+      transacao?.cartao_utilizado?.id.toString() === cartao;
 
-      const matchesCategoria =
-        !categoria ||
-        categoria === "todos" ||
-        transacao.categoria.id.toString() === categoria;
+    const matchesCategoria =
+      !categoria ||
+      categoria === "todos" ||
+      transacao.categoria.id.toString() === categoria;
 
-      const matchesFornecedor =
-        !fornecedor ||
-        fornecedor === "todos" ||
-        transacao?.fornecedor?.id.toString() === fornecedor;
+    const matchesFornecedor =
+      !fornecedor ||
+      fornecedor === "todos" ||
+      transacao?.fornecedor?.id.toString() === fornecedor;
 
-      return (
-        matchBusca &&
-        matchesType &&
-        matchesType2 &&
-        matchesConcluida &&
-        matchesMeio &&
-        matchesInstituicao &&
-        matchesCartao &&
-        matchesCategoria &&
-        matchesFornecedor
-      );
-    });
-  }
+    return (
+      matchBusca &&
+      matchesType &&
+      matchesType2 &&
+      matchesConcluida &&
+      matchesMeio &&
+      matchesInstituicao &&
+      matchesCartao &&
+      matchesCategoria &&
+      matchesFornecedor
+    );
+  });
+};
+
 
   return (
     <Card className="p-4">
@@ -251,63 +235,7 @@ export default function TabelaTransacoesFiltros({ dados }: TransacoesListAPi) {
           </div>
         </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Status</TableHead>
-              <TableHead>Data</TableHead>
-              <TableHead>Descrição / Categoria</TableHead>
-              <TableHead>Meio de Pagamento</TableHead>
-              <TableHead>Valor</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filtrarTransacoes &&
-              filtrarTransacoes().map((transacao, index) => (
-                <TableRow
-                  key={index}
-                  className={transacao.receita ? CLASS_RECEITA : CLASS_DESPESA}
-                >
-                  <TableCell className="justify-center items-center gap-1">
-                    <div className="flex justify-center items-center text-center gap-1">
-                      <IfConcluidoCircle
-                        concluido={
-                          transacao.transacao_concluido
-                            ? transacao.transacao_concluido
-                            : false
-                        }
-                      />
-                      <div className="font-bold uppercase">
-                        {transacao.receita ? "Receita" : "Despesa"}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{formatData(transacao.data)}</TableCell>
-                  <TableCell>
-                    {transacao.descricao} / {transacao.categoria.nome}
-                  </TableCell>
-                  <TableCell>
-                    {transacao.meio_de_transacao?.nome || "N/A"} /{" "}
-                    {transacao.instituicao_financeira?.nome || "N/A"}
-                  </TableCell>
-                  <TableCell>{formatReal(transacao.valor)}</TableCell>
-                  <TableCell>
-                    <BtnVisualizar id={transacao.id.toString()} />
-                  </TableCell>
-                  <TableCell>
-                    <BtnEditar
-                      receita={transacao.receita}
-                      id={transacao.id.toString()}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <BtnRecibo id={transacao.id.toString()} />
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
+     <TabelaT transacoes={filtrarTransacoes()}/>
       </CardContent>
     </Card>
   );

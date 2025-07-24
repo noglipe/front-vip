@@ -7,9 +7,9 @@ import { Card } from "@/components/UI/card";
 import { format } from "date-fns";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
-import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
+import ResumoFinanceiro from "@/app/app/_components/ResumoFinanceiro";
 
 export default function Page() {
   const [dataI, setDataI] = useState<any>();
@@ -67,22 +67,10 @@ export default function Page() {
       {dados ? (
         <div className="container mx-auto mt-2 space-y-6">
           {/* Totais Financeiros */}
-          <Card className="container p-4  rounded-xl">
-            <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
-              <PainelValor
-                valor={dados?.total_receitas || 0}
-                title="Total de Receitas"
-              />
-              <PainelValor
-                valor={dados?.total_despesas || 0}
-                title="Total de Despesas"
-              />
-              <PainelValor
-                valor={diferenca}
-                title=" Diferença (Lucro / Prejuízo)"
-              />
-            </div>
-          </Card>
+          <ResumoFinanceiro
+            totalReceitas={dados.total_receitas}
+            totalDespesas={dados.total_despesas}
+          />
 
           {/* Tabela de Transações */}
           {dados && <TabelaTransacoes dados={dados.transacao} />}

@@ -4,13 +4,12 @@ import { DatePickerForm } from "@/components/form/datePickerForm";
 import { Loading } from "@/components/loading";
 import { Button } from "@/components/UI/button";
 import { Card, CardDescription } from "@/components/UI/card";
-import { url } from "@/lib/apollo-client";
 import { format } from "date-fns";
 import { FilterIcon } from "lucide-react";
 import { useState } from "react";
-import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
+import ResumoFinanceiro from "@/app/app/_components/ResumoFinanceiro";
 
 export default function Page() {
   const [data, setData] = useState<any>();
@@ -56,20 +55,10 @@ export default function Page() {
           {/* Totais Financeiros */}
           <Card className="container p-4  rounded-xl">
             <h2>Transações do dia {data ? format(data, "dd/MM/yyyy") : ""}</h2>
-            <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
-              <PainelValor
-                valor={dados?.total_receitas || 0}
-                title="Total de Receitas"
-              />
-              <PainelValor
-                valor={dados?.total_despesas || 0}
-                title="Total de Despesas"
-              />
-              <PainelValor
-                valor={diferenca}
-                title=" Diferença (Lucro / Prejuízo)"
-              />
-            </div>
+            <ResumoFinanceiro
+              totalReceitas={dados.total_receitas}
+              totalDespesas={dados.total_despesas}
+            />
             <CardDescription className="text-end font-bold">
               *Dados referente ao mês vigente
             </CardDescription>

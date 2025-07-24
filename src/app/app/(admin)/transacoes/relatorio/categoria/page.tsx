@@ -5,10 +5,10 @@ import { Card, CardContent } from "@/components/UI/card";
 import { CATEGORIAS_FORM_QUERY } from "@/graphql/query";
 import { useState } from "react";
 import { Loading } from "@/components/loading";
-import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
 import { toast } from "sonner";
+import ResumoFinanceiro from "@/app/app/_components/ResumoFinanceiro";
 
 export default function Page() {
   const [categoria, setCategoria] = useState<any>(null);
@@ -75,22 +75,7 @@ export default function Page() {
             <h2 className="text-xl font-semibold mb-2">
               Transações da Categoria
             </h2>
-            <Card className="container p-4  rounded-xl">
-              <div className=" grid grid-cols-1 md:grid-cols-3 gap-6">
-                <PainelValor
-                  valor={dados.total_receitas}
-                  title="Total de Receitas"
-                />
-                <PainelValor
-                  valor={dados.total_despesas}
-                  title="Total de Despesas"
-                />
-                <PainelValor
-                  valor={dados.total_receitas + dados.total_despesas}
-                  title="Total de Despesas"
-                />
-              </div>
-            </Card>
+            <ResumoFinanceiro totalReceitas={dados.total_receitas} totalDespesas={dados.total_despesas}/>
 
             {dados && <TabelaTransacoes dados={dados.transacao} />}
           </div>
