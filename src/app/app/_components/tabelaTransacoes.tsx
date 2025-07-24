@@ -35,7 +35,7 @@ export default function TabelaTransacoes({ dados }: TransacoesListAPi) {
 
         return matchBusca && matchesType;
       })
-    : "";
+    : [];
 
   return (
     <Card className="p-4">
