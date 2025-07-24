@@ -23,7 +23,7 @@ import {
 } from "@/components/UI/dropdown-menu";
 import { ArrowDownCircle, ArrowDownFromLine } from "lucide-react";
 import { BtnConcluir } from "../(admin)/transacoes/_components/btnConcluir";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   transacoes: TransacoesAPI[]; // já tipado corretamente aqui
@@ -34,6 +34,10 @@ export default function TabelaT({ transacoes }: Props) {
 
   const CLASS_RECEITA = "text-green-400 cursor-pointer hover:bg-green-900";
   const CLASS_DESPESA = "text-red-400 cursor-pointer hover:bg-red-900";
+  
+  useEffect(() => {
+    setTDados(transacoes || []);
+  }, [transacoes]);
 
   function atualizarTransacaoConcluida(id: number, novoStatus: boolean) {
     setTDados((prev) =>
@@ -62,9 +66,7 @@ export default function TabelaT({ transacoes }: Props) {
           dados.map((transacao, index) => (
             <TableRow
               key={index}
-              className={
-                transacao.receita ? CLASS_RECEITA : CLASS_DESPESA
-              }
+              className={transacao.receita ? CLASS_RECEITA : CLASS_DESPESA}
             >
               <TableCell className="justify-center items-center gap-1">
                 <div className="flex justify-center items-center text-center gap-1">
@@ -88,7 +90,7 @@ export default function TabelaT({ transacoes }: Props) {
               <TableCell className="flex flex-row gap-1">
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex flex-row items-center justify-center text-center gap-2 p-2 w-full border  rounded hover:cursor-pointer">
-                    <ArrowDownCircle /> Ações 
+                    <ArrowDownCircle /> Ações
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>

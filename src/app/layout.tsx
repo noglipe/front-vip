@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br" suppressHydrationWarning>
-      <body className={` antialiased bg-background`}>
+      <body className={` antialiased bg-background p-4`}>
         {children}
         <Toaster position="top-center" richColors />
       </body>
