@@ -30,6 +30,7 @@ import { BtnEditar } from "../_components/tbnEditar";
 import { ApiNovo } from "@/lib/api";
 import Link from "next/link";
 import { decryptData } from "@/lib/crip";
+import { toast } from "sonner";
 
 interface Transacao {
   id: string;
@@ -99,10 +100,12 @@ export default function DetalhesTransacao() {
         if (response.ok) {
           setDadosArquivos(data2.arquivos);
         } else {
-          console.error("Erro ao buscar arquivos:", data);
+          toast.error(`Erro ao buscar arquivos: ${data}`);
+          throw new Error(`Erro ao buscar arquivos ${data}`);
         }
       } catch (error) {
-        console.error("Erro de conexão ao buscar arquivos:", error);
+        toast.error(`Erro de conexão ao buscar arquivos: ${error}`);
+        throw new Error(`Erro de conexão ao buscar arquivos: ${error}`);
       }
     };
 
@@ -133,7 +136,7 @@ export default function DetalhesTransacao() {
     const mtd = del ? "DELETE" : "PUT";
     const msg = del ? "excluída" : "restaurada";
 
-    const token = await decryptData(localStorage.getItem("data"))?.access
+    const token = await decryptData(localStorage.getItem("data"))?.access;
 
     try {
       const response = await fetch(url_api, {
@@ -146,7 +149,8 @@ export default function DetalhesTransacao() {
 
       if (!response.ok) {
         const msg2 = await response.text();
-        console.log(`Erro ao ${msg}: ${msg2}`);
+        toast.error(`Erro ao: ${msg}: ${msg2}`);
+        throw new Error(`Erro ao: ${msg}: ${msg2}`);
         return;
       }
 
@@ -154,8 +158,8 @@ export default function DetalhesTransacao() {
       router.push(`/app/transacoes/${id}/`);
       window.location.reload();
     } catch (error) {
-      console.error(`Erro ao ${msg} transação:`, error);
-      alert(`Erro ao ${msg} transação.`);
+      toast.error(`Erro ao ${msg} transação: ${error}`);
+      throw new Error(`Erro ao ${msg} transação: ${error}`);
     }
   }
 

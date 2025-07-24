@@ -26,6 +26,7 @@ import GraficoMeses from "./_components/graficoMeses";
 import { CentroDetalhesModal } from "./_components/CentroDetalhesModal";
 import { Button } from "@/components/UI/button";
 import { ApiNovo } from "@/lib/api";
+import { toast } from "sonner";
 
 type Custos = {
   nome: string;
@@ -120,7 +121,8 @@ export default function Page() {
 
       setDados(data);
     } catch (error) {
-      console.error(error);
+      toast.error(`Erro: ${error}`);
+      throw new Error(`Erro: ${error}`);
     } finally {
       setLoading(false);
     }

@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/client";
 import client from "../../../../../../lib/apollo-client";
 import { FORNECEDOR_QUERY } from "@/graphql/query";
 import { ApiNovo } from "@/lib/api";
+import { toast } from "sonner";
 
 interface Fornecedor {
   id: number;
@@ -56,8 +57,8 @@ export default function EditarFornecedor() {
       alert("Fornecedor atualizado com sucesso!");
       router.push("/app/fornecedores?refetch=true"); // Redireciona para a lista de fornecedores
     } catch (error) {
-      console.error(error);
-      alert("Erro ao atualizar fornecedor.");
+      toast.error(`Erro ao atualizar fornecedor: ${error}`);
+      throw new Error(`Erro ao atualizar fornecedor ${error}`);
     } finally {
       setSaving(false);
     }
@@ -66,8 +67,9 @@ export default function EditarFornecedor() {
   if (loading)
     return <p className="text-center text-gray-500">Carregando...</p>;
   if (error) {
-    console.error("Erro na query GraphQL:", error); // Adicionado console.error
-    return <p className="text-center text-red-500">{error.message}</p>;
+    toast.error(`Erro na query GraphQL: ${error}`);
+    throw new Error(`Erro na query GraphQL ${error}`);
+    return <p className="text-center text-red-500">{error?.message}</p>;
   }
 
   return (

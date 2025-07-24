@@ -12,6 +12,7 @@ import {
 } from "@/components/UI/dialog";
 
 import { ApiNovo } from "@/lib/api";
+import { toast } from "sonner";
 
 type Arquivo = {
   id: number;
@@ -44,11 +45,12 @@ export default function Validar({ item, onValidated }: Props) {
       const response = await ApiNovo(
         `financeiro/formulario/formulario-entrada/validar/${item.id}`
       );
-      // Aqui você pode atualizar o estado, dar um feedback, recarregar dados etc.
-      console.log("Validação feita com sucesso", response);
+      toast.success(`Validação feita com sucesso ${response}`);
+
       onValidated?.();
     } catch (error) {
-      console.error("Erro ao validar:", error);
+      toast.error(`Erro ao validar: ${error}`);
+      throw new Error(`Erro ao validar: ${error}`);
     }
   }
 

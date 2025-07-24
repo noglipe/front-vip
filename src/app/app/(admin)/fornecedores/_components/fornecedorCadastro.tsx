@@ -7,6 +7,7 @@ import { MiniLoading } from "@/components/loading";
 import { Card } from "@/components/UI/card";
 import { ApiNovo } from "@/lib/api";
 import { Button } from "@/components/UI/button";
+import { toast } from "sonner";
 
 export function FornecedorCadastro() {
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,8 @@ export function FornecedorCadastro() {
       setLoading(false);
     } catch (error) {
       setLoading(false);
-      console.error("Erro ao cadastrar fornecedor:", error);
+      toast.error(`Erro ao cadastrar fornecedor: ${error}`)
+      throw new Error(`Erro ao cadastrar fornecedor ${error}`);
     }
   };
 

@@ -8,6 +8,7 @@ import { Loading } from "@/components/loading";
 import PainelValor from "../../_components/painelValor";
 import TabelaTransacoes from "@/app/app/_components/tabelaTransacoes";
 import { ApiNovo } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function Page() {
   const [categoria, setCategoria] = useState<any>(null);
@@ -24,9 +25,10 @@ export default function Page() {
 
       const data: TransacoesPropsApi = await response.json();
       setDados(data);
-    } catch (err: any) {
-      setError(err.message);
-      console.log("Error ao buscar dados:", err);
+    } catch (error: any) {
+      setError(error.message);
+      toast.error(`Error ao buscar dados: ${error}`);
+      throw new Error(`Error ao buscar dados: ${error}`);
     } finally {
       setLoading(false);
     }
