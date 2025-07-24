@@ -101,7 +101,7 @@ interface TransacoesAPI {
   rastreioParcelas: number,
   receita: boolean,
   situacao_fiscal: boolean | null,
-  transacao_concluido: boolean | null,
+  transacao_concluido: boolean,
   valor: number,
   excluida: boolean
 }

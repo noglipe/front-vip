@@ -1,4 +1,4 @@
-// components/TabelaTransacoes.tsx
+"use client";
 
 import {
   Table,
@@ -8,19 +8,42 @@ import {
   TableBody,
   TableCell,
 } from "@/components/UI/table";
-import { formatData, formatReal } from "@/lib/utils"; // ajuste o caminho conforme sua estrutura
+import { formatData, formatReal } from "@/lib/utils";
 import { IfConcluidoCircle } from "../(admin)/transacoes/_components/ifConcluido";
-import BtnVisualizar from "../(admin)/transacoes/_components/btnVisualizar";
-import { BtnEditar } from "../(admin)/transacoes/_components/tbnEditar";
-import BtnRecibo from "../(admin)/transacoes/_components/tbnRecibo";
+import { LinkVisualizar } from "../(admin)/transacoes/_components/btnVisualizar";
+import { LinkEditar } from "../(admin)/transacoes/_components/tbnEditar";
+import { LinkRecibo } from "../(admin)/transacoes/_components/tbnRecibo";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/UI/dropdown-menu";
+import { ArrowDownFromLine } from "lucide-react";
+import { BtnConcluir } from "../(admin)/transacoes/_components/btnConcluir";
+import { useState } from "react";
 
 interface Props {
-  transacoes: string | TransacoesAPI[];
+  transacoes: TransacoesAPI[]; // já tipado corretamente aqui
 }
 
 export default function TabelaT({ transacoes }: Props) {
+  const [dados, setTDados] = useState<TransacoesAPI[]>(transacoes || []);
+
   const CLASS_RECEITA = "text-green-400 cursor-pointer hover:bg-green-900";
   const CLASS_DESPESA = "text-red-400 cursor-pointer hover:bg-red-900";
+
+  function atualizarTransacaoConcluida(id: number, novoStatus: boolean) {
+    setTDados((prev) =>
+      prev.map((transacao) =>
+        transacao.id === id
+          ? { ...transacao, transacao_concluido: novoStatus }
+          : transacao
+      )
+    );
+  }
 
   return (
     <Table>
@@ -35,16 +58,18 @@ export default function TabelaT({ transacoes }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array.isArray(transacoes) &&
-          transacoes.map((transacao, index) => (
+        {Array.isArray(dados) &&
+          dados.map((transacao, index) => (
             <TableRow
               key={index}
-              className={transacao.receita ? CLASS_RECEITA : CLASS_DESPESA}
+              className={
+                transacao.receita ? CLASS_RECEITA : CLASS_DESPESA
+              }
             >
               <TableCell className="justify-center items-center gap-1">
                 <div className="flex justify-center items-center text-center gap-1">
                   <IfConcluidoCircle
-                    concluido={transacao.transacao_concluido || false}
+                    concluido={transacao.transacao_concluido}
                   />
                   <div className="font-bold uppercase">
                     {transacao.receita ? "Receita" : "Despesa"}
@@ -61,12 +86,36 @@ export default function TabelaT({ transacoes }: Props) {
               </TableCell>
               <TableCell>{formatReal(transacao.valor)}</TableCell>
               <TableCell className="flex flex-row gap-1">
-                <BtnVisualizar id={transacao.id.toString()} />
-                <BtnEditar
-                  receita={transacao.receita}
-                  id={transacao.id.toString()}
-                />
-                <BtnRecibo id={transacao.id.toString()} />
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex flex-row items-center gap-2 p-2 w-full bg-amber-200 rounded hover:cursor-pointer">
+                    Ações <ArrowDownFromLine />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>
+                      Transação: #{transacao.id}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <LinkVisualizar id={transacao.id} />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <BtnConcluir
+                        id={transacao.id}
+                        status={transacao.transacao_concluido}
+                        onStatusChange={atualizarTransacaoConcluida}
+                      />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <LinkEditar
+                        id={transacao.id}
+                        receita={transacao.receita}
+                      />
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <LinkRecibo id={transacao.id} />
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}

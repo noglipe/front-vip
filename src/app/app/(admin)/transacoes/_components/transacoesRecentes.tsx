@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { IfConcluidoCircle } from "./ifConcluido";
 import { MiniBtnEditar } from "./tbnEditar";
 import { Card, CardHeader, CardTitle } from "@/components/UI/card";
-import { Receipt, ReceiptText } from "lucide-react";
+import { ReceiptText } from "lucide-react";
 
 interface DadosType {
   id: string;

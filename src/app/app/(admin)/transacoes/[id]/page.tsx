@@ -25,12 +25,11 @@ import { useEffect, useState } from "react";
 import TransacaoRelacionadas from "../_components/transacaoRelacionadas";
 import { Button } from "@/components/UI/button";
 import { IfConcluidoCircle, IfConcluidoText } from "../_components/ifConcluido";
-import BtnRecibo from "../_components/tbnRecibo";
-import { BtnEditar } from "../_components/tbnEditar";
 import { ApiNovo } from "@/lib/api";
-import Link from "next/link";
 import { decryptData } from "@/lib/crip";
 import { toast } from "sonner";
+import { BtnRecibo } from "../_components/tbnRecibo";
+import { BtnEditar } from "../_components/tbnEditar";
 
 interface Transacao {
   id: string;

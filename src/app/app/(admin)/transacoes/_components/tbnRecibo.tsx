@@ -1,13 +1,12 @@
-import { Button } from "@/components/UI/button";
 import { Printer } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface BtnReciboProps {
-  id: string;
+  id: string| number;
 }
 
-const BtnRecibo: React.FC<BtnReciboProps> = ({ id }) => {
+export const BtnRecibo: React.FC<BtnReciboProps> = ({ id }) => {
   const router = useRouter();
 
   return (
@@ -20,4 +19,17 @@ const BtnRecibo: React.FC<BtnReciboProps> = ({ id }) => {
   );
 };
 
-export default BtnRecibo;
+export const LinkRecibo = ({ id }: BtnReciboProps) => {
+  const router = useRouter();
+  return (
+    <Link
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`/app/transacoes/${id}`}
+      className="flex flex-row gap-2 items-center"
+    >
+      <Printer className="" size={16} />
+      Recibo
+    </Link>
+  );
+};

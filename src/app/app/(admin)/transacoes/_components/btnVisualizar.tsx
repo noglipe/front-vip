@@ -1,15 +1,13 @@
-import { Button } from "@/components/UI/button";
 import { EyeIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface BtnProps {
-  id: string;
+  id: string | number;
 }
 
-const BtnVisualizar: React.FC<BtnProps> = ({ id }) => {
+export const BtnVisualizar = ({ id }: BtnProps) => {
   const router = useRouter();
-
   return (
     <Link
       href={`/app/transacoes/${id}`}
@@ -20,4 +18,17 @@ const BtnVisualizar: React.FC<BtnProps> = ({ id }) => {
   );
 };
 
-export default BtnVisualizar;
+export const LinkVisualizar = ({ id }: BtnProps) => {
+  const router = useRouter();
+  return (
+    <Link
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`/app/transacoes/${id}`}
+      className="flex flex-row gap-2 items-center"
+    >
+      <EyeIcon className="" size={16} />
+      Visualizar
+    </Link>
+  );
+};

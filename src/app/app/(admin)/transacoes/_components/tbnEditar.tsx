@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 interface BtnEditarProps {
   receita: boolean;
-  id: string;
+  id: string | number;
 }
 
 export const BtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
@@ -33,6 +33,21 @@ export const MiniBtnEditar: React.FC<BtnEditarProps> = ({ receita, id }) => {
       href={`/app/transacoes/${link}/${id}`}
     >
       <Edit className="" size={14} />
+    </Link>
+  );
+};
+
+export const LinkEditar = ({ id }: BtnEditarProps) => {
+  const router = useRouter();
+  return (
+    <Link
+      target="_blank"
+      rel="noopener noreferrer"
+      href={`/app/transacoes/${id}`}
+      className="flex flex-row gap-2 items-center"
+    >
+      <Edit className="" size={16} />
+      Editar Transação
     </Link>
   );
 };

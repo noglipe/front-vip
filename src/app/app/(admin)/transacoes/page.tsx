@@ -49,7 +49,7 @@ export default function Page() {
       {dados ? (
         <div className="flex flex-col gap-4">
           {/* Totais Financeiros */}
-          <Card className="container p-4 rounded-sm ">
+          <Card className="p-4 rounded-sm w-full ">
             <CardHeader>
               <CardTitle className=" flex gap-2 items-center">
                 <Tickets /> TRANSAÇÕES
