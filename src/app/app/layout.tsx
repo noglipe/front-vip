@@ -11,7 +11,9 @@ export default function RootLayout({
     <div className="w-full">
       <VerificarLogin />
       <SidebarProvider>
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout>
+          {children}
+          </ClientLayout>
       </SidebarProvider>
     </div>
   );
