@@ -21,7 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/UI/dropdown-menu";
-import { ArrowDownFromLine } from "lucide-react";
+import { ArrowDownCircle, ArrowDownFromLine } from "lucide-react";
 import { BtnConcluir } from "../(admin)/transacoes/_components/btnConcluir";
 import { useState } from "react";
 
@@ -87,8 +87,8 @@ export default function TabelaT({ transacoes }: Props) {
               <TableCell>{formatReal(transacao.valor)}</TableCell>
               <TableCell className="flex flex-row gap-1">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex flex-row items-center gap-2 p-2 w-full bg-amber-200 rounded hover:cursor-pointer">
-                    Ações <ArrowDownFromLine />
+                  <DropdownMenuTrigger className="flex flex-row items-center justify-center text-center gap-2 p-2 w-full border  rounded hover:cursor-pointer">
+                    <ArrowDownCircle /> Ações 
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>
