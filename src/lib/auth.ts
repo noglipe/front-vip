@@ -1,5 +1,6 @@
 "use client "
 
+import { toast } from 'sonner';
 import { encryptData } from '../lib/crip'
 
 export async function login(username: string, password: string) {
@@ -9,15 +10,19 @@ export async function login(username: string, password: string) {
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}auth/login`, {
         method: "POST",
-        credentials: "include", 
+        credentials: "include",
         body: formData,
     });
 
-    if (!response.ok) {
-        throw new Error("Login inválido");
-    }
-
     const data = await response.json();
+
+    if (!response.ok) {
+        toast.error("Erro!", {
+            description: data.detail || "Falha na autenticação",
+        }
+        );
+        throw new Error(data.detail || "Login inválido");
+    }
 
     localStorage.setItem("data", encryptData(data));
 

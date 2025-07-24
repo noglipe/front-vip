@@ -53,7 +53,7 @@ export default function LoginPage() {
         localStorage.removeItem("RefreshLocal");
         url ? router.push(url) : router.push("/app");
       } else {
-        router.push("/app");
+        setLoading(false);
       }
     } catch (err) {
       setErro("Usuário ou Senha Inválidos.");
@@ -63,16 +63,23 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center ">
-      <Card className={`w-full max-w-md ${
-        isMobile && "border-none rounded-none"
-        }`}>
+      <Card
+        className={`w-full max-w-md ${isMobile && "border-none rounded-none"}`}
+      >
         <CardHeader className="flex flex-col justify-center items-center">
           <LogoMedida tamanho={110} />
-            <CardDescription>{TEXTS.description}</CardDescription>
+          <CardDescription>{TEXTS.description}</CardDescription>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-2">
+          <form onSubmit={handleSubmit} className="">
+            <div>
+              {erro && (
+                <p className="text-red-600 text-center bg-amber-100 p-2 rounded mb-2">
+                  {erro}
+                </p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="user">{TEXTS.userLabel}</Label>
               <Input
@@ -97,6 +104,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pr-10" // espaço pro ícone
+                  autoComplete="off"
                 />
                 <button
                   type="button"
@@ -109,9 +117,15 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <CardFooter className="flex flex-col space-y-4 p-0">
+            <CardFooter className="flex flex-col mt-4 p-0">
               <Button type="submit" className="w-full">
-                {loading ? <MiniLoading /> : TEXTS.loginButton}
+                {loading ? (
+                  <>
+                    <MiniLoading /> Processando...
+                  </>
+                ) : (
+                  TEXTS.loginButton
+                )}
               </Button>
             </CardFooter>
           </form>
