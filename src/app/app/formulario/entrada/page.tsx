@@ -148,6 +148,7 @@ export default function Page() {
               <TableHead>Dinheiro</TableHead>
               <TableHead>Pix</TableHead>
               <TableHead>Cartão</TableHead>
+              <TableHead>Total</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -173,6 +174,13 @@ export default function Page() {
                   <TableCell>{formatReal(item.dinheiro)}</TableCell>
                   <TableCell>{formatReal(item.pix)}</TableCell>
                   <TableCell>{formatReal(item.cartao)}</TableCell>
+                  <TableCell>
+                    {formatReal(
+                      Number(item.dinheiro) +
+                        Number(item.pix) +
+                        Number(item.cartao)
+                    )}
+                  </TableCell>
                   {perfil === "Administrador" && !item.validado && (
                     <TableCell>
                       <Validar

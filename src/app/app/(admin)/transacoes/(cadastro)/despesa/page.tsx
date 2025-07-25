@@ -219,6 +219,7 @@ export default function CadastroDespesaPage() {
         receita: false,
       };
 
+      console.log(despesaInput);
       const response = await ApiNovo(
         `financeiro/transacao/despesa/`,
         "POST",
@@ -268,6 +269,8 @@ export default function CadastroDespesaPage() {
           },
         });
       }
+    } finally {
+      window.location.reload();
     }
   };
 
